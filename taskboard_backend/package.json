@@ -1,0 +1,25 @@
+{
+  "name": "trello_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"cd ../taskboard_frontend && npm start\"",
+    "server": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "concurrently": "^7.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongodb": "^4.5.0",
+    "mongoose": "^6.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
