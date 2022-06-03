@@ -14,6 +14,9 @@ const cardSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "List",
     },
+    id_card:{
+      type:Number
+    }
     // list: { type: mongoose.Schema.Types.ObjectId, ref: "List" },
     // descData: {
     //   type: String,
