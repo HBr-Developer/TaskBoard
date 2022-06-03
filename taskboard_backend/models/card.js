@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const sequencing = require("../config/sequencing");
 
 const cardSchema = new mongoose.Schema(
   {
@@ -50,5 +51,25 @@ const cardSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+cardSchema.pre("save", function (next) {
+  let  card = this;
+  sequencing.getSequenceNextValue("id_card").
+  then(counter => {
+      console.log("Counter", counter);
+      if(!counter) {
+          sequencing.insertCounter("id_card")
+          .then(counter => {
+            card.id_card = counter;
+              console.log(card)
+              next();
+          })
+          .catch(error => next(error))
+      } else {
+        card.id_card = counter;
+          next();
+      }
+  })
+  .catch(error => next(error))
+});
 
 module.exports = mongoose.model("Card", cardSchema);

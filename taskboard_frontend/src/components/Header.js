@@ -1,9 +1,11 @@
 import {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
-import {Box, MenuItem} from '@mui/material';
+import {Box, Menu, MenuItem} from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {IconButton} from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
 
 const Header = () => {
     const [anchorElNav, setAnchorElNav] = useState(null);

@@ -1,8 +1,9 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Board from "../pages/Boards/Board";
 import BoardForm from "../pages/Boards/BoardForm";
 import CardInfo from "./Card/CardInfo";
 import TaskBoard from "./Board/TaskBoard";
+import Header from "./Header";
 import App from "../App";
 
 const MainRoutes = () => {

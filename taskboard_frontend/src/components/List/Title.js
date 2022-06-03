@@ -1,5 +1,5 @@
-import {useRef, useState} from "react";
-import {ClickAwayListener, InputBase, MenuItem, MenuList, Paper, Popper, Typography} from "@mui/material";
+import {useState, useRef} from "react";
+import {Typography, InputBase, Popper, Paper, ClickAwayListener, MenuList, MenuItem} from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import axios from "axios";
 
@@ -54,7 +54,7 @@ const Title = ({listTitle, setListTitle, listId, boardLists, setBoardLists}) => 
             await axios.delete(`http://localhost:3001/list/${listId}`);
             const newBordLists = boardLists.filter(list => list._id !== listId);
             setBoardLists(newBordLists);
-        } catch (err) {
+        } catch(err) {
             console.log(err);
         }
     }
@@ -64,6 +64,14 @@ const Title = ({listTitle, setListTitle, listId, boardLists, setBoardLists}) => 
         }
         setOpen(false);
     };
+    function handleListKeyDown(event) {
+        if (event.key === 'Tab') {
+            event.preventDefault();
+            setOpen(false);
+        } else if (event.key === 'Escape') {
+            setOpen(false);
+        }
+    }
     const handleOnBlur = async () => {
         try {
             if (listTitle === firstTitle) {
@@ -121,6 +129,7 @@ const Title = ({listTitle, setListTitle, listId, boardLists, setBoardLists}) => 
                                         autoFocusItem={open}
                                         id="composition-menu"
                                         aria-labelledby="composition-button"
+                                        // onKeyDown={handleListKeyDown}
                                         onBlur={() => setOpen(false)}
                                     >
                                         {/*<MenuItem onClick={handleClose}>More</MenuItem>*/}
