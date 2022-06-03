@@ -9,10 +9,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 const Card = ({card, index, list, boardLists, setBoardLists}) => {
     const cardStyle = {
         card: {
-            padding: 1,
-            marginLeft: 1.5,
-            marginRight: 1.5,
+            padding: 0.6,
+            paddingLeft: 1,
+            marginLeft: 0.9,
+            marginRight: 0.9,
             marginBottom: 1,
+            borderRadius: 0.7,
             backgroundColor: '#FFFEFE',
             '&:hover': {
                 backgroundColor: '#f7f7f7',
@@ -75,7 +77,7 @@ const Card = ({card, index, list, boardLists, setBoardLists}) => {
                     >
                         <Paper sx={cardStyle.card}>
                             <div style={cardStyle.containerDiv}>
-                                <Typography maxRows={1} onClick={() => handleOnClick(card._id)} style={{flexGrow: 1}}>{card.name}</Typography>
+                                <Typography maxRows={1} onClick={() => handleOnClick(card._id)} style={{flexGrow: 1, fontSize:'0.9rem'}}>{card.name}</Typography>
                                 <DeleteForeverIcon sx={cardStyle.deleteButton} onClick={() => handleOnDelete(card._id)} />
                             </div>
 

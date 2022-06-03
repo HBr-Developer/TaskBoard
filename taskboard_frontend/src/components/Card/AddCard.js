@@ -1,15 +1,22 @@
-import {Collapse, InputBase, Paper, Typography, unstable_useId} from "@mui/material";
+import {Collapse, InputBase, Paper, Typography,} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import {useState} from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from 'axios';
+import axios from "axios";
 
-const AddCard = ({toggleAddCard, setToggleAddCard, list, boardLists, setBoardLists}) => {
+const AddCard = ({
+                     toggleAddCard,
+                     setToggleAddCard,
+                     list,
+                     boardLists,
+                     setBoardLists,
+                 }) => {
     const addCardStyle = {
         add: {
+            borderRadius: 0.7,
             padding: 0.5,
-            marginTop: 2,
+            marginTop: 0.1,
             marginLeft: 1,
             marginRight: 1,
             backgroundColor: "#e1e2e9",
@@ -17,12 +24,12 @@ const AddCard = ({toggleAddCard, setToggleAddCard, list, boardLists, setBoardLis
     };
     const inputCard = {
         cont: {
-            marginTop: 3,
+            marginTop: 0.5,
             marginLeft: 1,
             marginRight: 1,
             paddingBottom: 4,
             paddingLeft: 1,
-            paddingTop: 0.5
+            paddingTop: 0.5,
         },
         addButton: {
             margin: 1,
@@ -35,14 +42,19 @@ const AddCard = ({toggleAddCard, setToggleAddCard, list, boardLists, setBoardLis
         e.preventDefault();
         if (!cardTitle) return;
         console.log(list);
-        const {data} = await axios.post(`http://localhost:3001/card/${list._id}/create`, {
-            name: cardTitle,
-            list_id: list._id
-        });
+        const {data} = await axios.post(
+            `http://localhost:3001/card/${list._id}/create`,
+            {
+                name: cardTitle,
+                list_id: list._id,
+            }
+        );
         const newCard = {_id: data._id, name: data.name, list_id: data.list_id};
-        console.log('newCard', newCard);
-        const newList = {...list, cards: [...list.cards, newCard]}
-        const newBoardLists = boardLists.map(boardList => boardList._id === list._id ? newList : boardList);
+        console.log("newCard", newCard);
+        const newList = {...list, cards: [...list.cards, newCard]};
+        const newBoardLists = boardLists.map((boardList) =>
+            boardList._id === list._id ? newList : boardList
+        );
         setBoardLists(newBoardLists);
         setToggleAddCard(!toggleAddCard);
         setCardTitle("");
@@ -60,8 +72,8 @@ const AddCard = ({toggleAddCard, setToggleAddCard, list, boardLists, setBoardLis
                     <Button
                         children={
                             <>
-                                <AddIcon/>
-                                <Typography>Add Card</Typography>
+                                <AddIcon sx={{fontSize: "1rem"}}/>
+                                <Typography sx={{fontSize: "0.9rem"}}>Add card</Typography>
                             </>
                         }
                         color="inherit"
@@ -91,7 +103,7 @@ const AddCard = ({toggleAddCard, setToggleAddCard, list, boardLists, setBoardLis
                         type="submit"
                         sx={inputCard.addButton}
                         variant="contained"
-                        children="ADD CARD"
+                        children="Add card"
                         color="success"
                         onClick={handleOnClick}
                     />

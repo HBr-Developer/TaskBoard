@@ -117,7 +117,7 @@ const Board = () => {
         <Stack
           direction="row"
           justifyContent="start"
-          alignItems="center"
+          alignItems="start"
           spacing={35}
         >
           <BoardSearch searched={searched} setSearched={setSearched} />

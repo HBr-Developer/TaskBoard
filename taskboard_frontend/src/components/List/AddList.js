@@ -8,8 +8,9 @@ import axios from "axios";
 const AddCard = ({toggleNewList, setToggleNewList, boardLists, setBoardLists, boardId}) => {
     const addCardStyle = {
         add: {
-            width: 300,
-            padding: 0.5,
+            borderRadius: 0.7,
+            width: 285,
+            padding: 0.2,
             marginTop: 0,
             marginLeft: 1,
             marginRight: 1,
@@ -23,14 +24,15 @@ const AddCard = ({toggleNewList, setToggleNewList, boardLists, setBoardLists, bo
             flexDirection: "column",
         },
         paper: {
-            width: 300,
+            borderRadius: 0.7,
+            width: 285,
             marginTop: 0,
             marginLeft: 1,
             marginRight: 1,
             padding: 0.5
         },
         addButton: {
-            margin: 1,
+            margin: 1
         },
     };
 
@@ -63,8 +65,8 @@ const AddCard = ({toggleNewList, setToggleNewList, boardLists, setBoardLists, bo
                     <Button
                         children={
                             <>
-                                <AddIcon/>
-                                <Typography>Add New List</Typography>
+                                <AddIcon sx={{ fontSize: "1rem" }} />
+                                <Typography sx={{ fontSize: "0.9rem" }} >Add New List</Typography>
                             </>
                         }
                         color="inherit"

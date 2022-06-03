@@ -4,12 +4,8 @@ const List = require("../models/list");
 
 exports.createBoard = async (req, res) => {
   try {
-    //  board.idBoard= Sequencing.getSequenceNextValue('idBoard').seq;
-    //  console.log(board)
     const board = new Board(req.body);
-    // board.idBoard = Sequencing.getSequenceNextValue("idBoard").seq;
     console.log("board", board);
-
     await board.save();
     res.json({ created: "Created" });
   } catch (err) {

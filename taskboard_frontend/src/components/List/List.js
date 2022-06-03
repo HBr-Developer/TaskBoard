@@ -7,9 +7,10 @@ import {Droppable, Draggable} from "react-beautiful-dnd";
 
 const List = ({ list, boardLists, setBoardLists, index }) => {
     const paperStyle = {
-        width: "300px",
+        borderRadius: 0.7,
+        width: "285px",
         backgroundColor: "#e1e2e9",
-        marginLeft: 1.5,
+        marginLeft: 1.2,
         flexShrink: 0,
     };
 

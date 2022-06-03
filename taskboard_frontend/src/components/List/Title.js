@@ -1,5 +1,5 @@
-import {useState, useRef} from "react";
-import {Typography, InputBase, Popper, Paper, ClickAwayListener, MenuList, MenuItem} from "@mui/material";
+import {useRef, useState} from "react";
+import {ClickAwayListener, InputBase, MenuItem, MenuList, Paper, Popper, Typography} from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import axios from "axios";
 
@@ -16,17 +16,20 @@ const Title = ({listTitle, setListTitle, listId, boardLists, setBoardLists}) => 
         title: {
             flexGrow: 1,
             fontWeight: "bold",
-            fontSize: '1.2rem',
-            marginBottom: 2
+            fontSize: '1rem',
+            marginBottom: 0.5,
+            marginTop: 0.5
         },
         input: {
             paddingLeft: 1,
             paddingRight: 1,
             fontWeight: "bold",
-            fontSize: '1.2rem',
-            marginBottom: 2.1
+            fontSize: '1rem',
+            marginBottom: 0.5,
+            marginTop: 0.5
         },
         more: {
+            marginTop: 0.5,
             borderRadius: 0.6,
             '&:hover': {
                 backgroundColor: "#C7CACB"
@@ -51,7 +54,7 @@ const Title = ({listTitle, setListTitle, listId, boardLists, setBoardLists}) => 
             await axios.delete(`http://localhost:3001/list/${listId}`);
             const newBordLists = boardLists.filter(list => list._id !== listId);
             setBoardLists(newBordLists);
-        } catch(err) {
+        } catch (err) {
             console.log(err);
         }
     }
@@ -61,14 +64,6 @@ const Title = ({listTitle, setListTitle, listId, boardLists, setBoardLists}) => 
         }
         setOpen(false);
     };
-    function handleListKeyDown(event) {
-        if (event.key === 'Tab') {
-            event.preventDefault();
-            setOpen(false);
-        } else if (event.key === 'Escape') {
-            setOpen(false);
-        }
-    }
     const handleOnBlur = async () => {
         try {
             if (listTitle === firstTitle) {
@@ -126,7 +121,6 @@ const Title = ({listTitle, setListTitle, listId, boardLists, setBoardLists}) => 
                                         autoFocusItem={open}
                                         id="composition-menu"
                                         aria-labelledby="composition-button"
-                                        // onKeyDown={handleListKeyDown}
                                         onBlur={() => setOpen(false)}
                                     >
                                         {/*<MenuItem onClick={handleClose}>More</MenuItem>*/}
