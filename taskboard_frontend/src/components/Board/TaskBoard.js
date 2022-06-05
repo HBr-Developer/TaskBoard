@@ -2,7 +2,7 @@ import AddList from "../List/AddList";
 import List from "../List/List";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { Outlet, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 //Demo data
@@ -22,6 +22,10 @@ const Board = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    getSingleBoard();
+  }, [id]);
 
   // update DB while dragging cards
   const updateLists = async (source, destination) => {
@@ -85,10 +89,6 @@ const Board = () => {
     // getSingleBoard();
   };
 
-  useEffect(() => {
-    getSingleBoard();
-  }, [boardLists]);
-
   const BoardStyle = {
     paddingTop: 30,
     // backgroundColor: "#282c34",
@@ -109,7 +109,7 @@ const Board = () => {
   };
 
   const handleOnDragEnd = (result) => {
-    const { destination, source, draggableId, type } = result;
+    const { destination, source, type } = result;
     if (!destination) return;
     if (type === "list") {
       updateBoard(source, destination);
