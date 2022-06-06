@@ -78,7 +78,8 @@ exports.listUpdate = async (req, res) => {
 
 exports.getListsFromBoard = async (req, res) => {
   try {
-    const boardLists = await List.find({board_id: req.params.boardId}, 'name cards').populate('cards', 'name descData');
+    const boardLists = await List.find({board_id: req.params.boardId}, 'name cards')
+        .populate('cards', 'name descData');
     res.json(boardLists);
   } catch(err) {
     console.log(err);

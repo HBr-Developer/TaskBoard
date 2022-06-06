@@ -13,7 +13,6 @@ const listSchema = new mongoose.Schema(
     },
     pos: {
       type: String,
-      // require: true,
     },
     subscribed: {
       type: Boolean,

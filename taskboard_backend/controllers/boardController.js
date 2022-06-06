@@ -1,6 +1,7 @@
 const Board = require("../models/board");
 const Card = require("../models/card");
 const List = require("../models/list");
+const Membre = require("../models/membre");
 
 exports.createBoard = async (req, res) => {
   try {
@@ -8,6 +9,21 @@ exports.createBoard = async (req, res) => {
     console.log("board", board);
     await board.save();
     res.json({ created: "Created" });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.AddMemberToBoard = async (req, res) => {
+  try {
+    const membre = await Membre.findById(req.params.membreId);
+    console.log("membre", membre);
+    const board = await Board.findById(req.params.boardId);
+    console.log("board", board);
+
+    await Membre.findOneAndUpdate({_id: membre._id}, {boards: [...membre.boards, board._id]});
+    await Board.findOneAndUpdate({_id: board._id}, {membres: [...board.membres, membre._id]});
+    res.json(board);
   } catch (err) {
     console.log(err);
   }
@@ -86,4 +102,20 @@ exports.listsOfBoard = async (req, res) => {
   }
 };
 
-
+exports.deleteMembreInBoard = async(req, res)=>{
+  try
+  { 
+    const membre = await Membre.findById(req.params.membreId);
+    await Board.updateMany({ '_id': membre.boards }, { $pull: { membres: membre._id } });
+    
+    
+    res.json(membre);
+    
+    console.log("removed")
+    
+  }
+  catch(err)
+  {
+    console.log(err.message);
+  }
+};

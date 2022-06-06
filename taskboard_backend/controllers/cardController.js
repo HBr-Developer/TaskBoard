@@ -1,16 +1,15 @@
 const Card = require("../models/card");
 const List = require("../models/list");
 
-exports.createCard = (req, res) => {
-  const card = new Card(req.body);
-  card
-    .save()
-    .then((card) => {
-      res.json(card);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+exports.createCard = async(req, res) => {
+  try {
+    const card = new Board(req.body);
+    console.log("card", card);
+    await card.save();
+    res.json({ created: "Created" });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.createCardInList = async (req, res) => {
@@ -73,6 +72,4 @@ exports.cardUpdate = (req, res) => {
     .catch((err) => {
       console.log(err.message);
     });
-  // const board = await Board.findById(req.params.id);
-  // Board.assign(board, req.body);
 };
