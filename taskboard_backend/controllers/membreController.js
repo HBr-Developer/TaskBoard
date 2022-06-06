@@ -1,6 +1,5 @@
-
 const Membre = require("../models/membre");
-
+const Board = require("../models/board");
 
 exports.createMembre = async (req, res) => {
   const membre = new Membre(req.body);
@@ -12,18 +11,18 @@ exports.createMembre = async (req, res) => {
   }
 };
 
-exports.getAllMembre = async (req, res) =>{
+exports.getAllMembre = async (req, res) => {
   try {
     const membre = await Membre.find();
     res.json(membre);
   } catch (err) {
     console.log(err.message);
   }
-}
+};
+
 exports.membreDelete = async (req, res) => {
   try {
     const deletedMembre = await Membre.findByIdAndDelete(req.params.id);
-    ;
     res.json(deletedMembre);
   } catch (err) {
     console.log(err.message);
@@ -39,14 +38,11 @@ exports.membreById = async (req, res) => {
   }
 };
 
-
 exports.MembreUpdate = async (req, res) => {
   try {
-    await  Membre.findByIdAndUpdate(req.params.id, req.body);
+    await Membre.findByIdAndUpdate(req.params.id, req.body);
     res.send("Membre updated succesfully");
   } catch (err) {
     console.log(err);
   }
 };
-
-

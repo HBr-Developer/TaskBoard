@@ -5,14 +5,16 @@ const {
     MembreUpdate,
     getAllMembre,
     membreById,
-    membreDelete
+    membreDelete,
+    deleteMembreInBoard,
+    AddMembreInBoard
 } = require("../controllers/membreController");
-
 
 router.post("/create", createMembre);
 router.patch("/:id", MembreUpdate);
-router.get("/",getAllMembre);
-router.get("/:id",membreById);
+router.get("/", getAllMembre);
+router.get("/:id", membreById);
 router.delete("/:id", membreDelete);
+
 
 module.exports = router;
