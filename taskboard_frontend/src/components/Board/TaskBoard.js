@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Button } from "@mui/material";
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
-//Demo data
 const Board = () => {
   const [toggleNewList, setToggleNewList] = useState(false);
   const [boardLists, setBoardLists] = useState([]);
   const [boardTitle, setBoardtitle] = useState("");
   const { id } = useParams();
-
+  
   // getting board data from DB
   const getSingleBoard = async () => {
     try {
@@ -22,11 +23,11 @@ const Board = () => {
       console.log(err);
     }
   };
-
+  
   useEffect(() => {
     getSingleBoard();
   }, [id]);
-
+  
   // update DB while dragging cards
   const updateLists = async (source, destination) => {
     const sourceList = {
@@ -88,26 +89,42 @@ const Board = () => {
     setBoardLists(newBoard);
     // getSingleBoard();
   };
-
+  
   const BoardStyle = {
-    paddingTop: 30,
+    paddingTop: 15,
     // backgroundColor: "#282c34",
     backgroundColor: "#FFFFFF",
     minHeight: "100vh",
     display: "flex",
     alignItems: "flex-start",
     overflowX: "auto",
+    topBar: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'start',
+      paddingTop: 7
+    },
     title: {
       // color: '#E1E2E9',
-      fontSize: "1.5rem",
+      fontWeight: 'bold',
+      fontSize: "1.3rem",
       color: "#495151",
-      margin: 0,
-      paddingTop: 10,
       paddingLeft: "1rem",
       // backgroundColor: "#282c34",
     },
+    members: {
+      marginLeft: 100,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    member: { backgroundColor: '#449159', padding: 4, borderRadius: "50%", color: '#FFF', marginRight: 10 },
+    separator: {
+      height: 18, borderRight: '1px solid #a6a6a6', marginRight: 7
+    }
   };
-
+  
   const handleOnDragEnd = (result) => {
     const { destination, source, type } = result;
     if (!destination) return;
@@ -117,11 +134,20 @@ const Board = () => {
       updateLists(source, destination);
     }
   };
-
+  
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
+      <div style={BoardStyle.topBar}>
+        <p style={BoardStyle.title}>{boardTitle}</p>
+        <div style={BoardStyle.members}>
+          <p style={BoardStyle.separator}></p>
+          <p style={BoardStyle.member}>HE</p>
+          <Button variant='contained' sx={{ paddingLeft: 1, paddingRight: 1, fontSize: '0.8rem' }}>
+            <PersonAddAltIcon sx={{ fontSize: 18, marginRight: 0.5 }}/> Share
+          </Button>
+        </div>
+      </div>
       <div>
-        <h1 style={BoardStyle.title}>{boardTitle}</h1>
         <Droppable droppableId="board" type="list" direction="horizontal">
           {(provided) => (
             <div

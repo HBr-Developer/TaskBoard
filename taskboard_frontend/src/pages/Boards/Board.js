@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Paper, Stack, Table, TableBody } from "@mui/material";
+import { Button, Paper, Table, TableBody } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
@@ -19,7 +19,7 @@ const Board = () => {
   const [searched, setSearched] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
   const navigate = useNavigate();
-
+  
   const GetBoards = () => {
     const url = "http://localhost:3001/board/";
     axios
@@ -36,11 +36,11 @@ const Board = () => {
         console.log("error", err);
       });
   };
-
+  
   useEffect(() => {
     GetBoards();
   }, [boards]);
-
+  
   //delete Board
   const deleteBoards = async (id) => {
     if (window.confirm("Do you want to delete this board")) {
@@ -51,7 +51,7 @@ const Board = () => {
       }
     }
   };
-
+  
   // Styling
   const styles = {
     paperStyle: {
@@ -76,13 +76,15 @@ const Board = () => {
       "& tbody td": {
         fontWeight: 300,
       },
-      // "&:last-child td, &:last-child th": {
-      //   border: 0,
-      // },
     },
     buttons: {
       addBoard: {
         backgroundColor: "#333996",
+        margin: 'auto',
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 20,
+        paddingRight: 20,
       },
       edit: {
         color: "#ffffff",
@@ -101,39 +103,37 @@ const Board = () => {
     },
   };
   //----------------------------------------------------------------Styling
-
+  
   const openInPopup = (item) => {
     setRecordUpdate(item);
     setOpenPopup(!openPopup);
   };
-
+  
   const handleOnClickRow = (id) => {
     navigate(`/taskboard/${id}`);
   };
-
+  
   return (
     <>
       <Paper sx={styles.paperStyle} elevation={2}>
-        <Stack
-          direction="row"
-          justifyContent="start"
-          alignItems="start"
-          spacing={35}
+        <div
+          style={
+            {
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between'
+            }
+          }
         >
-          <BoardSearch searched={searched} setSearched={setSearched} />
+          <BoardSearch searched={searched} setSearched={setSearched}/>
           <Button
             style={styles.buttons.addBoard}
             variant="contained"
-            sx={{
-              paddingRight: 3,
-              paddingLeft: 3,
-              paddingTop: 1.5,
-              paddingBottom: 1.5,
-            }}
+            sx={{}}
             children="New Board"
             onClick={() => setOpenPopup(true)}
           />
-        </Stack>
+        </div>
         <TableContainer component={Paper}>
           <Table sx={styles.tableStyle} aria-label="customized table">
             <TableHead>
@@ -172,7 +172,7 @@ const Board = () => {
                         color="success"
                         onClick={() => handleOnClickRow(board._id)}
                       >
-                        <MenuIcon />
+                        <MenuIcon/>
                       </Button>
                       <Button
                         variant="outlined"
@@ -180,7 +180,7 @@ const Board = () => {
                         sx={{ marginLeft: 2 }}
                         onClick={() => openInPopup(board)}
                       >
-                        <ModeEditOutlineIcon />
+                        <ModeEditOutlineIcon/>
                       </Button>
                       <Button
                         variant="outlined"
@@ -188,7 +188,7 @@ const Board = () => {
                         onClick={() => deleteBoards(board._id)}
                         sx={{ marginLeft: 2 }}
                       >
-                        <DeleteForeverIcon />
+                        <DeleteForeverIcon/>
                       </Button>
                     </TableCell>
                   </TableRow>
