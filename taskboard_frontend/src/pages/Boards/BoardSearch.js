@@ -5,7 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 const BoardSearch = ({ setSearched }) => {
   const styles = {
     boxStyle: {
-      width: 500,
+      width: 400,
       maxWidth: "100%",
       marginBottom: 4,
     },
