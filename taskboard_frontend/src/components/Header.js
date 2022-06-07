@@ -20,19 +20,16 @@ import SearchIcon from '@mui/icons-material/Search';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
 
-
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const Header = () => {
   const navigate = useNavigate();
 
   const styles = {
-    backgroundColor: '#e8e9ed',
+    backgroundColor: '#FFFFFF',
     color: '#4d56bf',
     top: 0,
     position: 'fixed',
     zIndex: 100,
-
-    
   }
   const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -72,14 +69,11 @@ const Header = () => {
     },
   }));
   const [anchorElUser, setAnchorElUser] = useState(null);
-
-
+  
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
-
-
+  
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -113,9 +107,7 @@ const Header = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-          
-        {/* >
-          sx={{ p: 0 }} */}
+            
             <Box>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} 
@@ -158,7 +150,6 @@ const Header = () => {
       </AppBar>
     </Box>
   );
-  
 }
 
 export default Header

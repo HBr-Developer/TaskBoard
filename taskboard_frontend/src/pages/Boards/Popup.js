@@ -30,7 +30,6 @@ const Popup = ({ title, children, openPopup, setOpenPopup, setRecordUpdate }) =>
           <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
             {title}
           </Typography>
-
           <CloseIcon
               onClick={handleCloseClicked}
               sx={styles.closeButton}

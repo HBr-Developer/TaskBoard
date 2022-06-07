@@ -1,8 +1,7 @@
-import { TextField, Grid, Button, Stack, Paper, Alert } from "@mui/material";
+import { TextField, Grid, Button, Stack, Paper } from "@mui/material";
 import { flexbox } from "@mui/system";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 
 function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
   let initialState = recordUpdate;
@@ -41,9 +40,6 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
   const [state, setState] = useState(initialState);
 
   const { name, descData } = state;
-
-  const { id } = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (state._id) {
@@ -109,10 +105,9 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
 
   return (
     <>
-      <Paper sx={styles.paper}>
+      <Paper elevation='0' sx={styles.paper}>
         <form onSubmit={handOnleSubmit}>
           <Grid container sx={styles.container}>
-            {id && <p style={styles.title}>Update Board</p>}
             <Grid item>
               <TextField
                 variant="outlined"

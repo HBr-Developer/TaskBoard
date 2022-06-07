@@ -3,6 +3,9 @@ import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 
 const BoardSearch = ({ setSearched }) => {
+  const handleOnChange = (e) =>
+      setSearched(e.target.value);
+  
   const styles = {
     boxStyle: {
       width: 400,
@@ -13,7 +16,7 @@ const BoardSearch = ({ setSearched }) => {
       padding: 0,
     },
   };
-
+  
   return (
     <Box sx={styles.boxStyle}>
       <TextField
@@ -25,11 +28,11 @@ const BoardSearch = ({ setSearched }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon />
+              <SearchIcon/>
             </InputAdornment>
           ),
         }}
-        onChange={(e) => setSearched(e.target.value)}
+        onChange={handleOnChange}
       />
     </Box>
   );

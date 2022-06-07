@@ -125,7 +125,7 @@ const Board = () => {
             }
           }
         >
-          <BoardSearch searched={searched} setSearched={setSearched}/>
+          <BoardSearch searched={searched} setSearched={setSearched} />
           <Button
             style={styles.buttons.addBoard}
             variant="contained"
