@@ -6,6 +6,14 @@ const membreSchema = new mongoose.Schema(
     // _id: {
     //   type: Number,
     // },
+      firstName:{
+          type: String,
+          require: true
+      },
+      lastName:{
+          type: String,
+          require: true
+      },
     username: {
       type: String,
       require: true,

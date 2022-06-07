@@ -1,5 +1,4 @@
 const Membre = require("../models/membre");
-const Board = require("../models/board");
 
 exports.createMembre = async (req, res) => {
   const membre = new Membre(req.body);
