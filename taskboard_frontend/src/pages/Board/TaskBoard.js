@@ -9,15 +9,25 @@ import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Spinner from "../../components/Spinner";
+import Popup from "./Popup";
+import InviteMember from '../../components/Member/InviteMember';
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import RightSidebar from "../../components/Sidebar/RightSidebar";
 
 const Board = () => {
+  // States
   const [toggleNewList, setToggleNewList] = useState(false);
   const [boardLists, setBoardLists] = useState([]);
   const [boardTitle, setBoardtitle] = useState("");
+  const [recordUpdate, setRecordUpdate] = useState("");
+  const [openPopup, setOpenPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showRightSidebar, setShowRightSideBar] = useState(false);
+  
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const [isLoading, setIsLoading] = useState(true);
+  
   
   // getting board data from DB
   const getSingleBoard = async () => {
@@ -159,47 +169,79 @@ const Board = () => {
   }
   
   return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
-      <div style={BoardStyle.topBar}>
-        <p style={BoardStyle.title}>{boardTitle}</p>
-        <div style={BoardStyle.members}>
-          <p style={BoardStyle.separator}></p>
-          <p style={BoardStyle.member}>HE</p>
-          <Button variant='contained' sx={{ paddingLeft: 1, paddingRight: 1, fontSize: '0.8rem' }}>
-            <PersonAddAltIcon sx={{ fontSize: 18, marginRight: 0.5 }}/> Share
+    <>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <div style={BoardStyle.topBar}>
+          <p style={BoardStyle.title}>{boardTitle}</p>
+          <div style={BoardStyle.members}>
+            <p style={BoardStyle.separator}></p>
+            <p style={BoardStyle.member}>HE</p>
+            <Button variant='contained' sx={{ paddingLeft: 1, paddingRight: 1, fontSize: '0.8rem' }}
+                    onClick={() => setOpenPopup(true)}>
+              <PersonAddAltIcon sx={{ fontSize: 18, marginRight: 0.5 }}/> Share
+            </Button>
+          </div>
+          <Button
+            variant="contained"
+            sx={{
+              paddingLeft: 1,
+              paddingRight: 1,
+              marginLeft: 80,
+              fontSize: "0.8rem",
+            }}
+            onClick={() => setShowRightSideBar(!showRightSidebar)}
+          >
+            <MenuOpenIcon sx={{ fontSize: 18 }} /> Show menu
           </Button>
+          <RightSidebar
+            showRightSidebar={showRightSidebar}
+            setShowRightSideBar={setShowRightSideBar}
+          />
         </div>
-      </div>
-      <div>
-        <Droppable droppableId="board" type="list" direction="horizontal">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={BoardStyle}
-            >
-              {boardLists.map((list, index) => (
-                <List
-                  index={index}
-                  key={list._id}
-                  list={list}
+        <div>
+          <Droppable droppableId="board" type="list" direction="horizontal">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={BoardStyle}
+              >
+                {boardLists.map((list, index) => (
+                  <List
+                    index={index}
+                    key={list._id}
+                    list={list}
+                    boardLists={boardLists}
+                    setBoardLists={setBoardLists}
+                  />
+                ))}
+                {provided.placeholder}
+                <AddList
+                  toggleNewList={toggleNewList}
+                  setToggleNewList={setToggleNewList}
                   boardLists={boardLists}
                   setBoardLists={setBoardLists}
+                  boardId={id}
                 />
-              ))}
-              {provided.placeholder}
-              <AddList
-                toggleNewList={toggleNewList}
-                setToggleNewList={setToggleNewList}
-                boardLists={boardLists}
-                setBoardLists={setBoardLists}
-                boardId={id}
-              />
-            </div>
-          )}
-        </Droppable>
-      </div>
-    </DragDropContext>
+              </div>
+            )}
+          </Droppable>
+        </div>
+      </DragDropContext>
+      <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        setRecordUpdate={setRecordUpdate}
+        recordUpdate={recordUpdate}
+        title={"Share the board"}
+      >
+        <InviteMember
+          openPopup={openPopup}
+          setOpenPopup={setOpenPopup}
+          recordUpdate={recordUpdate}
+        />
+      </Popup>
+    </>
   );
 };
 
