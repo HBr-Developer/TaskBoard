@@ -55,7 +55,7 @@ function RightSidebar({ showRightSidebar }) {
   };
   
   return (
-    <nav className={showRightSidebar ? 'rightsidebar active' : 'rightsidebar'}>
+    <nav className={showRightSidebar ? 'rightSidebar active' : 'rightSidebar'}>
       <ul className='rightSide-menu-items'>
         
         <h1>Activity</h1>

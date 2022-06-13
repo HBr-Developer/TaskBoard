@@ -55,7 +55,7 @@ const Boards = () => {
     }
     GetBoards();
     setIsLoading(false);
-  }, [user]);
+  }, [user, boards]);
   
   //delete Board
   const deleteBoards = async (id) => {
