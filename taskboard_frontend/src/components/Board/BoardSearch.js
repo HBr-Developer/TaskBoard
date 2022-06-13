@@ -1,5 +1,4 @@
 import { Box, TextField, InputAdornment } from "@mui/material";
-import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 
 const BoardSearch = ({ setSearched }) => {
@@ -9,11 +8,9 @@ const BoardSearch = ({ setSearched }) => {
   const styles = {
     boxStyle: {
       width: 400,
-      maxWidth: "100%",
-      marginBottom: 4,
+      maxWidth: '100%',
     },
     search: {
-      padding: 0,
     },
   };
   
@@ -22,16 +19,16 @@ const BoardSearch = ({ setSearched }) => {
       <TextField
         sx={styles.search}
         fullWidth
-        variant="standard"
+        variant="outlined"
         label="Seacrh"
         id="fullWidth"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon/>
-            </InputAdornment>
-          ),
-        }}
+        // InputProps={{
+        //   startAdornment: (
+        //     <InputAdornment position="start">
+        //       <SearchIcon/>
+        //     </InputAdornment>
+        //   ),
+        // }}
         onChange={handleOnChange}
       />
     </Box>

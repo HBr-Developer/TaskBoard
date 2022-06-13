@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Paper, Typography} from "@mui/material";
 import {Draggable} from "react-beautiful-dnd";
 import CardInfo from "./CardInfo";
-import Popup from "../../pages/Boards/Popup";
+import Popup from "../../pages/Board/Popup";
 import axios from "axios";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 

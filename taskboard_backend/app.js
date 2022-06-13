@@ -7,7 +7,8 @@ const cors = require("cors");
 const boardRoutes = require("./routes/boards");
 const cardRoutes = require("./routes/cards");
 const listRoutes = require("./routes/lists");
-const membreRoutes = require("./routes/membres");
+const memberRoutes = require("./routes/members");
+const permissionRoutes = require("./routes/permissions");
 
 //Config
 require("dotenv").config();
@@ -30,7 +31,8 @@ app.use(cors());
 app.use("/board", boardRoutes);
 app.use("/card", cardRoutes);
 app.use("/list", listRoutes);
-app.use("/membre", membreRoutes);
+app.use("/member", memberRoutes);
+app.use("/permission", permissionRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello");

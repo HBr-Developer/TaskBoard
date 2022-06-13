@@ -3,7 +3,7 @@ const List = require("../models/list");
 
 exports.createCard = async(req, res) => {
   try {
-    const card = new Board(req.body);
+    const card = new Boards(req.body);
     console.log("card", card);
     await card.save();
     res.json({ created: "Created" });
@@ -16,7 +16,7 @@ exports.createCardInList = async (req, res) => {
   try {
     const list = await List.findById(req.params.listId);
     const newCard = new Card({ ...req.body, list_id: list._id });
-    const listUpdated = await List.findByIdAndUpdate(list._id, {
+    await List.findByIdAndUpdate(list._id, {
       ...list._doc,
       cards: [...list.cards, newCard],
     });

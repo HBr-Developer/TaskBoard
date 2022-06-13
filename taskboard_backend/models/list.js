@@ -5,9 +5,7 @@ const listSchema = new mongoose.Schema(
     name: {
       type: String,
       require: true,
-     
     },
-
     closed: {
       type: Boolean,
     },

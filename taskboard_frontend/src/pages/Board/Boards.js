@@ -5,25 +5,36 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import axios from "axios";
-import BoardSearch from "./BoardSearch";
+import BoardSearch from "../../components/Board/BoardSearch";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import Popup from "./Popup";
-import BoardForm from "./BoardForm";
+import BoardForm from "../../components/Board/BoardForm";
+import { useSelector } from "react-redux";
+import Spinner from "../../components/Spinner";
 
-const Board = () => {
+const Boards = () => {
   const [recordUpdate, setRecordUpdate] = useState("");
   const [boards, setBoards] = useState([]);
   const [searched, setSearched] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
   
   const GetBoards = () => {
+    if(!user) return;
+    const token = user.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
     const url = "http://localhost:3001/board/";
     axios
-      .get(url)
+      .get(url, config)
       .then((response) => {
         const { status, message, data } = response;
         if (status !== 200) {
@@ -38,8 +49,13 @@ const Board = () => {
   };
   
   useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     GetBoards();
-  }, [boards]);
+    setIsLoading(false);
+  }, [user]);
   
   //delete Board
   const deleteBoards = async (id) => {
@@ -80,7 +96,7 @@ const Board = () => {
     buttons: {
       addBoard: {
         backgroundColor: "#333996",
-        margin: 'auto',
+        // margin: 'auto',
         paddingTop: 10,
         paddingBottom: 10,
         paddingLeft: 20,
@@ -113,6 +129,10 @@ const Board = () => {
     navigate(`/taskboard/${id}`);
   };
   
+  if (isLoading) {
+    return <Spinner/>
+  }
+  
   return (
     <>
       <Paper sx={styles.paperStyle} elevation={2}>
@@ -121,16 +141,17 @@ const Board = () => {
             {
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'space-between'
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 50
             }
           }
         >
-          <BoardSearch searched={searched} setSearched={setSearched} />
+          <BoardSearch searched={searched} setSearched={setSearched}/>
           <Button
             style={styles.buttons.addBoard}
             variant="contained"
-            sx={{}}
-            children="New Board"
+            children="New Boards"
             onClick={() => setOpenPopup(true)}
           />
         </div>
@@ -138,13 +159,13 @@ const Board = () => {
           <Table sx={styles.tableStyle} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <TableCell>Board Name</TableCell>
-                <TableCell align="center">Board Description</TableCell>
+                <TableCell>Boards Name</TableCell>
+                <TableCell align="center">Boards Description</TableCell>
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {boards
+              {boards.length === 0 ? <p>No boards available</p> : boards
                 .filter(
                   (board) =>
                     board.name.toLowerCase().includes(searched.toLowerCase()) ||
@@ -214,4 +235,4 @@ const Board = () => {
   );
 };
 
-export default Board;
+export default Boards;

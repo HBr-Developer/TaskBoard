@@ -6,15 +6,24 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AddIcon from '@mui/icons-material/Add';
 import { Link } from 'react-router-dom'
 import './sidebar.css';
-import BoardSearch from "../../pages/Boards/BoardSearch";
-import Popup from "../../pages/Boards/Popup";
-import BoardForm from "../../pages/Boards/BoardForm";
+import BoardSearch from "../Board/BoardSearch";
+import Popup from "../../pages/Board/Popup";
+import BoardForm from "../Board/BoardForm";
+import { useSelector } from "react-redux";
 
 function Sidebar({ showSidebar, setShowSideBar }) {
   const [listBoards, setListboards] = useState([]);
   const [searched, setSearched] = useState("");
   const [recordUpdate, setRecordUpdate] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
+  const { user } = useSelector((state) => state.auth);
+  
+  const token = user.token;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
   
   const hideSideBar = () => {
     setShowSideBar(!showSidebar);
@@ -22,7 +31,7 @@ function Sidebar({ showSidebar, setShowSideBar }) {
   
   const getListBoards = async () => {
     try {
-      const b = await axios.get("http://localhost:3001/board");
+      const b = await axios.get("http://localhost:3001/board", config);
       setListboards(b.data);
     } catch (err) {
       console.log(err);

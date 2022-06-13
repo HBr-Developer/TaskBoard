@@ -1,29 +1,27 @@
-
 import AppBar from '@mui/material/AppBar';
-import { Box, MenuItem } from '@mui/material';
+import { Box, Button, MenuItem } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from "react-router-dom";
-
 import { styled, alpha } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
-
 import Menu from '@mui/material/Menu';
-
 import SearchIcon from '@mui/icons-material/Search';
-
-
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { logout, reset } from "../features/auth/authSlice";
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const Header = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  
   const styles = {
     backgroundColor: '#FFFFFF',
     color: '#4d56bf',
@@ -59,7 +57,7 @@ const Header = () => {
     color: 'inherit',
     '& .MuiInputBase-input': {
       padding: theme.spacing(1, 1, 1, 0),
-
+      
       paddingLeft: `calc(1em + ${theme.spacing(4)})`,
       transition: theme.transitions.create('width'),
       width: '100%',
@@ -78,74 +76,98 @@ const Header = () => {
     setAnchorElUser(null);
   };
   
+  const onLogout = () => {
+    dispatch(reset());
+    dispatch(logout());
+    navigate('/');
+  }
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={styles}>
         <Toolbar variant='dense'>
-          <MenuItem key='Home' style={{ marginLeft: 20 }} onClick={() => navigate("/")}>
+          <MenuItem key='Home' style={{ marginLeft: 20 }} onClick={() => navigate("/board")}>
             <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: 25 }} color="inherit" component="div"
                         children='Taskboard'/>
           </MenuItem>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          {user && (
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon/>
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
           
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+          )}
+          <Box sx={{ flexGrow: 1 }}/>
+          
+          {/*Bell and profile icons*/}
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             
-            <Box>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} 
-                    size="large"
-                  aria-label="account of current user"
-                  aria-controls="primary-search-account-menu"
-                  aria-haspopup="true"
-                  color="inherit">
-                  {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
-                  <AccountCircle />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '20px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
             
+            {user ? (
+              <>
+                {/*<IconButton*/}
+                {/*  size="large"*/}
+                {/*  aria-label="show 17 new notifications"*/}
+                {/*  color="inherit"*/}
+                {/*>*/}
+                {/*  <Badge badgeContent={17} color="error">*/}
+                {/*    <NotificationsIcon/>*/}
+                {/*  </Badge>*/}
+                {/*</IconButton>*/}
+                
+                <Box>
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleOpenUserMenu}
+                                size="medium"
+                                sx={{padding: 1}}
+                                aria-label="account of current user"
+                                aria-controls="primary-search-account-menu"
+                                aria-haspopup="true"
+                                color="inherit">
+                      {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+                      <AccountCircle/>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: '20px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    <MenuItem key="menus" onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center" onClick={onLogout}>Logout</Typography>
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              </>
+            ) : (
+              <Box>
+                <Button onClick={() => navigate("/login")}>
+                  Login
+                </Button>
+                
+                <Button onClick={() => navigate("/register")}>
+                  Register
+                </Button>
+              </Box>
+            )}
           </Box>
-
+        
         </Toolbar>
       </AppBar>
     </Box>

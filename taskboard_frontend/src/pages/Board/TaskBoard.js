@@ -1,22 +1,35 @@
-import AddList from "../List/AddList";
-import List from "../List/List";
+import AddList from "../../components/List/AddList";
+import List from "../../components/List/List";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@mui/material";
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Spinner from "../../components/Spinner";
 
 const Board = () => {
   const [toggleNewList, setToggleNewList] = useState(false);
   const [boardLists, setBoardLists] = useState([]);
   const [boardTitle, setBoardtitle] = useState("");
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const [isLoading, setIsLoading] = useState(true);
   
   // getting board data from DB
   const getSingleBoard = async () => {
+    if (!user) return;
+    const token = user.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
     try {
-      const response = await axios.get(`http://localhost:3001/board/${id}`);
+      const response = await axios.get(`http://localhost:3001/board/${id}`, config);
       setBoardtitle(response.data.name);
       setBoardLists(response.data.lists);
     } catch (err) {
@@ -25,6 +38,13 @@ const Board = () => {
   };
   
   useEffect(() => {
+    setTimeout(() => {
+      if (!user) {
+        navigate('/login');
+        return;
+      }
+      setIsLoading(false);
+    }, 500);
     getSingleBoard();
   }, [id]);
   
@@ -97,7 +117,6 @@ const Board = () => {
     minHeight: "100vh",
     display: "flex",
     alignItems: "flex-start",
-    overflowX: "auto",
     topBar: {
       display: 'flex',
       flexDirection: 'row',
@@ -134,6 +153,10 @@ const Board = () => {
       updateLists(source, destination);
     }
   };
+  
+  if (isLoading) {
+    return <Spinner/>;
+  }
   
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>

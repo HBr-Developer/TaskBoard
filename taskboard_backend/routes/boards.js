@@ -7,21 +7,22 @@ const {
   boardDelete,
   boardUpdate,
   listsOfBoard,
-  AddMemberToBoard,
-  deleteMembreInBoard
+  assignPermissionToBoard,
+  // deleteMemberInBoard
 } = require("../controllers/boardController");
+const { protect } = require('../middleware/authMiddleware');
 
-router.get("/", getAllBoards);
-router.get("/:id", boardById);
+router.get("/", protect, getAllBoards);
+router.get("/:id", protect, boardById);
 
-router.post("/create", createBoard);
-router.delete("/:id", boardDelete);
-router.patch("/:id", boardUpdate);
+router.post("/create", protect, createBoard);
+router.delete("/:id", protect, boardDelete);
+router.patch("/:id", protect, boardUpdate);
 
-router.get("/:boardId/lists", listsOfBoard)
+router.get("/:boardId/lists", protect, listsOfBoard);
 
-router.post("/:membreId/board/:boardId", AddMemberToBoard);
-router.patch("/:membreId/delete", deleteMembreInBoard);
+router.post("/permission/:boardId/:memberId", protect, assignPermissionToBoard);
+// router.patch("/:memberId/delete", protect, deleteMemberInBoard);
 
 
 module.exports = router;

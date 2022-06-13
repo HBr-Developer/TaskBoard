@@ -1,29 +1,68 @@
 const Board = require("../models/board");
 const Card = require("../models/card");
 const List = require("../models/list");
-const Membre = require("../models/membre");
+const Member = require("../models/member");
+const Permission = require("../models/permission");
 
 exports.createBoard = async (req, res) => {
   try {
-    const board = new Board(req.body);
-    console.log("board", board);
+    // Create a new board
+    const board = await Board({
+      ...req.body
+    });
+    // Create a new permission
+    const permission = await Permission.create({
+      board: board._id,
+      user: req.member.id,
+      role: "admin"
+    });
+    // Retrieve the member logged in
+    const member = await Member.findById(req.member.id, "permissions");
+    // Adding the new Permission into the member logged in and the new board
+    await Member.updateOne({ _id: req.member.id }, { permissions: [...member.permissions, permission._id] });
+    board.permissions.push(permission._id);
     await board.save();
-    res.json({ created: "Created" });
+    res.json(board);
   } catch (err) {
     console.log(err);
   }
 };
 
-exports.AddMemberToBoard = async (req, res) => {
+exports.assignPermissionToBoard = async (req, res) => {
   try {
-    const membre = await Membre.findById(req.params.membreId);
-    console.log("membre", membre);
+    // Retrieve the member
+    const member = await Member.findById(req.params.memberId);
+    // Retrieve the current board
     const board = await Board.findById(req.params.boardId);
-    console.log("board", board);
-
-    await Membre.findOneAndUpdate({_id: membre._id}, {boards: [...membre.boards, board._id]});
-    await Board.findOneAndUpdate({_id: board._id}, {membres: [...board.membres, membre._id]});
-    res.json(board);
+    // verify if permission exists
+    const per = await Permission.find({ board: board._id, user: member._id });
+    if (per.length === 0) {
+      // New permission
+      const permission = await Permission.create({
+        board: board._id,
+        user: member._id,
+        role: "invited"
+      });
+      await Board.updateOne({ _id: board._id }, { permissions: [...board.permissions, permission] });
+      res.json(permission);
+    } else {
+      res.json('Permission already exists');
+    }
+    
+    // await permission.save();
+    // Update user and board permissions
+    // await Member.updateOne({_id: member._id}, {permissions: [...member.permissions, permission]});
+    // const newBoard = await Board.updateOne({_id: board._id}, {permissions: [...member.permissions, permission]});
+    // res.json(newBoard);
+    
+    // const member = await Member.findById(req.params.memberId);
+    // console.log("member", member);
+    // const board = await Board.findById(req.params.boardId);
+    // console.log("board", board);
+    //
+    // await Member.findOneAndUpdate({_id: member._id}, {boards: [...member.boards, board._id]});
+    // await Board.findOneAndUpdate({_id: board._id}, {members: [...board.members, member._id]});
+    // res.json(board);
   } catch (err) {
     console.log(err);
   }
@@ -31,12 +70,24 @@ exports.AddMemberToBoard = async (req, res) => {
 
 exports.getAllBoards = async (req, res) => {
   try {
-    const allBoards = await Board.find().populate({
+    const permissions = await Permission.find({ user: req.member.id });
+    // res.json(permissions);
+    const permissionBoards = permissions.map((per) => per.board);
+    const allBoards = await Board.find({ _id: permissionBoards }, 'name descData lists permissions createdAt updatedAt').populate({
       path: "lists",
       populate: {
         path: "cards",
         model: "Card",
+        select: "name descData"
       },
+    }).populate({
+      path: 'permissions',
+      select: 'user role',
+      populate: {
+        path: 'user',
+        model: 'Member',
+        select: 'name email'
+      }
     });
     res.json(allBoards);
   } catch (err) {
@@ -46,13 +97,21 @@ exports.getAllBoards = async (req, res) => {
 
 exports.boardById = async (req, res) => {
   try {
-    let newBoard = await Board.findById(req.params.id, "name lists").populate({
+    let newBoard = await Board.findById(req.params.id, 'name descData lists permissions createdAt updatedAt').populate({
       path: "lists",
-      select: "name cards",
       populate: {
         path: "cards",
-        select: "name descData",
+        model: "Card",
+        select: "name descData"
       },
+    }).populate({
+      path: 'permissions',
+      select: 'user role',
+      populate: {
+        path: 'user',
+        model: 'Member',
+        select: 'name email'
+      }
     });
     res.json(newBoard);
   } catch (err) {
@@ -102,20 +161,17 @@ exports.listsOfBoard = async (req, res) => {
   }
 };
 
-exports.deleteMembreInBoard = async(req, res)=>{
-  try
-  { 
-    const membre = await Membre.findById(req.params.membreId);
-    await Board.updateMany({ '_id': membre.boards }, { $pull: { membres: membre._id } });
+exports.deletememberInBoard = async (req, res) => {
+  try {
+    const member = await Member.findById(req.params.memberId);
+    await Board.updateMany({ '_id': member.boards }, { $pull: { members: member._id } });
     
     
-    res.json(membre);
+    res.json(member);
     
     console.log("removed")
     
-  }
-  catch(err)
-  {
+  } catch (err) {
     console.log(err.message);
   }
 };

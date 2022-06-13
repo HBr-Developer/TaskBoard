@@ -1,39 +1,39 @@
-import { TextField, Grid, Button, Stack, Paper } from "@mui/material";
-import { flexbox } from "@mui/system";
-import axios from "axios";
-import { useEffect, useState } from "react";
-
-function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
-  let initialState = recordUpdate;
-
-  const styles = {
-    form: {
-      display: flexbox,
-    },
-    container: {
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    inputStyle: {
-      width: "100%",
-      "&:not(:last-child)": {
-        marginBottom: 5,
+  import { TextField, Grid, Button, Stack, Paper } from "@mui/material";
+  import { flexbox } from "@mui/system";
+  import axios from "axios";
+  import { useEffect, useState } from "react";
+  
+  function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
+    let initialState = recordUpdate;
+  
+    const styles = {
+      form: {
+        display: flexbox,
       },
-    },
-    title: {
-      fontSize: 25,
-      marginBottom: 50,
-    },
-    submit: {
-      textAlign: "center",
-    },
-    paper: {
-      margin: "auto",
-      paddingTop: 2,
-      paddingBottom: 8,
-      paddingLeft: 5,
-      paddingRight: 5,
-      width: "10  0%",
+      container: {
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      inputStyle: {
+        width: "100%",
+        "&:not(:last-child)": {
+          marginBottom: 5,
+        },
+      },
+      title: {
+        fontSize: 25,
+        marginBottom: 50,
+      },
+      submit: {
+        textAlign: "center",
+      },
+      paper: {
+        margin: "auto",
+        paddingTop: 2,
+        paddingBottom: 8,
+        paddingLeft: 5,
+        paddingRight: 5,
+        width: "10  0%",
     },
   };
 
@@ -111,7 +111,7 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
             <Grid item>
               <TextField
                 variant="outlined"
-                label="Board Name"
+                label="Boards Name"
                 name="name"
                 value={name}
                 onChange={handleInputChange}
@@ -119,7 +119,7 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
               />
               <TextField
                 variant="outlined"
-                label="Board Description"
+                label="Boards Description"
                 name="descData"
                 value={descData}
                 onChange={handleInputChange}
