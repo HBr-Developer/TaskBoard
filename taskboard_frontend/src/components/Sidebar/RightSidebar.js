@@ -1,20 +1,6 @@
-import { useEffect } from "react";
-import axios from "axios";
 import './rightSidebar.css';
 
 function RightSidebar({ showRightSidebar }) {
-  const getListBoards = async () => {
-    try {
-      const b = await axios.get("http://localhost:3001/board");
-      setListboards(b.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  
-  useEffect(() => {
-    getListBoards();
-  }, []);
   
   //Sidebar items
   // const SidebarItems = listBoards.map((list, index) => ({
@@ -25,9 +11,8 @@ function RightSidebar({ showRightSidebar }) {
   //   cName: 'side-text'
   // }));
   
-  console.log('SidebarItems', SidebarItems);
   const BoardStyle = {
-    paddingTop: 15,
+    paddingTop: 0,
     // backgroundColor: "#282c34",
     backgroundColor: "#FFFFFF",
     minHeight: "100vh",
@@ -71,7 +56,7 @@ function RightSidebar({ showRightSidebar }) {
   
   return (
     <nav className={showRightSidebar ? 'rightsidebar active' : 'rightsidebar'}>
-      <ul className='side-menu-items'>
+      <ul className='rightSide-menu-items'>
         
         <h1>Activity</h1>
         <hr></hr>
