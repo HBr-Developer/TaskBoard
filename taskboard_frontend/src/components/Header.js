@@ -5,16 +5,13 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from "react-router-dom";
 import { styled, alpha } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { logout, reset } from "../features/auth/authSlice";
+import UserAvatar from "./avatar/UserAvatar";
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const Header = () => {
@@ -106,32 +103,13 @@ const Header = () => {
           
           {/*Bell and profile icons*/}
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            
-            
             {user ? (
               <>
-                {/*<IconButton*/}
-                {/*  size="large"*/}
-                {/*  aria-label="show 17 new notifications"*/}
-                {/*  color="inherit"*/}
-                {/*>*/}
-                {/*  <Badge badgeContent={17} color="error">*/}
-                {/*    <NotificationsIcon/>*/}
-                {/*  </Badge>*/}
-                {/*</IconButton>*/}
-                
                 <Box>
                   <Tooltip title="Open settings">
-                    <IconButton onClick={handleOpenUserMenu}
-                                size="medium"
-                                sx={{padding: 1}}
-                                aria-label="account of current user"
-                                aria-controls="primary-search-account-menu"
-                                aria-haspopup="true"
-                                color="inherit">
-                      {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
-                      <AccountCircle/>
-                    </IconButton>
+                    <div style={styles.avatar} onClick={handleOpenUserMenu}>
+                      <UserAvatar name={user.name}/>
+                    </div>
                   </Tooltip>
                   <Menu
                     sx={{ mt: '20px' }}

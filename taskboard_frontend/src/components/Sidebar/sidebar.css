@@ -64,3 +64,10 @@
 span {
     margin-left: 16px;
 }
+nav * {
+    color: white !important;
+}
+nav .css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+    border-color:white;
+    width: 90%;
+}

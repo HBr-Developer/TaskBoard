@@ -1,4 +1,6 @@
 const Permission = require("../models/permission");
+const Board = require("../models/board");
+const Member = require("../models/member");
 
 exports.allPermissions = async (req, res) => {
   try {
@@ -7,6 +9,22 @@ exports.allPermissions = async (req, res) => {
       model: 'Member',
       select: 'name'
     })
+    res.json(permission);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+exports.addPermission = async (req, res) => {
+  try {
+    // create new permission
+    const permission = await Permission.create(req.body);
+    console.log('permission', permission);
+    // add permission to the board
+    const board = await Board.findById(req.body.board);
+    await Board.updateOne({ _id: req.body.board }, { permissions: [...board.permissions, permission] });
+    // add permission to the user
+    await Member.updateOne({ _id: req.body.user }, { permissions: [...board.permissions, permission] });
     res.json(permission);
   } catch (err) {
     console.log(err);

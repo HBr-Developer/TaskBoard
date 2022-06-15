@@ -1,16 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const {
-  createMember,
-  MemberUpdate,
-  getAllMember,
-  memberById,
-  memberDelete,
-  deleteMemberInBoard,
-  AddMemberInBoard,
+  getAllMembers,
   registerMember,
   loginMember,
-  getMe
+  getMe,
+  getMembersOfBoard
 } = require("../controllers/memberController");
 
 const { protect } = require('../middleware/authMiddleware');
@@ -18,11 +13,7 @@ const { protect } = require('../middleware/authMiddleware');
 router.post("/", registerMember);
 router.post("/login", loginMember);
 router.get("/me", protect, getMe);
-
-// router.post("/create", createMember);
-// router.patch("/:id", MemberUpdate);
-// router.get("/", getAllMember);
-// router.get("/:id", memberById);
-// router.delete("/:id", memberDelete);
+router.get("/", getAllMembers);
+router.get("/:boardId", getMembersOfBoard);
 
 module.exports = router;

@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
-  
   const [state, setState] = useState(recordUpdate);
   const { name, descData } = state;
   const { user } = useSelector((state) => state.auth);
@@ -69,7 +68,6 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
   
   //addBoard
   const addBoard = async (data) => {
-    
     try {
       await axios.post("http://localhost:3001/board/create", data, config);
     } catch (err) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Paper, Table, TableBody } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -24,28 +24,26 @@ const Boards = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   
-  const GetBoards = () => {
-    if(!user) return;
+  const GetBoards = async () => {
+    if (!user) return;
     const token = user.token;
     const config = {
       headers: {
         Authorization: `Bearer ${token}`
       }
     }
-    const url = "http://localhost:3001/board/";
-    axios
-      .get(url, config)
-      .then((response) => {
-        const { status, message, data } = response;
-        if (status !== 200) {
-          alert(message, status);
-        } else {
-          setBoards(data);
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
+    
+    try {
+      const response = await axios.get("http://localhost:3001/board/", config);
+      const { status, message, data } = response;
+      if (status !== 200) {
+        alert(message, status);
+      } else {
+        setBoards(data);
+      }
+    } catch (err) {
+      console.log("error", err);
+    }
   };
   
   useEffect(() => {

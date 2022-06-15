@@ -26,7 +26,7 @@ function App() {
       <div>
         <Header/>
         {user && (
-            <Sidebar showSidebar={showSidebar} setShowSideBar={setShowSideBar}/>
+          <Sidebar showSidebar={showSidebar} setShowSideBar={setShowSideBar}/>
         )}
         <div style={showSidebar ? styles.sideBarOn : styles.sideBarOff}>
           <Outlet/>

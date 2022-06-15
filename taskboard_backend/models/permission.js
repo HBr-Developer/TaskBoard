@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const memberSchema = new mongoose.Schema(
   {
+    role: {
+      type: String,
+    },
     board: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Board",
@@ -9,9 +12,6 @@ const memberSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Member",
-    },
-    role: {
-      type: String,
     }
   },
   { timestamps: true }

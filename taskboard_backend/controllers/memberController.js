@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
 const Member = require("../models/member");
+const Board = require("../models/board");
 
 
 exports.registerMember = asyncHandler(async (req, res) => {
@@ -63,12 +64,41 @@ exports.getMe = asyncHandler(async (req, res) => {
   res.status(200).json(req.member);
 });
 
+exports.getAllMembers = asyncHandler(async (req, res) => {
+  try {
+    const members = await Member.find();
+    res.status(200).json(members);
+  } catch(err) {
+    console.log(err);
+  }
+});
+
+exports.getMembersOfBoard = asyncHandler(async (req, res) => {
+  try {
+    // const members = await Member.find().populate('permissions').populate("permissions");
+    const board = await Board.findById(req.params.boardId, 'name descData createdAt updatedAt').populate({
+      path: 'permissions',
+      select: 'role board',
+      populate: {
+        path: 'user',
+        model: 'Member',
+        select: 'name email'
+      }
+    });
+    const users = board.permissions.map((permission) => ({ user: permission.user, role: permission.role }));
+    res.status(200).json(users);
+  } catch(err) {
+    console.log(err);
+  }
+});
+
 //Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '1d',
   })
 }
+
 
 // exports.createMember = async (req, res) => {
 //   const member = new Member(req.body);

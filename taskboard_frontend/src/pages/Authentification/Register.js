@@ -46,7 +46,6 @@ function Register() {
       }
       dispatch(register(userData));
     }
-    
   }
   
   const onChange = (e) => {

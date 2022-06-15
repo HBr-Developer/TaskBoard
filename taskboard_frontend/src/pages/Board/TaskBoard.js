@@ -13,6 +13,7 @@ import Popup from "./Popup";
 import InviteMember from '../../components/Member/InviteMember';
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import RightSidebar from "../../components/Sidebar/RightSidebar";
+import UserAvatar from "../../components/avatar/UserAvatar";
 
 const Board = () => {
   // States
@@ -23,11 +24,12 @@ const Board = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showRightSidebar, setShowRightSideBar] = useState(false);
+  const [allMembers, setAllMembers] = useState([]);
+  const [invitedMembers, setInvitedMembers] = useState([]);
   
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  
   
   // getting board data from DB
   const getSingleBoard = async () => {
@@ -48,15 +50,22 @@ const Board = () => {
   };
   
   useEffect(() => {
+    setIsLoading(true);
     setTimeout(() => {
       if (!user) {
         navigate('/login');
         return;
       }
+      getSingleBoard();
+      getAllMembers();
       setIsLoading(false);
-    }, 500);
-    getSingleBoard();
+    }, 300);
   }, [id]);
+  
+  // useEffect(() => {
+  //   getAllMembers();
+  //   console.log('invited');
+  // }, []);
   
   // update DB while dragging cards
   const updateLists = async (source, destination) => {
@@ -102,6 +111,13 @@ const Board = () => {
   };
   // const updateBoard = async (newBoardList)
   const updateBoard = async (source, destination) => {
+    if (!user) return;
+    const token = user.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
     const newBoard = boardLists;
     console.log("newBoard", newBoard);
     const draggedList = newBoard.splice(source.index, 1)[0];
@@ -112,13 +128,60 @@ const Board = () => {
     try {
       await axios.patch(`http://localhost:3001/board/${id}`, {
         lists: newBoardLists,
-      });
+      }, config);
     } catch (err) {
       console.log(err);
     }
     setBoardLists(newBoard);
     // getSingleBoard();
   };
+  
+  // get Members
+  const getAllMembers = async () => {
+    if (!user) return;
+    const token = user.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+    try {
+      // get invited members
+      const response2 = await axios.get(`http://localhost:3001/member/${id}`);
+      const allInvitedMember = response2.data.map((member) => (
+        { _id: member.user._id, name: member.user.name, email: member.user.email, role: member.role }
+      ))
+      setInvitedMembers(allInvitedMember);
+      
+      // get All members
+      const response1 = await axios.get("http://localhost:3001/member", config);
+      const Member = response1.data.map((member) => ({ _id: member._id, name: member.name, email: member.email }));
+      
+      // checking for duplicated values
+      for (let i = 0; i < allInvitedMember.length; i++) {
+        const index = Member.findIndex((mem) => {
+          return mem._id === allInvitedMember[i]._id;
+        })
+        Member.splice(index, 1);
+      }
+      setAllMembers(Member);
+      
+      // let found = false;
+      // for (let i = 0; i < response1.data.length; i++) {
+      //   found = false;
+      //   for (let e = 0; e < allInvitedMember.length; e++) {
+      //     if(response1.data[i]._id === allInvitedMember[e]._id) {
+      //       found = true;
+      //     }
+      //   }
+      //   if(!found) {
+      //     Member.push(response1.data[i]);
+      //   }
+      // }
+    } catch (err) {
+      console.log(err)
+    }
+  }
   
   const BoardStyle = {
     paddingTop: 15,
@@ -130,6 +193,7 @@ const Board = () => {
     topBar: {
       display: 'flex',
       flexDirection: 'row',
+      alignItems: 'center',
       justifyContent: 'start',
       paddingTop: 7
     },
@@ -142,15 +206,18 @@ const Board = () => {
       // backgroundColor: "#282c34",
     },
     members: {
-      marginLeft: 100,
+      marginLeft: 20,
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center'
     },
-    member: { backgroundColor: '#449159', padding: 4, borderRadius: "50%", color: '#FFF', marginRight: 10 },
     separator: {
       height: 18, borderRight: '1px solid #a6a6a6', marginRight: 7
+    },
+    membersAvatars: {
+      display: 'flex',
+      flexDirection: 'row'
     }
   };
   
@@ -175,12 +242,18 @@ const Board = () => {
           <p style={BoardStyle.title}>{boardTitle}</p>
           <div style={BoardStyle.members}>
             <p style={BoardStyle.separator}></p>
-            <p style={BoardStyle.member}>HE</p>
-            <Button variant='contained' sx={{ paddingLeft: 1, paddingRight: 1, fontSize: '0.8rem' }}
+            <div className='membersAvatars' style={BoardStyle.membersAvatars}>
+              {invitedMembers.map((member) => (
+                <UserAvatar key={member.name} name={member.name}/>
+              ))}
+            </div>
+            <Button variant='contained' sx={{ paddingLeft: 1, paddingRight: 1, marginLeft: 1, fontSize: '0.8rem' }}
                     onClick={() => setOpenPopup(true)}>
               <PersonAddAltIcon sx={{ fontSize: 18, marginRight: 0.5 }}/> Share
             </Button>
           </div>
+          
+          {/*// Show menu button*/}
           <Button
             variant="contained"
             sx={{
@@ -191,7 +264,7 @@ const Board = () => {
             }}
             onClick={() => setShowRightSideBar(!showRightSidebar)}
           >
-            <MenuOpenIcon sx={{ fontSize: 18 }} /> Show menu
+            <MenuOpenIcon sx={{ fontSize: 18 }}/> Show menu
           </Button>
           <RightSidebar
             showRightSidebar={showRightSidebar}
@@ -233,12 +306,18 @@ const Board = () => {
         setOpenPopup={setOpenPopup}
         setRecordUpdate={setRecordUpdate}
         recordUpdate={recordUpdate}
-        title={"Share the board"}
+        title={"Share board"}
       >
         <InviteMember
+          allMembers={allMembers}
+          setAllMembers={setAllMembers}
+          invitedMembers={invitedMembers}
+          setInvitedMembers={setInvitedMembers}
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           recordUpdate={recordUpdate}
+          user={user}
+          boardId={id}
         />
       </Popup>
     </>

@@ -1,0 +1,16 @@
+.avatar {
+    color: #FFF;
+    background-color: #FF5B3C;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    font-size: 0.8rem;
+    margin-right: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar:hover {
+    cursor: pointer;
+}

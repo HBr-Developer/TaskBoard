@@ -62,6 +62,7 @@ function Sidebar({ showSidebar, setShowSideBar }) {
             <BoardSearch searched={searched} setSearched={setSearched}/>
           </Link>
           <div style={{
+            marginTop: 40,
             paddingLeft: 20,
             paddingRight: 15,
             display: 'flex',

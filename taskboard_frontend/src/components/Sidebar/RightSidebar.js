@@ -1,16 +1,6 @@
 import './rightSidebar.css';
 
 function RightSidebar({ showRightSidebar }) {
-  
-  //Sidebar items
-  // const SidebarItems = listBoards.map((list, index) => ({
-  //   id: index,
-  //   title: list.name,
-  //   icon: <DashboardIcon/>,
-  //   path: `taskboard/${list._id}`,
-  //   cName: 'side-text'
-  // }));
-  
   const BoardStyle = {
     paddingTop: 0,
     // backgroundColor: "#282c34",

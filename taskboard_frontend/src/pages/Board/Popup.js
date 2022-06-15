@@ -17,26 +17,28 @@ const Popup = ({ title, children, openPopup, setOpenPopup, setRecordUpdate }) =>
       }
     }
   }
-
+  
   const handleCloseClicked = () => {
     setOpenPopup(false);
     setRecordUpdate('');
   };
-
+  
   return (
     <Dialog open={openPopup}>
-      <DialogTitle>
-        <div style={{ display: "flex" }}>
-          <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
-            {title}
-          </Typography>
-          <CloseIcon
+      <div style={{backgroundColor: '#FBFBFB'}}>
+        <DialogTitle sx={{ paddingTop: 1, paddingBottom: 1 }}>
+          <div style={{ display: "flex", flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
+            <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
+              {title}
+            </Typography>
+            <CloseIcon
               onClick={handleCloseClicked}
               sx={styles.closeButton}
-          />
-        </div>
-      </DialogTitle>
-      <DialogContent dividers>{children}</DialogContent>
+            />
+          </div>
+        </DialogTitle>
+        <DialogContent dividers>{children}</DialogContent>
+      </div>
     </Dialog>
   );
 };

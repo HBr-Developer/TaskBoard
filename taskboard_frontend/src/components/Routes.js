@@ -17,9 +17,9 @@ const MainRoutes = () => {
           <Route path='register' element={<Register/>}/>
           <Route path="board" element={<Boards/>}/>
           <Route path="taskboard/:id" element={<TaskBoard/>}/>
+          <Route path="update/:id" element={<BoardForm/>}/>
+          <Route path="cardinfo/:id" element={<CardInfo/>}/>
         </Route>
-        <Route path="update/:id" element={<BoardForm/>}/>
-        <Route path="cardinfo/:id" element={<CardInfo/>}/>
       </Routes>
     </>
   );

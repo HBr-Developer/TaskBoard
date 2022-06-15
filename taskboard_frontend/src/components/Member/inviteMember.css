@@ -1,0 +1,28 @@
+.css-wjsjww-MuiChip-label {
+    padding-left: 0 !important;
+}
+
+.memberSearch {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+}
+
+.search {
+    flex-grow: 1;
+}
+
+.memberSearch .shareButton {
+    margin: 0;
+    flex-grow: 0;
+    margin-left: 10px;
+    background-color: #1976D2;
+    transition: background-color 100ms;
+    border-radius: 2px;
+}
+
+.memberSearch .shareButton:hover {
+    background-color: #175b9f;
+}
