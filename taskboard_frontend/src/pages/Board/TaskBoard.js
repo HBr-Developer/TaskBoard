@@ -259,7 +259,7 @@ const Board = () => {
             sx={{
               paddingLeft: 1,
               paddingRight: 1,
-              marginLeft: 80,
+              marginLeft: 120,
               fontSize: "0.8rem",
             }}
             onClick={() => setShowRightSideBar(!showRightSidebar)}

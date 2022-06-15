@@ -1,6 +1,6 @@
 .rightSidebar {
     z-index: 50;
-    background-color: #E8E9ED;
+    background-color:#f7f8fa;
     width: 350px;
     height: 100vh;
     display: flex;
@@ -14,6 +14,7 @@
     right: 0;
     transition: 150ms;
 }
+
 
 /*.rightSide-text {*/
 /*    display: flex;*/
@@ -52,6 +53,13 @@ hr{
     margin-top: 10px;
 }
 
-h1{
+
+h4{
     margin-left: 150px;
+}
+.topheader{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }

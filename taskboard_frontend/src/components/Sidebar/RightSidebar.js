@@ -1,6 +1,6 @@
 import './rightSidebar.css';
-
-function RightSidebar({ showRightSidebar }) {
+import CloseIcon from '@mui/icons-material/Close';
+function RightSidebar({ showRightSidebar, setShowRightSideBar }) {
   const BoardStyle = {
     paddingTop: 0,
     // backgroundColor: "#282c34",
@@ -47,10 +47,16 @@ function RightSidebar({ showRightSidebar }) {
   return (
     <nav className={showRightSidebar ? 'rightSidebar active' : 'rightSidebar'}>
       <ul className='rightSide-menu-items'>
-        
-        <h1>Activity</h1>
+
+        <div className="topheader">
+          <h4>Activity </h4>
+          <CloseIcon onClick={()=>{setShowRightSideBar(!showRightSidebar)}}/>
+
+        </div>
+
         <hr></hr>
-        
+
+
         <table className="table">
           <tr>
             <td><p style={BoardStyle.member}>IB</p></td>
