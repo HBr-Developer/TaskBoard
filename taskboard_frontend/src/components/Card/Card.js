@@ -5,7 +5,7 @@ import CardInfo from "./CardInfo";
 import Popup from "../../pages/Board/Popup";
 import axios from "axios";
 
-const Card = ({ card, index, list, boardLists, setBoardLists }) => {
+const Card = ({ card, index, list, boardLists, setBoardLists, visibiity }) => {
   const cardStyle = {
     card: {
       padding: 0.6,
@@ -17,7 +17,8 @@ const Card = ({ card, index, list, boardLists, setBoardLists }) => {
       backgroundColor: '#FFFEFE',
       '&:hover': {
         backgroundColor: '#f7f7f7',
-      }
+      },
+    display: `${visibiity}`
     },
     containerDiv: {
       display: 'flex',

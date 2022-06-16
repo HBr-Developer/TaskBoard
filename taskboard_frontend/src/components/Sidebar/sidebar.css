@@ -30,6 +30,9 @@
 
 .chevronRight {
     visibility: hidden;
+    padding: 15px;
+    background-color: #FFF;
+    border-radius: 50%;
 }
 
 .side-text {

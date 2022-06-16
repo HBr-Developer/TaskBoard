@@ -154,6 +154,7 @@ const Boards = () => {
           />
         </div>
         <TableContainer component={Paper}>
+          
           <Table sx={styles.tableStyle} aria-label="customized table">
             <TableHead>
               <TableRow>
@@ -163,7 +164,7 @@ const Boards = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {boards.length === 0 ? <p>No boards available</p> : boards
+              {boards.length <= 0 ? (<><TableRow><TableCell>No boards available</TableCell></TableRow></>) : boards
                 .filter(
                   (board) =>
                     board.name.toLowerCase().includes(searched.toLowerCase()) ||

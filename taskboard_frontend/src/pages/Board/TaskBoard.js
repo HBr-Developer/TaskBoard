@@ -15,6 +15,8 @@ import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import RightSidebar from "../../components/Sidebar/RightSidebar";
 import UserAvatar from "../../components/avatar/UserAvatar";
 
+import PositionedPopper from './Popper';
+
 const Board = () => {
   // States
   const [toggleNewList, setToggleNewList] = useState(false);
@@ -26,6 +28,7 @@ const Board = () => {
   const [showRightSidebar, setShowRightSideBar] = useState(false);
   const [allMembers, setAllMembers] = useState([]);
   const [invitedMembers, setInvitedMembers] = useState([]);
+  const [searched, setSearched] = useState({search: "", members: []});
   
   const { id } = useParams();
   const navigate = useNavigate();
@@ -133,7 +136,6 @@ const Board = () => {
       console.log(err);
     }
     setBoardLists(newBoard);
-    // getSingleBoard();
   };
   
   // get Members
@@ -251,6 +253,14 @@ const Board = () => {
                     onClick={() => setOpenPopup(true)}>
               <PersonAddAltIcon sx={{ fontSize: 18, marginRight: 0.5 }}/> Share
             </Button>
+  
+            <p style={BoardStyle.separator}></p>
+            {/*<Button variant='contained'>*/}
+            {/*  <FilterListIcon />*/}
+            {/*</Button>*/}
+            
+            {/*// Bottom menu || cardSearch*/}
+            <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers} />
           </div>
           
           {/*// Show menu button*/}
@@ -286,6 +296,7 @@ const Board = () => {
                     list={list}
                     boardLists={boardLists}
                     setBoardLists={setBoardLists}
+                    searched={searched}
                   />
                 ))}
                 {provided.placeholder}

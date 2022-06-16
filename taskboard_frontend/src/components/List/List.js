@@ -5,7 +5,7 @@ import AddCard from "../Card/AddCard";
 import { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-const List = ({ list, boardLists, setBoardLists, index }) => {
+const List = ({ list, boardLists, setBoardLists, index, searched }) => {
   const paperStyle = {
     borderRadius: 0.7,
     width: "285px",
@@ -32,8 +32,13 @@ const List = ({ list, boardLists, setBoardLists, index }) => {
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {list.cards.map((card, index) => (
-                    <Card key={card._id} card={card} index={index} list={list} boardLists={boardLists}
-                          setBoardLists={setBoardLists}/>
+                    card.name.toLowerCase().includes(searched.search.toLowerCase()) ? (
+                      <Card visibiity='' key={card._id} card={card} index={index} list={list} boardLists={boardLists}
+                            setBoardLists={setBoardLists}/>
+                    ) : (
+                      <Card visibiity='none' key={card._id} card={card} index={index} list={list} boardLists={boardLists}
+                            setBoardLists={setBoardLists}/>
+                    )
                   ))}
                   {provided.placeholder}
                   <AddCard

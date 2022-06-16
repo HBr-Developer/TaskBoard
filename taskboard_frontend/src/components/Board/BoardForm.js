@@ -108,7 +108,7 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
   
   return (
     <>
-      <Paper elevation='0' sx={styles.paper}>
+      <Paper elevation={0} sx={styles.paper}>
         <form onSubmit={handleOnSubmit}>
           <Grid container sx={styles.container}>
             <Grid item>

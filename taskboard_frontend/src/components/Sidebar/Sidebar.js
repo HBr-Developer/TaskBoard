@@ -57,7 +57,7 @@ function Sidebar({ showSidebar, setShowSideBar }) {
           <Link to='#' className='menu-bars'>
             <div className='direction'>
               <ChevronLeftIcon className='chevronLeft' onClick={hideSideBar}/>
-              <ChevronRightIcon className={showSidebar && 'chevronRight'} onClick={hideSideBar}/>
+              <ChevronRightIcon className={showSidebar ? 'chevronRight' : ''} onClick={hideSideBar}/>
             </div>
             <BoardSearch searched={searched} setSearched={setSearched}/>
           </Link>

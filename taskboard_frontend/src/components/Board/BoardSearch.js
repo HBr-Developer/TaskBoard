@@ -22,13 +22,13 @@ const BoardSearch = ({ setSearched }) => {
         variant="outlined"
         label="Seacrh"
         id="fullWidth"
-        // InputProps={{
-        //   startAdornment: (
-        //     <InputAdornment position="start">
-        //       <SearchIcon/>
-        //     </InputAdornment>
-        //   ),
-        // }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon/>
+            </InputAdornment>
+          ),
+        }}
         onChange={handleOnChange}
       />
     </Box>
