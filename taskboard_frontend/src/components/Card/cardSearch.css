@@ -43,3 +43,8 @@
 .members input[type=checkbox] {
   margin-right: 10px;
 }
+
+.css-1t4vnk2-MuiDialogContent-root {
+  padding: 0 !important;
+  margin: 0 !important;
+}

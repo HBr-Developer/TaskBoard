@@ -16,27 +16,28 @@ const List = ({ list, boardLists, setBoardLists, index, searched }) => {
   
   const [toggleAddCard, setToggleAddCard] = useState(false);
   const [listTitle, setListTitle] = useState(list.name);
+  const [currentList, setCurrentList] = useState(list);
   
   return (
-    <Draggable draggableId={list._id} index={index}>
+    <Draggable draggableId={currentList._id} index={index}>
       {(provided) => (
         <div ref={provided.innerRef} {...provided.draggableProps}>
           <Paper sx={paperStyle} {...provided.dragHandleProps}>
-            <Title listTitle={listTitle} setListTitle={setListTitle} listId={list._id} boardLists={boardLists}
+            <Title listTitle={listTitle} setListTitle={setListTitle} listId={currentList._id} boardLists={boardLists}
                    setBoardLists={setBoardLists}/>
             <Droppable
-              droppableId={list._id}
+              droppableId={currentList._id}
               index={index}
               type="card"
             >
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {list.cards.map((card, index) => (
+                  {currentList.cards.map((card, index) => (
                     card.name.toLowerCase().includes(searched.search.toLowerCase()) ? (
-                      <Card visibiity='' key={card._id} card={card} index={index} list={list} boardLists={boardLists}
+                      <Card visibility='' key={card._id} card={card} index={index} list={currentList} boardLists={boardLists}
                             setBoardLists={setBoardLists}/>
                     ) : (
-                      <Card visibiity='none' key={card._id} card={card} index={index} list={list} boardLists={boardLists}
+                      <Card visibility='none' key={card._id} card={card} index={index} list={currentList} boardLists={boardLists}
                             setBoardLists={setBoardLists}/>
                     )
                   ))}
@@ -44,7 +45,7 @@ const List = ({ list, boardLists, setBoardLists, index, searched }) => {
                   <AddCard
                     toggleAddCard={toggleAddCard}
                     setToggleAddCard={setToggleAddCard}
-                    list={list}
+                    list={currentList}
                     boardLists={boardLists}
                     setBoardLists={setBoardLists}
                   />

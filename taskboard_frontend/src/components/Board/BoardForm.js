@@ -36,7 +36,7 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
       paddingBottom: 8,
       paddingLeft: 5,
       paddingRight: 5,
-      width: "10  0%",
+      width: "100%",
     },
   };
   

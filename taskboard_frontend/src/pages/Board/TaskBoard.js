@@ -30,6 +30,73 @@ const Board = () => {
   const [invitedMembers, setInvitedMembers] = useState([]);
   const [searched, setSearched] = useState({ search: "", members: [] });
   
+  const BoardStyle = {
+    paddingTop: 15,
+    backgroundColor: "#FFFFFF",
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "flex-start",
+    topBar: {
+      marginRight: '20px',
+      marginLeft: '20px',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingTop: 7
+    },
+    leftSide: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'start',
+      paddingTop: 7
+    },
+    title: {
+      fontWeight: 'bold',
+      fontSize: "1.3rem",
+      color: "#495151",
+    },
+    members: {
+      marginLeft: 20,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    separator: {
+      height: 18, borderRight: '1px solid #a6a6a6', marginRight: 7
+    },
+    membersAvatars: {
+      display: 'flex',
+      flexDirection: 'row'
+    },
+    historyButton: {
+      transition: 'background-color 100ms',
+      color: "#FFF",
+      backgroundColor: '#1976D2',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '6px',
+      paddingLeft: '8px',
+      paddingRight: '8px',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      '&:hover': {
+        color: "#000"
+      }
+    },
+    rightSide: {
+      width: '28%',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    }
+  };
+  
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -51,25 +118,6 @@ const Board = () => {
       console.log(err);
     }
   };
-  
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      if (!user) {
-        navigate('/login');
-        return;
-      }
-      getSingleBoard();
-      getAllMembers();
-      setIsLoading(false);
-    }, 300);
-  }, [id]);
-  
-  // useEffect(() => {
-  //   getAllMembers();
-  //   console.log('invited');
-  // }, []);
-  
   // update DB while dragging cards
   const updateLists = async (source, destination) => {
     const sourceList = {
@@ -137,7 +185,6 @@ const Board = () => {
     }
     setBoardLists(newBoard);
   };
-  
   // get Members
   const getAllMembers = async () => {
     if (!user) return;
@@ -167,87 +214,11 @@ const Board = () => {
         Member.splice(index, 1);
       }
       setAllMembers(Member);
-      
-      // let found = false;
-      // for (let i = 0; i < response1.data.length; i++) {
-      //   found = false;
-      //   for (let e = 0; e < allInvitedMember.length; e++) {
-      //     if(response1.data[i]._id === allInvitedMember[e]._id) {
-      //       found = true;
-      //     }
-      //   }
-      //   if(!found) {
-      //     Member.push(response1.data[i]);
-      //   }
-      // }
     } catch (err) {
       console.log(err)
     }
   }
-  
-  const BoardStyle = {
-    paddingTop: 15,
-    // backgroundColor: "#282c34",
-    backgroundColor: "#FFFFFF",
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "flex-start",
-    topBar: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingTop: 7
-    },
-    leftSide: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'start',
-      paddingTop: 7
-    },
-    title: {
-      // color: '#E1E2E9',
-      fontWeight: 'bold',
-      fontSize: "1.3rem",
-      color: "#495151",
-      paddingLeft: "1rem",
-      // backgroundColor: "#282c34",
-    },
-    members: {
-      marginLeft: 20,
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    separator: {
-      height: 18, borderRight: '1px solid #a6a6a6', marginRight: 7
-    },
-    membersAvatars: {
-      display: 'flex',
-      flexDirection: 'row'
-    },
-    historyButton: {
-      marginRight: '10px',
-      transition: 'background-color 100ms',
-      color: "#FFF",
-      backgroundColor: '#1976D2',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '6px',
-      paddingLeft: '8px',
-      paddingRight: '8px',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      '&:hover': {
-        color: "#000"
-      }
-    }
-  };
-  
+  // handle on drag
   const handleOnDragEnd = (result) => {
     const { destination, source, type } = result;
     if (!destination) return;
@@ -257,6 +228,19 @@ const Board = () => {
       updateLists(source, destination);
     }
   };
+  
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      if (!user) {
+        navigate('/login');
+        return;
+      }
+      getSingleBoard();
+      getAllMembers();
+      setIsLoading(false);
+    }, 300);
+  }, [id]);
   
   if (isLoading) {
     return <Spinner/>;
@@ -279,12 +263,12 @@ const Board = () => {
                       onClick={() => setOpenPopup(true)}>
                 <PersonAddAltIcon sx={{ fontSize: 18, marginRight: 0.5 }}/> Share
               </Button>
-              <p style={BoardStyle.separator}></p>
-              <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers}/>
+            
             </div>
           </div>
-          <div className='leftSide'>
+          <div style={BoardStyle.rightSide} className='rightSide'>
             {/*// Show menu button*/}
+            <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers}/>
             <div style={BoardStyle.historyButton} className="historyButton"
                  onClick={() => setShowRightSideBar(!showRightSidebar)}>
               <MenuOpenIcon sx={{ fontSize: 18 }}/> Show menu
