@@ -39,7 +39,7 @@ const CardSearch = ({ searched, setSearched, invitedMembers, setOpen }) => {
       <div className="filter-top-bar">
         <p>Filter</p>
         <CloseIcon
-          color={"#474747"}
+          sx={{color: '#565656', transition: "color 100ms", '&:hover': {cursor: 'pointer', color: '#a8a8a8'}}}
           fontSize={"small"}
           onClick={() => setOpen(false)}
         />

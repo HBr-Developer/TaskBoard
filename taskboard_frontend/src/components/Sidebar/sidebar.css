@@ -67,7 +67,7 @@
 span {
     margin-left: 16px;
 }
-nav * {
+.sidebar * {
     color: white !important;
 }
 nav .css-1d3z3hw-MuiOutlinedInput-notchedOutline{

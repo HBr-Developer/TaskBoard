@@ -28,7 +28,7 @@ const Board = () => {
   const [showRightSidebar, setShowRightSideBar] = useState(false);
   const [allMembers, setAllMembers] = useState([]);
   const [invitedMembers, setInvitedMembers] = useState([]);
-  const [searched, setSearched] = useState({search: "", members: []});
+  const [searched, setSearched] = useState({ search: "", members: [] });
   
   const { id } = useParams();
   const navigate = useNavigate();
@@ -196,6 +196,13 @@ const Board = () => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingTop: 7
+    },
+    leftSide: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
       justifyContent: 'start',
       paddingTop: 7
     },
@@ -220,6 +227,24 @@ const Board = () => {
     membersAvatars: {
       display: 'flex',
       flexDirection: 'row'
+    },
+    historyButton: {
+      marginRight: '10px',
+      transition: 'background-color 100ms',
+      color: "#FFF",
+      backgroundColor: '#1976D2',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '6px',
+      paddingLeft: '8px',
+      paddingRight: '8px',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      '&:hover': {
+        color: "#000"
+      }
     }
   };
   
@@ -241,46 +266,32 @@ const Board = () => {
     <>
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <div style={BoardStyle.topBar}>
-          <p style={BoardStyle.title}>{boardTitle}</p>
-          <div style={BoardStyle.members}>
-            <p style={BoardStyle.separator}></p>
-            <div className='membersAvatars' style={BoardStyle.membersAvatars}>
-              {invitedMembers.map((member) => (
-                <UserAvatar key={member.name} name={member.name}/>
-              ))}
+          <div style={BoardStyle.leftSide}>
+            <p style={BoardStyle.title}>{boardTitle}</p>
+            <div style={BoardStyle.members}>
+              <p style={BoardStyle.separator}></p>
+              <div className='membersAvatars' style={BoardStyle.membersAvatars}>
+                {invitedMembers.map((member) => (
+                  <UserAvatar key={member.name} name={member.name}/>
+                ))}
+              </div>
+              <Button variant='contained' sx={{ paddingLeft: 1, paddingRight: 1, marginLeft: 1, fontSize: '0.8rem' }}
+                      onClick={() => setOpenPopup(true)}>
+                <PersonAddAltIcon sx={{ fontSize: 18, marginRight: 0.5 }}/> Share
+              </Button>
+              <p style={BoardStyle.separator}></p>
+              <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers}/>
             </div>
-            <Button variant='contained' sx={{ paddingLeft: 1, paddingRight: 1, marginLeft: 1, fontSize: '0.8rem' }}
-                    onClick={() => setOpenPopup(true)}>
-              <PersonAddAltIcon sx={{ fontSize: 18, marginRight: 0.5 }}/> Share
-            </Button>
-  
-            <p style={BoardStyle.separator}></p>
-            {/*<Button variant='contained'>*/}
-            {/*  <FilterListIcon />*/}
-            {/*</Button>*/}
-            
-            {/*// Bottom menu || cardSearch*/}
-            <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers} />
           </div>
-          
-          {/*// Show menu button*/}
-          <Button
-            variant="contained"
-            sx={{
-              paddingLeft: 1,
-              paddingRight: 1,
-              marginLeft: 80,
-              fontSize: "0.8rem",
-            }}
-            onClick={() => setShowRightSideBar(!showRightSidebar)}
-          >
-            <MenuOpenIcon sx={{ fontSize: 18 }}/> Show menu
-          </Button>
-          <RightSidebar
-            showRightSidebar={showRightSidebar}
-            setShowRightSideBar={setShowRightSideBar}
-          />
+          <div className='leftSide'>
+            {/*// Show menu button*/}
+            <div style={BoardStyle.historyButton} className="historyButton"
+                 onClick={() => setShowRightSideBar(!showRightSidebar)}>
+              <MenuOpenIcon sx={{ fontSize: 18 }}/> Show menu
+            </div>
+          </div>
         </div>
+        
         <div>
           <Droppable droppableId="board" type="list" direction="horizontal">
             {(provided) => (
@@ -331,6 +342,12 @@ const Board = () => {
           boardId={id}
         />
       </Popup>
+      
+      {/*Right Siebar*/}
+      <RightSidebar
+        showRightSidebar={showRightSidebar}
+        setShowRightSideBar={setShowRightSideBar}
+      />
     </>
   );
 };
