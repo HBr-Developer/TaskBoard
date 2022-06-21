@@ -23,6 +23,7 @@ Features
 
     
 Steps to run the application
+
   	 First install the MongoDB Compass for better visualization of data with MongoDB server.
 
 	 install node module "npm i",
