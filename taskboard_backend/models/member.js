@@ -25,6 +25,12 @@ const memberSchema = new mongoose.Schema(
         ref: "Permission",
       }
     ],
+    cardPermissions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "CardPermission",
+      },
+    ]
     // boards: [
     //   {
     //     type: mongoose.Schema.Types.ObjectId,

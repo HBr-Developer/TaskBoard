@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Paper, Typography } from "@mui/material";
 import { Draggable } from "react-beautiful-dnd";
 import CardInfo from "./CardInfo";
 import CardPopup from "./CardPopup";
-import axios from "axios";
 
 const Card = ({ card, index, list, boardLists, setBoardLists, visibility }) => {
   const cardStyle = {
@@ -45,6 +44,13 @@ const Card = ({ card, index, list, boardLists, setBoardLists, visibility }) => {
   };
   const [openPopup, setOpenPopup] = useState(false);
   const [currentCard, setCurrentCard] = useState(card);
+  const [cardMembers, setCardMembers] = useState(card.cardPermissions ? card.cardPermissions.map((per) => per.user) : []);
+  // console.log('cardMembers changed', cardMembers);
+  
+  useEffect(() => {
+    setCurrentCard(card);
+    console.log("Current card changed", card);
+  }, [boardLists])
 
   // // delete card
   // const handleOnDelete = async (id) => {
@@ -67,7 +73,7 @@ const Card = ({ card, index, list, boardLists, setBoardLists, visibility }) => {
 
   return (
     <>
-      <Draggable draggableId={currentCard._id} index={index}>
+      <Draggable draggableId={card._id} index={index}>
         {(provided) => (
           <div
             ref={provided.innerRef}
@@ -76,7 +82,7 @@ const Card = ({ card, index, list, boardLists, setBoardLists, visibility }) => {
           >
             <Paper sx={cardStyle.card}>
               <div style={cardStyle.containerDiv} onClick={handleOnClick}>
-                <Typography style={{ flexGrow: 1, fontSize: '0.9rem' }}>{currentCard.name}</Typography>
+                <Typography style={{ flexGrow: 1, fontSize: '0.9rem' }}>{card.name}</Typography>
                 {/*<DeleteForeverIcon sx={cardStyle.deleteButton} onClick={() => handleOnDelete(card._id)}/>*/}
               </div>
 
@@ -95,15 +101,13 @@ const Card = ({ card, index, list, boardLists, setBoardLists, visibility }) => {
         <CardInfo
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
-          boardLists={boardLists}
-          setBoardLists={setBoardLists}
-          list={list}
           card={currentCard}
           setCard={setCurrentCard}
+          cardMembers={cardMembers}
+          setCardMembers={setCardMembers}
         />
       </CardPopup>
     </>
-
   );
 };
 

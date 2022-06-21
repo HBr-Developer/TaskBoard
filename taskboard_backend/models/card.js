@@ -18,22 +18,28 @@ const cardSchema = new mongoose.Schema(
     idCard: {
       type: Number,
     },
-    DataLastActivity: {
-      type: String,
-    },
-    pos: {
-      type: String,
-    },
-    Attachement: {
-      type: String,
-      // require: true,
-    },
-    due: {
-      type: Date,
-    },
-    dueComplet: {
-      type: Boolean,
-    },
+    cardPermissions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "CardPermission",
+      },
+    ]
+    // DataLastActivity: {
+    //   type: String,
+    // },
+    // pos: {
+    //   type: String,
+    // },
+    // Attachement: {
+    //   type: String,
+    //   // require: true,
+    // },
+    // due: {
+    //   type: Date,
+    // },
+    // dueComplet: {
+    //   type: Boolean,
+    // },
   },
   { timestamps: true }
 );

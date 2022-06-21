@@ -33,8 +33,8 @@ const styles = {
     margin: "auto",
     paddingTop: 2,
     paddingBottom: 2,
-    paddingLeft: 0,
-    paddingRight: 0,
+    paddingLeft: 2,
+    paddingRight: 2,
     width: "550px",
   },
   tableCell: {
@@ -54,17 +54,11 @@ export default function InviteMember({
 }) {
   
   const [selectedMembers, setSelectedmembers] = useState([]);
-  // console.log("allMembers", allMembers);
-  // console.log("selectedMembers", selectedMembers);
-  // console.log("invitedMembers", invitedMembers);
   
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     const newAllMembers = allMembers;
     const newInvitedMembers = selectedMembers.map((member) => ({ ...member, role: 'invited' }));
-    for (let i = 0; i < newInvitedMembers; i++) {
-      await axios.post()
-    }
     
     // removing new invited members from all members
     for (let e = 0; e < newInvitedMembers.length; e++) {

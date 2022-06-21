@@ -2,10 +2,11 @@ import { Paper } from "@mui/material";
 import Title from "./Title";
 import Card from "../Card/Card";
 import AddCard from "../Card/AddCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 const List = ({ list, boardLists, setBoardLists, index, searched }) => {
+  
   const paperStyle = {
     borderRadius: 0.7,
     width: "285px",
@@ -17,6 +18,10 @@ const List = ({ list, boardLists, setBoardLists, index, searched }) => {
   const [toggleAddCard, setToggleAddCard] = useState(false);
   const [listTitle, setListTitle] = useState(list.name);
   const [currentList, setCurrentList] = useState(list);
+  
+  useEffect(() => {
+    setCurrentList(list);
+  }, [boardLists])
   
   return (
     <Draggable draggableId={currentList._id} index={index}>
@@ -34,10 +39,12 @@ const List = ({ list, boardLists, setBoardLists, index, searched }) => {
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {currentList.cards.map((card, index) => (
                     card.name.toLowerCase().includes(searched.search.toLowerCase()) ? (
-                      <Card visibility='' key={card._id} card={card} index={index} list={currentList} boardLists={boardLists}
+                      <Card visibility='' key={card._id}
+                            card={card} index={index} list={currentList} setList={setCurrentList} boardLists={boardLists}
                             setBoardLists={setBoardLists}/>
                     ) : (
-                      <Card visibility='none' key={card._id} card={card} index={index} list={currentList} boardLists={boardLists}
+                      <Card visibility='none' key={card._id}
+                            card={card} index={index} list={currentList} setList={setCurrentList} boardLists={boardLists}
                             setBoardLists={setBoardLists}/>
                     )
                   ))}
@@ -46,6 +53,7 @@ const List = ({ list, boardLists, setBoardLists, index, searched }) => {
                     toggleAddCard={toggleAddCard}
                     setToggleAddCard={setToggleAddCard}
                     list={currentList}
+                    setList={setCurrentList}
                     boardLists={boardLists}
                     setBoardLists={setBoardLists}
                   />

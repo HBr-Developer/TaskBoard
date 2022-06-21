@@ -21,6 +21,8 @@ const MainRoutes = () => {
           <Route path="cardinfo/:id" element={<CardInfo/>}/>
         </Route>
       </Routes>
+  
+     
     </>
   );
 };

@@ -14,7 +14,6 @@ import InviteMember from '../../components/Member/InviteMember';
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import RightSidebar from "../../components/Sidebar/RightSidebar";
 import UserAvatar from "../../components/avatar/UserAvatar";
-
 import PositionedPopper from './Popper';
 
 const Board = () => {
@@ -118,6 +117,7 @@ const Board = () => {
       console.log(err);
     }
   };
+  
   // update DB while dragging cards
   const updateLists = async (source, destination) => {
     const sourceList = {
@@ -142,6 +142,7 @@ const Board = () => {
       try {
         const sourceCards = sourceList.cards.map((card) => card._id);
         const destinationCards = destinationList.cards.map((card) => card._id);
+        // console.log(destinationCards);
         // update list_id
         await axios.patch(`http://localhost:3001/card/${draggedCard._id}`, {
           list_id: destinationList._id,
@@ -170,12 +171,9 @@ const Board = () => {
       }
     }
     const newBoard = boardLists;
-    console.log("newBoard", newBoard);
     const draggedList = newBoard.splice(source.index, 1)[0];
-    console.log("draggedList", draggedList);
     newBoard.splice(destination.index, 0, draggedList);
     const newBoardLists = newBoard.map((list) => list._id);
-    console.log("newBoardLists", newBoardLists);
     try {
       await axios.patch(`http://localhost:3001/board/${id}`, {
         lists: newBoardLists,
@@ -230,12 +228,12 @@ const Board = () => {
   };
   
   useEffect(() => {
+    if (!user) {
+      navigate('/login', { replace: true });
+      return;
+    }
     setIsLoading(true);
     setTimeout(() => {
-      if (!user) {
-        navigate('/login');
-        return;
-      }
       getSingleBoard();
       getAllMembers();
       setIsLoading(false);
@@ -275,7 +273,6 @@ const Board = () => {
             </div>
           </div>
         </div>
-        
         <div>
           <Droppable droppableId="board" type="list" direction="horizontal">
             {(provided) => (
@@ -327,7 +324,7 @@ const Board = () => {
         />
       </Popup>
       
-      {/*Right Siebar*/}
+      {/*Right Sidebar*/}
       <RightSidebar
         showRightSidebar={showRightSidebar}
         setShowRightSideBar={setShowRightSideBar}

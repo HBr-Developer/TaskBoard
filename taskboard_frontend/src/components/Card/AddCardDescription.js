@@ -1,5 +1,4 @@
 import { InputBase, Paper, Typography, Collapse } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
@@ -9,7 +8,6 @@ const AddCardDescription = ({ toggleDescription, setToggleDescription, card, set
   const addCardStyle = {
     add: {
       borderRadius: 0.7,
-      width: 285,
       padding: 0.2,
       marginTop: 0,
       marginLeft: 1,
@@ -37,8 +35,8 @@ const AddCardDescription = ({ toggleDescription, setToggleDescription, card, set
       flexDirection: "column",
     },
     paper: {
+      // width: '500px',
       borderRadius: 0.7,
-      width: 285,
       marginTop: 0,
       marginLeft: 1,
       marginRight: 1,
@@ -63,7 +61,7 @@ const AddCardDescription = ({ toggleDescription, setToggleDescription, card, set
   };
   
   return (
-    <div>
+    <div style={{width: '100%'}}>
       <Collapse in={!toggleDescription}>
         <Typography onClick={() => setToggleDescription(!toggleDescription)}
                     sx={addCardStyle.descriptionText}>{card.descData ? (card.descData) : ("Card Description")}</Typography>

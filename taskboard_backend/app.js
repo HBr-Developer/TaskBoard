@@ -9,6 +9,7 @@ const cardRoutes = require("./routes/cards");
 const listRoutes = require("./routes/lists");
 const memberRoutes = require("./routes/members");
 const permissionRoutes = require("./routes/permissions");
+const cardPermissionRoutes = require("./routes/cardPermissions");
 
 //Config
 require("dotenv").config();
@@ -33,6 +34,7 @@ app.use("/card", cardRoutes);
 app.use("/list", listRoutes);
 app.use("/member", memberRoutes);
 app.use("/permission", permissionRoutes);
+app.use("/cardPermission", cardPermissionRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello");

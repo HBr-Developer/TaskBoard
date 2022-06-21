@@ -48,12 +48,12 @@ const Boards = () => {
   
   useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
       return;
     }
     GetBoards();
     setIsLoading(false);
-  }, [user, boards]);
+  }, [boards]);
   
   //delete Board
   const deleteBoards = async (id) => {

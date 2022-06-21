@@ -1,23 +1,12 @@
-import {
-  Collapse,
-  InputBase,
-  Paper,
-  Typography,
-  unstable_useId,
-} from "@mui/material";
+import { Collapse, InputBase, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
-const AddCard = ({
-  toggleAddCard,
-  setToggleAddCard,
-  list,
-  boardLists,
-  setBoardLists,
-}) => {
+const AddCard = ({ toggleAddCard, setToggleAddCard, list, boardLists, setBoardLists, setList }) => {
   const addCardStyle = {
     add: {
       borderRadius: 0.7,
@@ -41,36 +30,52 @@ const AddCard = ({
       margin: 1,
     },
   };
-
+  
   const [cardTitle, setCardTitle] = useState("");
-
+  const { user } = useSelector((state) => state.auth);
+  
   const handleOnClick = async (e) => {
     e.preventDefault();
+    if (!user) return;
+    const token = user.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
     if (!cardTitle) return;
-    console.log(list);
     const { data } = await axios.post(
-      `http://localhost:3001/card/${list._id}/create`,
+      `http://localhost:3001/card/create`,
       {
         name: cardTitle,
         list_id: list._id,
-      }
+        role: 'admin'
+      },
+      config
     );
-    const newCard = { _id: data._id, name: data.name, list_id: data.list_id };
-    console.log("newCard", newCard);
+    
+    const cardResponse = await axios.get(`http://localhost:3001/card/${data._id}`);
+    const newCard = {
+      _id: cardResponse.data._id,
+      name: cardResponse.data.name,
+      list_id: cardResponse.data.list_id,
+      cardPermissions: [...cardResponse.data.cardPermissions]
+    };
     const newList = { ...list, cards: [...list.cards, newCard] };
     const newBoardLists = boardLists.map((boardList) =>
       boardList._id === list._id ? newList : boardList
     );
     setBoardLists(newBoardLists);
     setToggleAddCard(!toggleAddCard);
+    setList(newList);
     setCardTitle("");
   };
-
+  
   const handleOnClose = () => {
     setToggleAddCard(!toggleAddCard);
     setCardTitle("");
   };
-
+  
   return (
     <>
       <Collapse in={!toggleAddCard}>
@@ -78,7 +83,7 @@ const AddCard = ({
           <Button
             children={
               <>
-                <AddIcon sx={{ fontSize: "1rem" }} />
+                <AddIcon sx={{ fontSize: "1rem" }}/>
                 <Typography sx={{ fontSize: "0.9rem" }}>Add card</Typography>
               </>
             }
@@ -87,7 +92,7 @@ const AddCard = ({
           />
         </Paper>
       </Collapse>
-
+      
       <Collapse in={toggleAddCard}>
         <Paper sx={inputCard.cont}>
           <InputBase

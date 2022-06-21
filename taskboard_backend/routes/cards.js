@@ -6,11 +6,12 @@ const {
   getAllCards,
   cardDelete,
   cardUpdate,
-  createCardInList,
 } = require("../controllers/cardController");
 
-router.post("/create", createCard);
-router.post("/:listId/create", createCardInList);
+const { protect } = require('../middleware/authMiddleware');
+
+// router.post("/create", createCard);
+router.post("/create", protect, createCard);
 router.get("/", getAllCards);
 router.get("/:id", cardById);
 router.delete("/:id", cardDelete);

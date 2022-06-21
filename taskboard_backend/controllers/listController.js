@@ -18,7 +18,7 @@ exports.createListInBoard = async (req, res) => {
     //saving a new list
     const newList = await new List({ ...req.body, board_id: board._id }).save();
     //saving the newlist in the board
-    const newBoard = await Board.findByIdAndUpdate(board._id, {
+    await Board.findByIdAndUpdate(board._id, {
       ...board._doc,
       lists: [...board.lists, newList._id],
     });
@@ -30,7 +30,7 @@ exports.createListInBoard = async (req, res) => {
 
 exports.getAllList = async (req, res) => {
   try {
-    const allLists = await List.find().populate("cards", "name descData");
+    const allLists = await List.find().populate("cards", "name descData cardPermissions");
     res.json(allLists);
   } catch (err) {
     console.log(err);
