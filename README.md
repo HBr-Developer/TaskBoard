@@ -3,6 +3,7 @@ Application CRM et Gestion des projets
 
 
 Features 
+
     Login/Register with JWT token authentication, 
 	
     Ability to create/update/delete the board,
