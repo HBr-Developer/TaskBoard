@@ -21,8 +21,8 @@ Features
     Assign a card to the user.
 	
     
-    Steps to run the application
     
+    Steps to run the application
 
 	    First install the MongoDB Compass for better visualization of data with MongoDB server.
 
