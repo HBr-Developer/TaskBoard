@@ -21,15 +21,18 @@ Features
     Assign a card to the user.
 	
     
- First install the MongoDB Compass for better visualization of data with MongoDB server.
- 
-    install node module "npm i",
-	
-    Create .env and add this env variable LOCAL_MONGODB=mongodb://localhost:27017/db ,
-	
-    Add JWT_SECRET_KEY=randomstrings  "using this cmnd =   node -e "console.log(require('crypto').randomBytes(90).toString('base64'));" ,
-	
-    Run application "npm start".
+    Steps to run the application
+    
+
+	    First install the MongoDB Compass for better visualization of data with MongoDB server.
+
+	    install node module "npm i",
+
+	    Create .env and add this env variable LOCAL_MONGODB=mongodb://localhost:27017/db ,
+
+	    Add JWT_SECRET_KEY=randomstrings  "using this cmnd =   node -e "console.log(require('crypto').randomBytes(90).toString('base64'));" ,
+
+	    Run application "npm start".
 
 
 Tech stacks
