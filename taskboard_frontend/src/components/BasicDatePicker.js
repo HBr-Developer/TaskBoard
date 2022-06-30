@@ -5,10 +5,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './styles.css'
 
 export default function BasicDatePicker({ setSearched, searched, type }) {
-  // const [value, setValue] = useState(null);
   
   const handleOnChange = (newValue) => {
-    setValue(newValue);
     if (type === 'start') {
       setSearched((prevState) => ({
         ...prevState,

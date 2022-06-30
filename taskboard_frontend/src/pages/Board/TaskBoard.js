@@ -329,7 +329,7 @@ const Board = () => {
           </div>
           <div style={BoardStyle.rightSide} className='rightSide'>
             {/*filter*/}
-            <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers}/>
+            <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers} filteredCards={filteredCards} boardLists={boardLists}/>
             {/*// Show menu button*/}
             <div style={BoardStyle.historyButton} className="historyButton"
                  onClick={() => setShowRightSideBar(!showRightSidebar)}>

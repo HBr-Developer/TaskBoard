@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CardSearch from "../../components/Card/CardSearch";
 
-export default function PositionedPopper({searched, setSearched, invitedMembers}) {
+export default function PositionedPopper({searched, setSearched, invitedMembers, filteredCards, boardLists}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState();
@@ -36,7 +36,7 @@ export default function PositionedPopper({searched, setSearched, invitedMembers}
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
             <Paper sx={styles.paper}>
-              <CardSearch setOpen={setOpen} searched={searched} setSearched={setSearched} invitedMembers={invitedMembers} />
+              <CardSearch setOpen={setOpen} searched={searched} setSearched={setSearched} invitedMembers={invitedMembers} filteredCards={filteredCards} boardLists={boardLists} />
             </Paper>
           </Fade>
         )}

@@ -3,9 +3,17 @@ import UserAvatar from "../avatar/UserAvatar";
 import CloseIcon from "@mui/icons-material/Close";
 import "./cardSearch.css";
 import BasicDatePicker from "../BasicDatePicker";
+import * as XLSX from "xlsx"
 
-const CardSearch = ({ searched, setSearched, invitedMembers, setOpen }) => {
+const CardSearch = ({ searched, setSearched, invitedMembers, setOpen, filteredCards, boardLists }) => {
   console.log('searched', searched);
+  
+  const handleExport = () => {
+    let wb = XLSX.utils.book_new();
+    let ws = XLSX.utils.json_to_sheet(filteredCards.length > 0 ? filteredCards : boardLists);
+    XLSX.utils.book_append_sheet(wb, ws, "MySheet1");
+    XLSX.writeFile(wb, "MyData.xlsx");
+  }
 
   const handleOnChange = (e) => {
     if(e.target.name === 'members') {
@@ -119,7 +127,7 @@ const CardSearch = ({ searched, setSearched, invitedMembers, setOpen }) => {
       </div>
       <div style={styles.buttons}>
         <div style={styles.clear} onClick={() => setSearched({ search: "", members: [], dateRange: [null, null] })}>Clear</div>
-        <div style={styles.export}>Export</div>
+        <div style={styles.export} onClick={handleExport}>Export</div>
       </div>
     </div>
   );
