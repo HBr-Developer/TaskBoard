@@ -15,19 +15,69 @@ import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import RightSidebar from "../../components/Sidebar/RightSidebar";
 import UserAvatar from "../../components/avatar/UserAvatar";
 import PositionedPopper from './Popper';
+import { format } from "date-fns";
 
 const Board = () => {
   // States
   const [toggleNewList, setToggleNewList] = useState(false);
   const [boardLists, setBoardLists] = useState([]);
-  const [boardTitle, setBoardtitle] = useState("");
+  const [boardTitle, setBoardTitle] = useState("");
   const [recordUpdate, setRecordUpdate] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showRightSidebar, setShowRightSideBar] = useState(false);
   const [allMembers, setAllMembers] = useState([]);
   const [invitedMembers, setInvitedMembers] = useState([]);
-  const [searched, setSearched] = useState({ search: "", members: [] });
+  const [searched, setSearched] = useState({ search: "", members: [], dateRange: [null, null] });
+  const [filteredCards, setFilteredCards] = useState([]);
+  
+  console.log('filteredCards', filteredCards);
+  
+  const compStartDate = (card, firstDate) => {
+    const cardDate = new Date(card.createdAt);
+    if (!firstDate) {
+      return true
+    }
+    // comparing years
+    if (cardDate.getFullYear() > firstDate.getFullYear()) return true;
+    if (cardDate.getFullYear() < firstDate.getFullYear()) return false;
+    if (cardDate.getFullYear() === firstDate.getFullYear()) {
+      // comparing months
+      if (cardDate.getMonth() + 1 > firstDate.getMonth() + 1) return true;
+      if (cardDate.getMonth() + 1 < firstDate.getMonth() + 1) return false;
+      if (cardDate.getMonth() + 1 === firstDate.getMonth() + 1) {
+        // Comparing days
+        if (cardDate.getDate() > firstDate.getDate()) return true;
+        if (cardDate.getDate() + 1 < firstDate.getDate() + 1) return false;
+        if (cardDate.getDate() + 1 === firstDate.getDate() + 1) {
+          return true
+        }
+      }
+    }
+  }
+  
+  const compEndDate = (card, endDate) => {
+    const cardDate = new Date(card.createdAt);
+    if (!endDate) {
+      return true
+    }
+    // comparing years
+    if (cardDate.getFullYear() < endDate.getFullYear()) return true;
+    if (cardDate.getFullYear() > endDate.getFullYear()) return false;
+    if (cardDate.getFullYear() === endDate.getFullYear()) {
+      // comparing months
+      if (cardDate.getMonth() + 1 < endDate.getMonth() + 1) return true;
+      if (cardDate.getMonth() + 1 > endDate.getMonth() + 1) return false;
+      if (cardDate.getMonth() + 1 === endDate.getMonth() + 1) {
+        // Comparing days
+        if (cardDate.getDate() < endDate.getDate()) return true;
+        if (cardDate.getDate() + 1 > endDate.getDate() + 1) return false;
+        if (cardDate.getDate() + 1 === endDate.getDate() + 1) {
+          return true
+        }
+      }
+    }
+  }
   
   const BoardStyle = {
     paddingTop: 15,
@@ -100,6 +150,19 @@ const Board = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   
+  useEffect(() => {
+    const fCards = [];
+    boardLists.map((list) => (
+      list.cards.map((card) => (
+        ((card.name.toLowerCase().includes(searched.search.toLowerCase())) &&
+          ((searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) =>
+        (per.user.name))[0]))) && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1])))
+        && (fCards.push({name: card.name, status: list.name, createdAt: format(new Date(card.createdAt), "dd-MM-yyyy")}))
+      ))
+    ))
+    setFilteredCards([...fCards]);
+  }, [searched])
+  
   // getting board data from DB
   const getSingleBoard = async () => {
     if (!user) return;
@@ -111,7 +174,7 @@ const Board = () => {
     }
     try {
       const response = await axios.get(`http://localhost:3001/board/${id}`, config);
-      setBoardtitle(response.data.name);
+      setBoardTitle(response.data.name);
       setBoardLists(response.data.lists);
     } catch (err) {
       console.log(err);
@@ -257,16 +320,17 @@ const Board = () => {
                   <UserAvatar key={member.name} name={member.name}/>
                 ))}
               </div>
+              {/*Share*/}
               <Button variant='contained' sx={{ paddingLeft: 1, paddingRight: 1, marginLeft: 1, fontSize: '0.8rem' }}
                       onClick={() => setOpenPopup(true)}>
                 <PersonAddAltIcon sx={{ fontSize: 18, marginRight: 0.5 }}/> Share
               </Button>
-            
             </div>
           </div>
           <div style={BoardStyle.rightSide} className='rightSide'>
-            {/*// Show menu button*/}
+            {/*filter*/}
             <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers}/>
+            {/*// Show menu button*/}
             <div style={BoardStyle.historyButton} className="historyButton"
                  onClick={() => setShowRightSideBar(!showRightSidebar)}>
               <MenuOpenIcon sx={{ fontSize: 18 }}/> Show menu
@@ -289,6 +353,8 @@ const Board = () => {
                     boardLists={boardLists}
                     setBoardLists={setBoardLists}
                     searched={searched}
+                    compStartDate={compStartDate}
+                    compEndDate={compEndDate}
                   />
                 ))}
                 {provided.placeholder}

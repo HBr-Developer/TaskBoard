@@ -4,7 +4,7 @@ import { Draggable } from "react-beautiful-dnd";
 import CardInfo from "./CardInfo";
 import CardPopup from "./CardPopup";
 
-const Card = ({ card, index, list, boardLists, setBoardLists, visibility }) => {
+const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
   const cardStyle = {
     card: {
       padding: 0.6,
@@ -45,11 +45,9 @@ const Card = ({ card, index, list, boardLists, setBoardLists, visibility }) => {
   const [openPopup, setOpenPopup] = useState(false);
   const [currentCard, setCurrentCard] = useState(card);
   const [cardMembers, setCardMembers] = useState(card.cardPermissions ? card.cardPermissions.map((per) => per.user) : []);
-  // console.log('cardMembers changed', cardMembers);
   
   useEffect(() => {
     setCurrentCard(card);
-    console.log("Current card changed", card);
   }, [boardLists])
 
   // // delete card

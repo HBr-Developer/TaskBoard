@@ -5,7 +5,7 @@ import AddCard from "../Card/AddCard";
 import { useEffect, useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-const List = ({ list, boardLists, setBoardLists, index, searched }) => {
+const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate, compEndDate }) => {
   
   const paperStyle = {
     borderRadius: 0.7,
@@ -38,16 +38,32 @@ const List = ({ list, boardLists, setBoardLists, index, searched }) => {
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {currentList.cards.map((card, index) => (
-                    card.name.toLowerCase().includes(searched.search.toLowerCase()) ? (
-                      <Card visibility='' key={card._id}
-                            card={card} index={index} list={currentList} setList={setCurrentList} boardLists={boardLists}
-                            setBoardLists={setBoardLists}/>
+                      (card.name.toLowerCase().includes(searched.search.toLowerCase()) &&
+                        (searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) => (per.user.name))[0])) &&
+                        (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1]))
+                      )
+                    ) ? (
+                      <Card visibility=''
+                            key={card._id}
+                            card={card}
+                            index={index}
+                            list={currentList}
+                            setList={setCurrentList}
+                            boardLists={boardLists}
+                            setBoardLists={setBoardLists}
+                      />
                     ) : (
-                      <Card visibility='none' key={card._id}
-                            card={card} index={index} list={currentList} setList={setCurrentList} boardLists={boardLists}
-                            setBoardLists={setBoardLists}/>
+                      <Card visibility='none'
+                            key={card._id}
+                            card={card}
+                            index={index}
+                            list={currentList}
+                            setList={setCurrentList}
+                            boardLists={boardLists}
+                            setBoardLists={setBoardLists}
+                      />
                     )
-                  ))}
+                  )}
                   {provided.placeholder}
                   <AddCard
                     toggleAddCard={toggleAddCard}

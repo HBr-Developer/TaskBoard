@@ -1,8 +1,8 @@
-import { Box, InputAdornment, TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { TextField } from "@mui/material";
 import UserAvatar from "../avatar/UserAvatar";
 import CloseIcon from "@mui/icons-material/Close";
 import "./cardSearch.css";
+import BasicDatePicker from "../BasicDatePicker";
 
 const CardSearch = ({ searched, setSearched, invitedMembers, setOpen }) => {
   console.log('searched', searched);
@@ -16,23 +16,58 @@ const CardSearch = ({ searched, setSearched, invitedMembers, setOpen }) => {
           [e.target.name]: [...searched.members ,e.target.value]
         }));
       } else if(!e.target.checked) {
-        const spliced = searched.members.splice(searched.members.indexOf(e.target.value), 1);
+        searched.members.splice(searched.members.indexOf(e.target.value), 1);
         setSearched((prevState) => ({
           ...prevState,
           [e.target.name]: searched.members
         }))
       }
-    } else
-    setSearched((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value
-    }));
+    } else if(e.target.name === 'search') {
+      setSearched((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value
+      }));
+    }
+    
   };
 
   const styles = {
     boxStyle: {
       width: "100%",
     },
+    clear: {
+      transition: 'background-color 100ms',
+      color: "#FFF",
+      backgroundColor: '#1976D2',
+      width: "100%",
+      textAlign: 'center',
+      padding: '4px',
+      paddingLeft: '8px',
+      paddingRight: '8px',
+      borderRadius: '5px',
+      marginRight: 4,
+      cursor: 'pointer'
+    },
+    export: {
+      transition: 'background-color 100ms',
+      color: "#FFF",
+      backgroundColor: '#05b02e',
+      width: "100%",
+      textAlign: 'center',
+      padding: '4px',
+      paddingLeft: '8px',
+      paddingRight: '8px',
+      borderRadius: '5px',
+      marginLeft: 4,
+      cursor: 'pointer'
+    },
+    buttons: {
+      marginTop: 15,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    }
   };
   return (
     <div className="cardSearch">
@@ -66,13 +101,25 @@ const CardSearch = ({ searched, setSearched, invitedMembers, setOpen }) => {
                 type="checkbox"
                 value={member.name}
                 onChange={handleOnChange}
-                checked={searched.members.length <= 0 ? (false) : (searched.members.includes(member.name))}
+                checked={searched.members.length <= 0 ? false : (searched.members.includes(member.name))}
               />
               <UserAvatar name={member.name} />
               <span>{member.name}</span>
             </div>
           ))}
         </form>
+      </div>
+      <div>
+        <p>Date</p>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+          <BasicDatePicker setSearched={setSearched} searched={searched} type='start' />
+          <p style={{width: '35px', textAlign: 'center'}}>to</p>
+          <BasicDatePicker setSearched={setSearched} searched={searched} type='end' />
+        </div>
+      </div>
+      <div style={styles.buttons}>
+        <div style={styles.clear} onClick={() => setSearched({ search: "", members: [], dateRange: [null, null] })}>Clear</div>
+        <div style={styles.export}>Export</div>
       </div>
     </div>
   );

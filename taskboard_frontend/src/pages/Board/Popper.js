@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
@@ -13,6 +12,8 @@ export default function PositionedPopper({searched, setSearched, invitedMembers}
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState();
+  
+  const filterNumbers = (searched.search.length > 0 ? 1 : 0) + searched.members.length + ((searched.dateRange[0] ? 1 : 0) + (searched.dateRange[1] ? 1 : 0));
   
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,7 +36,6 @@ export default function PositionedPopper({searched, setSearched, invitedMembers}
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
             <Paper sx={styles.paper}>
-              {/*<Typography sx={{ p: 2 }}>The content of the Popper.</Typography>*/}
               <CardSearch setOpen={setOpen} searched={searched} setSearched={setSearched} invitedMembers={invitedMembers} />
             </Paper>
           </Fade>
@@ -43,7 +43,8 @@ export default function PositionedPopper({searched, setSearched, invitedMembers}
       </Popper>
       <Grid container justifyContent="center">
         <Grid item>
-          <Button onClick={handleClick('bottom')}><FilterListIcon /></Button>
+          {/*filter button*/}
+          <Button onClick={handleClick('bottom')}>{filterNumbers === 0 ? null : filterNumbers}<FilterListIcon />Filter</Button>
         </Grid>
       </Grid>
     </Box>
