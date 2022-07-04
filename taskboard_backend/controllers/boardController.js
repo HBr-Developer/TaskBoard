@@ -73,22 +73,28 @@ exports.getAllBoards = async (req, res) => {
     const permissions = await Permission.find({ user: req.member.id });
     // res.json(permissions);
     const permissionBoards = permissions.map((per) => per.board);
-    const allBoards = await Board.find({ _id: permissionBoards }, 'name descData lists permissions createdAt updatedAt').populate({
-      path: "lists",
-      populate: {
-        path: "cards",
-        model: "Card",
-        select: "name descData"
-      },
-    }).populate({
-      path: 'permissions',
-      select: 'user role',
-      populate: {
-        path: 'user',
-        model: 'Member',
-        select: 'name email'
-      }
-    });
+    const allBoards = await Board.find({
+      _id: permissionBoards,
+      active: true
+    }, 'name descData lists permissions createdAt updatedAt')
+      .populate({
+        path: "lists",
+        model: "List",
+        match: { active: true },
+        populate: {
+          path: "cards",
+          model: "Card",
+          select: "name descData dueDate",
+        },
+      }).populate({
+        path: 'permissions',
+        select: 'user role',
+        populate: {
+          path: 'user',
+          model: 'Member',
+          select: 'name email'
+        }
+      }).exec();
     res.json(allBoards);
   } catch (err) {
     console.log(err.message);
@@ -99,10 +105,11 @@ exports.boardById = async (req, res) => {
   try {
     let newBoard = await Board.findById(req.params.id, 'name descData lists permissions createdAt updatedAt').populate({
       path: "lists",
+      match: {active: true},
       populate: {
         path: "cards",
         model: "Card",
-        select: "name descData createdAt",
+        select: "name descData createdAt dueDate",
         populate: {
           path: 'cardPermissions',
           model: 'CardPermissions',
@@ -144,8 +151,9 @@ exports.boardDelete = async (req, res) => {
 
 exports.boardUpdate = async (req, res) => {
   try {
+    console.log('body', req.body);
     await Board.findByIdAndUpdate(req.params.id, req.body);
-    res.send("Board updated succesfully");
+    res.send("Board updated successfully");
   } catch (err) {
     console.log(err);
   }
@@ -170,11 +178,10 @@ exports.listsOfBoard = async (req, res) => {
   }
 };
 
-exports.deletememberInBoard = async (req, res) => {
+exports.deleteMemberInBoard = async (req, res) => {
   try {
     const member = await Member.findById(req.params.memberId);
     await Board.updateMany({ '_id': member.boards }, { $pull: { members: member._id } });
-    
     
     res.json(member);
     

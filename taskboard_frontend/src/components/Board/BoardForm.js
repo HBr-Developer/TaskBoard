@@ -70,6 +70,7 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
   const addBoard = async (data) => {
     try {
       await axios.post("http://localhost:3001/board/create", data, config);
+      
     } catch (err) {
       console.log(err);
     }

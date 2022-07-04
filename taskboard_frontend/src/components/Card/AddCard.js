@@ -53,22 +53,29 @@ const AddCard = ({ toggleAddCard, setToggleAddCard, list, boardLists, setBoardLi
       },
       config
     );
-    
     const cardResponse = await axios.get(`http://localhost:3001/card/${data._id}`);
     const newCard = {
       _id: cardResponse.data._id,
       name: cardResponse.data.name,
       list_id: cardResponse.data.list_id,
-      cardPermissions: [...cardResponse.data.cardPermissions]
+      cardPermissions: [...cardResponse.data.cardPermissions],
+      createdAt: cardResponse.data.createdAt
     };
     const newList = { ...list, cards: [...list.cards, newCard] };
     const newBoardLists = boardLists.map((boardList) =>
       boardList._id === list._id ? newList : boardList
     );
     setBoardLists(newBoardLists);
-    setToggleAddCard(!toggleAddCard);
     setList(newList);
     setCardTitle("");
+    // add card to history
+    await axios.post("http://localhost:3001/cardHistory", {
+      user: user._id,
+      card: newCard._id,
+      board: list.board_id,
+      action: `add`,
+    })
+    setToggleAddCard(!toggleAddCard);
   };
   
   const handleOnClose = () => {

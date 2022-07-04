@@ -5,11 +5,9 @@ const cardSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      require: true,
     },
     descData: {
       type: String,
-      require: true,
     },
     list_id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -17,6 +15,9 @@ const cardSchema = new mongoose.Schema(
     },
     idCard: {
       type: Number,
+    },
+    dueDate: {
+      type: Date
     },
     cardPermissions: [
       {

@@ -41,3 +41,11 @@
 .container p {
     color: #565656 !important;
  }
+
+.avatarItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    padding-bottom: 1px;
+}

@@ -36,7 +36,6 @@ const CardSearch = ({ searched, setSearched, invitedMembers, setOpen, filteredCa
         [e.target.name]: e.target.value
       }));
     }
-    
   };
 
   const styles = {
@@ -77,6 +76,7 @@ const CardSearch = ({ searched, setSearched, invitedMembers, setOpen, filteredCa
       justifyContent: 'space-between'
     }
   };
+  
   return (
     <div className="cardSearch">
       <div className="filter-top-bar">

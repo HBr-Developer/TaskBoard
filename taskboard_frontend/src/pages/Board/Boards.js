@@ -57,8 +57,15 @@ const Boards = () => {
   
   //delete Board
   const deleteBoards = async (id) => {
+    if (!user) return;
+    const token = user.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
     if (window.confirm("Do you want to delete this board")) {
-      const response = await axios.delete(`http://localhost:3001/board/${id}`);
+      const response = await axios.patch(`http://localhost:3001/board/${id}`, {active: false}, config);
       if (response.status === 200) {
         console.log("Board deleted successfully");
         GetBoards();

@@ -2,8 +2,9 @@ import { useState, useRef } from "react";
 import { Typography, InputBase, Popper, Paper, ClickAwayListener, MenuList, MenuItem } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
-const Title = ({ listTitle, setListTitle, listId, boardLists, setBoardLists }) => {
+const Title = ({ listTitle, setListTitle, listId, boardLists, setBoardLists, boardId }) => {
   const TitleStyle = {
     titleContainer: {
       marginLeft: 8,
@@ -36,6 +37,7 @@ const Title = ({ listTitle, setListTitle, listId, boardLists, setBoardLists }) =
       }
     }
   };
+  const { user } = useSelector((state) => state.auth);
   
   const [titleOpened, setTitleOpened] = useState(false);
   const [open, setOpen] = useState(false);
@@ -44,17 +46,26 @@ const Title = ({ listTitle, setListTitle, listId, boardLists, setBoardLists }) =
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
+  
   const handleOnDelete = async (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-    try {
-      console.log('listId', listId);
-      await axios.delete(`http://localhost:3001/list/${listId}`);
-      const newBordLists = boardLists.filter(list => list._id !== listId);
-      setBoardLists(newBordLists);
-    } catch (err) {
-      console.log(err);
+    if (window.confirm("Do you want to delete this list")) {
+      if (anchorRef.current && anchorRef.current.contains(event.target)) {
+        return;
+      }
+      try {
+        console.log('listId', listId);
+        await axios.patch(`http://localhost:3001/list/${listId}`, { active: false });
+        await axios.post("http://localhost:3001/listHistory", {
+          user: user._id,
+          list: listId,
+          board: boardId,
+          action: `delete`,
+        })
+        const newBordLists = boardLists.filter(list => list._id !== listId);
+        setBoardLists(newBordLists);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
   const handleClose = async (event) => {
@@ -68,6 +79,12 @@ const Title = ({ listTitle, setListTitle, listId, boardLists, setBoardLists }) =
     try {
       console.log('listTitle', listTitle);
       const updatedList = await axios.patch(`http://localhost:3001/list/${listId}`, { name: listTitle });
+      await axios.post("http://localhost:3001/listHistory", {
+        user: user._id,
+        list: listId,
+        board: boardId,
+        action: `update`,
+      })
       console.log('updatedList', updatedList);
       setTitleOpened(!titleOpened);
     } catch (err) {

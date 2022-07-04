@@ -55,7 +55,6 @@ const Board = () => {
       }
     }
   }
-  
   const compEndDate = (card, endDate) => {
     const cardDate = new Date(card.createdAt);
     if (!endDate) {
@@ -149,19 +148,6 @@ const Board = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  
-  useEffect(() => {
-    const fCards = [];
-    boardLists.map((list) => (
-      list.cards.map((card) => (
-        ((card.name.toLowerCase().includes(searched.search.toLowerCase())) &&
-          ((searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) =>
-        (per.user.name))[0]))) && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1])))
-        && (fCards.push({name: card.name, status: list.name, createdAt: format(new Date(card.createdAt), "dd-MM-yyyy")}))
-      ))
-    ))
-    setFilteredCards([...fCards]);
-  }, [searched])
   
   // getting board data from DB
   const getSingleBoard = async () => {
@@ -303,6 +289,24 @@ const Board = () => {
     }, 300);
   }, [id]);
   
+  useEffect(() => {
+    const fCards = [];
+    boardLists.map((list) => (
+      list.cards.map((card) => (
+        ((card.name.toLowerCase().includes(searched.search.toLowerCase())) &&
+          ((searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) =>
+            (per.user.name))[0]))) && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1])))
+        && (fCards.push({
+          name: card.name,
+          status: list.name,
+          createdAt: format(new Date(card.createdAt), "dd-MM-yyyy"),
+          dueDate: card.dueDate != null ? format(new Date(card.dueDate), "dd-MM-yyyy") : "Not assigned yet"
+        }))
+      ))
+    ))
+    setFilteredCards([...fCards]);
+  }, [searched])
+  
   if (isLoading) {
     return <Spinner/>;
   }
@@ -329,7 +333,8 @@ const Board = () => {
           </div>
           <div style={BoardStyle.rightSide} className='rightSide'>
             {/*filter*/}
-            <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers} filteredCards={filteredCards} boardLists={boardLists}/>
+            <PositionedPopper searched={searched} setSearched={setSearched} invitedMembers={invitedMembers}
+                              filteredCards={filteredCards} boardLists={boardLists}/>
             {/*// Show menu button*/}
             <div style={BoardStyle.historyButton} className="historyButton"
                  onClick={() => setShowRightSideBar(!showRightSidebar)}>
@@ -394,6 +399,8 @@ const Board = () => {
       <RightSidebar
         showRightSidebar={showRightSidebar}
         setShowRightSideBar={setShowRightSideBar}
+        boardId={id}
+        boardLists={boardLists}
       />
     </>
   );

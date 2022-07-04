@@ -4,6 +4,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AddCardDescription from "./AddCardDescription";
 import GroupIcon from '@mui/icons-material/Group';
 import UserAvatar from "../avatar/UserAvatar";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import TextField from "@mui/material/TextField";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import axios from "axios";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 function CardInfo({ card, setCard, cardMembers }) {
   const [toggleDescription, setToggleDescription] = useState(false);
@@ -22,9 +28,18 @@ function CardInfo({ card, setCard, cardMembers }) {
       flexDirection: 'column',
       alignItems: 'start',
       justifyContent: 'center',
-      marginBottom: 30
+      marginBottom: 20
     }
   };
+  
+  const handleOnDateChange = async (newValue) => {
+    setCard({ ...card, dueDate: newValue});
+    try {
+      await axios.patch(`http://localhost:3001/card/${card._id}`, {dueDate: newValue})
+    } catch(err) {
+      console.log(err)
+    }
+  }
   
   return (
     <>
@@ -47,6 +62,20 @@ function CardInfo({ card, setCard, cardMembers }) {
             </div>
             <AddCardDescription toggleDescription={toggleDescription} setToggleDescription={setToggleDescription}
                                 card={card} setCard={setCard}/>
+          </div>
+          <div>
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 15}}>
+              <AccessTimeIcon />
+              <p>Due Date</p>
+            </div>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                name="date"
+                value={new Date(card.dueDate)}
+                onChange={handleOnDateChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </div>
         </div>
       </Paper>

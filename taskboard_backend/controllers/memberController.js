@@ -45,7 +45,6 @@ exports.loginMember = asyncHandler(async (req, res) => {
   //check for member email
   const member = await Member.findOne({ email });
   console.log(member);
-  
   if (member && (await bcrypt.compare(password, member.password))) {
     res.status(201).json({
       _id: member._id,

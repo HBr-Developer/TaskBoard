@@ -14,3 +14,10 @@
 .avatar:hover {
     cursor: pointer;
 }
+
+.avatarItem {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    padding: 10px;
+}

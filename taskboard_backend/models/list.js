@@ -4,7 +4,6 @@ const listSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      require: true,
     },
     closed: {
       type: Boolean,
@@ -14,6 +13,10 @@ const listSchema = new mongoose.Schema(
     },
     subscribed: {
       type: Boolean,
+    },
+    active: {
+      type: Boolean,
+      default: true
     },
     board_id: {
       type: mongoose.Schema.Types.ObjectId,

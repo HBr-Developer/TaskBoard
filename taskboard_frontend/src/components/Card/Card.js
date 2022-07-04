@@ -80,10 +80,8 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
           >
             <Paper sx={cardStyle.card}>
               <div style={cardStyle.containerDiv} onClick={handleOnClick}>
-                <Typography style={{ flexGrow: 1, fontSize: '0.9rem' }}>{card.name}</Typography>
-                {/*<DeleteForeverIcon sx={cardStyle.deleteButton} onClick={() => handleOnDelete(card._id)}/>*/}
+                <Typography style={{ flexGrow: 1, fontSize: '0.9rem' }}>{currentCard.name}</Typography>
               </div>
-
             </Paper>
           </div>
         )}

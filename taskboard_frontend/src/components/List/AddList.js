@@ -4,8 +4,10 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const AddCard = ({ toggleNewList, setToggleNewList, boardLists, setBoardLists, boardId }) => {
+  const { user } = useSelector((state) => state.auth);
   const addCardStyle = {
     add: {
       borderRadius: 0.7,
@@ -46,12 +48,18 @@ const AddCard = ({ toggleNewList, setToggleNewList, boardLists, setBoardLists, b
         cards: [],
         board_id: boardId
       };
-      
       const { data } = await axios.post(`http://localhost:3001/list/${boardId}/create`, newListItem);
       const newList = { _id: data._id, name: data.name, cards: data.cards, board_id: data.board_id }
       console.log('newList', newList);
       setBoardLists([...boardLists, { ...newList }]);
       setTitle("");
+      // add list to history
+      await axios.post("http://localhost:3001/listHistory", {
+        user: user._id,
+        list: newList._id,
+        board: boardId,
+        action: `add`,
+      })
       setToggleNewList(!toggleNewList);
     } catch (err) {
       console.log(err);

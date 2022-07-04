@@ -30,9 +30,8 @@ function Login() {
     dispatch(reset());
   }, [user, isError, isSuccess, message, navigate, dispatch]);
   
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    
     const userData = {
       email,
       password

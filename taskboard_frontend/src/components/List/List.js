@@ -29,7 +29,7 @@ const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate,
         <div ref={provided.innerRef} {...provided.draggableProps}>
           <Paper sx={paperStyle} {...provided.dragHandleProps}>
             <Title listTitle={listTitle} setListTitle={setListTitle} listId={currentList._id} boardLists={boardLists}
-                   setBoardLists={setBoardLists}/>
+                   setBoardLists={setBoardLists} boardId={list.board_id}/>
             <Droppable
               droppableId={currentList._id}
               index={index}

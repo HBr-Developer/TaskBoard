@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom"
 import Sidebar from "./components/Sidebar/Sidebar";
 import { useState } from "react";
 import Header from "./components/Header";
@@ -23,8 +23,8 @@ function App() {
   
   return (
     <>
+      <Header/>
       <div>
-        <Header/>
         {user && (
           <Sidebar showSidebar={showSidebar} setShowSideBar={setShowSideBar}/>
         )}

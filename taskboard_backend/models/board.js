@@ -10,14 +10,9 @@ const boardSchema = new mongoose.Schema(
     descData: {
       type: String
     },
-    closed: {
+    active: {
       type: Boolean,
-    },
-    pinned: {
-      type: Boolean,
-    },
-    starred: {
-      type: Boolean,
+      default: true
     },
     lists: [
       {

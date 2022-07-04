@@ -22,7 +22,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.5.0",
     "mongoose": "^6.3.1",
-    "mongoose-sequence": "^5.3.1"
+    "mongoose-sequence": "^5.3.1",
+    "react-router": "^6.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
