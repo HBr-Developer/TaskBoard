@@ -32,6 +32,7 @@ const Board = () => {
   const [filteredCards, setFilteredCards] = useState([]);
   
   console.log('filteredCards', filteredCards);
+  console.log('invitedMembers', invitedMembers);
   
   const compStartDate = (card, firstDate) => {
     const cardDate = new Date(card.createdAt);

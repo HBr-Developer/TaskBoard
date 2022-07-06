@@ -1,4 +1,4 @@
-import { TextField, Grid, Paper } from "@mui/material";
+import { TextField, Grid, Paper, FormControl, Select, MenuItem } from "@mui/material";
 import { flexbox } from "@mui/system";
 import Autocomplete from "@mui/material/Autocomplete";
 import Table from '@mui/material/Table';
@@ -53,7 +53,25 @@ export default function InviteMember({
   boardId
 }) {
   
-  const [selectedMembers, setSelectedmembers] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useState([]);
+  const roleChange = invitedMembers.filter((member) => member.name === user.name)[0].role === "admin";
+  
+  const handleChange = async (e) => {
+    const memberChanged = invitedMembers.filter((member) => (member.name === e.target.name))[0];
+    setInvitedMembers(invitedMembers.map((member) => (member.name === memberChanged.name ? {
+      ...memberChanged,
+      role: e.target.value
+    } : member)));
+    try {
+      await axios.patch("http://localhost:3001/permission", {
+        user: memberChanged._id,
+        board: boardId,
+        role: e.target.value
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
   
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -115,7 +133,7 @@ export default function InviteMember({
                 renderInput={(params) => (
                   <TextField {...params} label="Size small" placeholder="Favorites"/>
                 )}
-                onChange={(e, value) => {setSelectedmembers(value)}}
+                onChange={(e, value) => {setSelectedMembers(value)}}
               />
               {/*<Button component={'submit'} sx={{ marginLeft: 2 }} variant={'contained'} children={'Share'} />*/}
               <input className={'shareButton'} type="submit" value={'Share'}/>
@@ -134,25 +152,38 @@ export default function InviteMember({
                         {member.email}
                       </TableCell>
                       <TableCell component="th" scope="row" align={"right"}>
-                        <p>{member.role}</p>
                         {/*// change Permission*/}
-                        {/*<FormControl margin='none' size='small'>*/}
-                        {/*  <InputLabel style={{ fontSize: 10 }}*/}
-                        {/*              id="demo-simple-select-label">Role</InputLabel>*/}
-                        {/*  <Select*/}
-                        {/*    style={{ fontSize: 10 }}*/}
-                        {/*    labelId="demo-simple-select-label"*/}
-                        {/*    id="demo-simple-select"*/}
-                        {/*    // value={row.username}*/}
-                        {/*    label="Role"*/}
-                        {/*    // onChange={handleChange}*/}
-                        {/*    sx={{ width: "100px" }}*/}
-                        {/*  >*/}
-                        {/*    <MenuItem value={10}>Admin</MenuItem>*/}
-                        {/*    <MenuItem value={20}>Member</MenuItem>*/}
-                        {/*    <MenuItem value={30}>Admin</MenuItem>*/}
-                        {/*  </Select>*/}
-                        {/*</FormControl>*/}
+                        <FormControl margin='none' size='small'>
+                          {/*<InputLabel style={{ fontSize: 15 }}*/}
+                          {/*            id="demo-simple-select-label">role*/}
+                          {/*</InputLabel>*/}
+                          {!roleChange ? (
+                            <Select
+                              disabled
+                              name={member.name}
+                              style={{ fontSize: 15 }}
+                              id="demo-simple-select"
+                              value={member.role}
+                              onChange={handleChange}
+                              sx={{ width: "100px" }}
+                            >
+                              <MenuItem value={'admin'}>Admin</MenuItem>
+                              <MenuItem value={'invited'}>Invited</MenuItem>
+                            </Select>
+                          ) : (
+                            <Select
+                              name={member.name}
+                              style={{ fontSize: 15 }}
+                              id="demo-simple-select"
+                              value={member.role}
+                              onChange={handleChange}
+                              sx={{ width: "100px" }}
+                            >
+                              <MenuItem value={'admin'}>Admin</MenuItem>
+                              <MenuItem value={'invited'}>Invited</MenuItem>
+                            </Select>
+                          )}
+                        </FormControl>
                       </TableCell>
                     </TableRow>
                   ))}

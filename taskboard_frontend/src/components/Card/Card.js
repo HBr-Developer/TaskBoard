@@ -3,6 +3,8 @@ import { Paper, Typography } from "@mui/material";
 import { Draggable } from "react-beautiful-dnd";
 import CardInfo from "./CardInfo";
 import CardPopup from "./CardPopup";
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import UserAvatar from "../avatar/UserAvatar";
 
 const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
   const cardStyle = {
@@ -48,8 +50,17 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
   
   useEffect(() => {
     setCurrentCard(card);
-  }, [boardLists])
-
+  }, [boardLists]);
+  
+  const getDateLimit = () => {
+    const days = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+    let hours = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 3600));
+    let minutes = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 60));
+    minutes -= 60 * hours;
+    hours -= 24 * days
+    return `${days}d ${hours}h ${minutes}m`;
+  }
+  
   // // delete card
   // const handleOnDelete = async (id) => {
   //   try {
@@ -64,11 +75,11 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
   //     console.log(err);
   //   }
   // }
-
+  
   const handleOnClick = () => {
     setOpenPopup(!openPopup);
   }
-
+  
   return (
     <>
       <Draggable draggableId={card._id} index={index}>
@@ -78,9 +89,18 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Paper sx={cardStyle.card}>
-              <div style={cardStyle.containerDiv} onClick={handleOnClick}>
+            <Paper sx={cardStyle.card} onClick={handleOnClick}>
+              <div style={cardStyle.containerDiv}>
                 <Typography style={{ flexGrow: 1, fontSize: '0.9rem' }}>{currentCard.name}</Typography>
+              </div>
+              <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                {new Date(new Date(currentCard.dueDate).getTime() - new Date(currentCard.createdAt).getTime()).getDate() <= 3 &&
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                    <AccessTimeFilledIcon color="error"/>
+                    <p
+                      style={{ color: '#D32F2F' }}>{(new Date(currentCard.dueDate).getHours() - new Date(currentCard.createdAt).getHours()) < 72 && getDateLimit()}</p>
+                  </div>}
+                <div style={{width: '100%',display: 'flex', alignItems: 'center', justifyContent: 'end'}}><UserAvatar name={cardMembers[0].name} /></div>
               </div>
             </Paper>
           </div>
