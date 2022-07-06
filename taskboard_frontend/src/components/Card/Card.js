@@ -5,6 +5,7 @@ import CardInfo from "./CardInfo";
 import CardPopup from "./CardPopup";
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import UserAvatar from "../avatar/UserAvatar";
+import { format } from "date-fns";
 
 const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
   const cardStyle = {
@@ -54,11 +55,12 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
   
   const getDateLimit = () => {
     const days = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+    if(days < 0) return {time: format(new Date(currentCard.dueDate), "dd/MM HH:mm"), status: false};
     let hours = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 3600));
     let minutes = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 60));
     minutes -= 60 * hours;
     hours -= 24 * days
-    return `${days}d ${hours}h ${minutes}m`;
+    return {time: `${days}d ${hours}h ${minutes}m`, status: true};
   }
   
   // // delete card
@@ -96,9 +98,9 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
               <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                 {new Date(new Date(currentCard.dueDate).getTime() - new Date(currentCard.createdAt).getTime()).getDate() <= 3 &&
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-                    <AccessTimeFilledIcon color="error"/>
+                    <AccessTimeFilledIcon color={'error'} sx={!getDateLimit().status && {color: 'black'}} />
                     <p
-                      style={{ color: '#D32F2F' }}>{(new Date(currentCard.dueDate).getHours() - new Date(currentCard.createdAt).getHours()) < 72 && getDateLimit()}</p>
+                      style={!getDateLimit().status ? {color: 'black'} : { color: '#D32F2F' }}>{(new Date(currentCard.dueDate).getHours() - new Date(currentCard.createdAt).getHours()) < 72 && getDateLimit().time}</p>
                   </div>}
                 <div style={{width: '100%',display: 'flex', alignItems: 'center', justifyContent: 'end'}}><UserAvatar name={cardMembers[0].name} /></div>
               </div>
