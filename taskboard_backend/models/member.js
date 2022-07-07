@@ -19,6 +19,9 @@ const memberSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please enter a password'],
     },
+    color: {
+      type: Number,
+    },
     permissions: [
       {
         type: mongoose.Schema.Types.ObjectId,

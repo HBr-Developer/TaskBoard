@@ -1,4 +1,4 @@
-// const CardPermissions = require("../models/CardPermissionModel");
+const CardPermissions = require("../models/CardPermissionModel");
 const Card = require("../models/card");
 const Member = require("../models/member");
 
@@ -17,8 +17,9 @@ exports.allPermissions = async (req, res) => {
 
 exports.addPermission = async (req, res) => {
   try {
+    console.log('body', req.body)
     // create new permission
-    const permission = await CardPermissionModel.create(req.body);
+    const permission = await CardPermissions.create(req.body);
     // add permission to the card
     const card = await Card.findById(req.body.card);
     await Card.updateOne({ _id: req.body.card }, { cardPermissions: [...card.cardPermissions, permission._id] });

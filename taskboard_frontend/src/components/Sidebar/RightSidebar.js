@@ -15,7 +15,7 @@ function RightSidebar({ showRightSidebar, setShowRightSideBar, boardId, boardLis
     });
     const cardHistoryData = cardHistory.data.map((his) => (
       {
-        logo: <UserAvatar name={his.user.name}/>,
+        logo: <UserAvatar name={his.user.name} color={his.user.color}/>,
         message: `${his.user.name} ${his.action === "add" ? "added" : (his.action === "update" ? "updated" : "deleted")} the card ${his.card.name}`
       }
     ))
@@ -29,7 +29,7 @@ function RightSidebar({ showRightSidebar, setShowRightSideBar, boardId, boardLis
     });
     const listHistoryData = listHistory.data.map((his) => (
       {
-        logo: <UserAvatar name={his.user.name}/>,
+        logo: <UserAvatar name={his.user.name} color={his.user.color}/>,
         message: `${his.user.name} ${his.action === "add" ? "added" : (his.action === "update" ? "updated" : "deleted")} the list ${his.list.name}`
       }
     ))
@@ -54,14 +54,14 @@ function RightSidebar({ showRightSidebar, setShowRightSideBar, boardId, boardLis
         </div>
         <div className='separator'></div>
         <div className={'body'}>
-          {listHistory.map((his) => (
-            <div key={his.message} className="avatarItem">
+          {listHistory.map((his, index) => (
+            <div key={index} className="avatarItem">
               {his.logo}
               <p style={{ marginLeft: 5 }}>{his.message}</p>
             </div>
           ))}
-          {cardHistory.map((his) => (
-            <div key={his.message} className="avatarItem">
+          {cardHistory.map((his, index) => (
+            <div key={index} className="avatarItem">
               {his.logo}
               <p style={{ marginLeft: 5 }}>{his.message}</p>
             </div>

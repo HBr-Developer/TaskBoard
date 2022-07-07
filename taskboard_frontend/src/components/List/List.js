@@ -5,7 +5,7 @@ import AddCard from "../Card/AddCard";
 import { useEffect, useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate, compEndDate }) => {
+const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate, compEndDate, invitedMembers }) => {
   
   const paperStyle = {
     borderRadius: 0.7,
@@ -38,29 +38,32 @@ const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate,
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {currentList.cards.map((card, index) => (
-                      (card.name.toLowerCase().includes(searched.search.toLowerCase()) &&
-                        (searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) => (per.user.name))[0])) &&
-                        (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1]))
+                      ((card.name.toLowerCase().includes(searched.search.toLowerCase()) || (card.label ? card.label.name.toLowerCase().includes(searched.search.toLowerCase()) : false))
+                        && (searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) => (per.user.name))[0]))
+                        && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1]))
                       )
                     ) ? (
                       <Card visibility=''
-                            key={card._id}
+                            key={index}
                             card={card}
                             index={index}
                             list={currentList}
                             setList={setCurrentList}
                             boardLists={boardLists}
                             setBoardLists={setBoardLists}
+                            invitedMembers={invitedMembers}
                       />
                     ) : (
                       <Card visibility='none'
-                            key={card._id}
+                            key={index}
                             card={card}
                             index={index}
                             list={currentList}
                             setList={setCurrentList}
                             boardLists={boardLists}
                             setBoardLists={setBoardLists}
+                            board={list.board_id}
+                            invitedMembers={invitedMembers}
                       />
                     )
                   )}

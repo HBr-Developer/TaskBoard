@@ -24,7 +24,11 @@ const cardSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "CardPermission",
       },
-    ]
+    ],
+    label: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Label",
+    }
     // DataLastActivity: {
     //   type: String,
     // },

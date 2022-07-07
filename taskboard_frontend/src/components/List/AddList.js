@@ -42,7 +42,6 @@ const AddCard = ({ toggleNewList, setToggleNewList, boardLists, setBoardLists, b
   const handleOnClick = async () => {
     if (!title) return;
     try {
-      console.log('boardLists', boardLists);
       const newListItem = {
         name: title,
         cards: [],
@@ -50,7 +49,6 @@ const AddCard = ({ toggleNewList, setToggleNewList, boardLists, setBoardLists, b
       };
       const { data } = await axios.post(`http://localhost:3001/list/${boardId}/create`, newListItem);
       const newList = { _id: data._id, name: data.name, cards: data.cards, board_id: data.board_id }
-      console.log('newList', newList);
       setBoardLists([...boardLists, { ...newList }]);
       setTitle("");
       // add list to history

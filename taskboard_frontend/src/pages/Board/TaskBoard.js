@@ -31,8 +31,8 @@ const Board = () => {
   const [searched, setSearched] = useState({ search: "", members: [], dateRange: [null, null] });
   const [filteredCards, setFilteredCards] = useState([]);
   
-  console.log('filteredCards', filteredCards);
-  console.log('invitedMembers', invitedMembers);
+  // console.log('filteredCards', filteredCards);
+  // console.log('invitedMembers', invitedMembers);
   
   const compStartDate = (card, firstDate) => {
     const cardDate = new Date(card.createdAt);
@@ -173,10 +173,13 @@ const Board = () => {
     const sourceList = {
       ...boardLists.filter((list) => list._id === source.droppableId)[0],
     };
+    console.log('sourceList', sourceList);
     const destinationList = {
       ...boardLists.filter((list) => list._id === destination.droppableId)[0],
     };
+    console.log('destinationList', destinationList);
     const draggedCard = sourceList.cards.splice(source.index, 1)[0];
+    console.log('draggedCard', draggedCard);
     destinationList.cards.splice(destination.index, 0, draggedCard);
     if (sourceList._id === destinationList._id) {
       try {
@@ -246,13 +249,13 @@ const Board = () => {
       // get invited members
       const response2 = await axios.get(`http://localhost:3001/member/${id}`);
       const allInvitedMember = response2.data.map((member) => (
-        { _id: member.user._id, name: member.user.name, email: member.user.email, role: member.role }
+        { _id: member.user._id, name: member.user.name, email: member.user.email, role: member.role, color: member.user.color }
       ))
       setInvitedMembers(allInvitedMember);
       
       // get All members
       const response1 = await axios.get("http://localhost:3001/member", config);
-      const Member = response1.data.map((member) => ({ _id: member._id, name: member.name, email: member.email }));
+      const Member = response1.data.map((member) => ({ _id: member._id, name: member.name, email: member.email, color: member.color }));
       
       // checking for duplicated values
       for (let i = 0; i < allInvitedMember.length; i++) {
@@ -294,14 +297,15 @@ const Board = () => {
     const fCards = [];
     boardLists.map((list) => (
       list.cards.map((card) => (
-        ((card.name.toLowerCase().includes(searched.search.toLowerCase())) &&
-          ((searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) =>
-            (per.user.name))[0]))) && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1])))
+        ((card.name.toLowerCase().includes(searched.search.toLowerCase()) || (card.label ? card.label.name.toLowerCase().includes(searched.search.toLowerCase()) : false))
+          &&
+          ((searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) => (per.user.name))[0]))) && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1])))
         && (fCards.push({
           name: card.name,
           status: list.name,
           createdAt: format(new Date(card.createdAt), "dd-MM-yyyy"),
-          dueDate: card.dueDate != null ? format(new Date(card.dueDate), "dd-MM-yyyy") : "Not assigned yet"
+          dueDate: card.dueDate != null ? format(new Date(card.dueDate), "dd-MM-yyyy") : "Not assigned yet",
+          label: card.label ? card.label : null
         }))
       ))
     ))
@@ -322,7 +326,7 @@ const Board = () => {
               <p style={BoardStyle.separator}></p>
               <div className='membersAvatars' style={BoardStyle.membersAvatars}>
                 {invitedMembers.map((member) => (
-                  <UserAvatar key={member.name} name={member.name}/>
+                  <UserAvatar key={member.name} name={member.name} color={member.color}/>
                 ))}
               </div>
               {/*Share*/}
@@ -361,6 +365,7 @@ const Board = () => {
                     searched={searched}
                     compStartDate={compStartDate}
                     compEndDate={compEndDate}
+                    invitedMembers={invitedMembers}
                   />
                 ))}
                 {provided.placeholder}

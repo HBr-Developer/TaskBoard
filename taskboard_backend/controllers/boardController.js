@@ -105,20 +105,27 @@ exports.boardById = async (req, res) => {
   try {
     let newBoard = await Board.findById(req.params.id, 'name descData lists permissions createdAt updatedAt').populate({
       path: "lists",
-      match: {active: true},
+      match: { active: true },
       populate: {
         path: "cards",
         model: "Card",
-        select: "name descData createdAt dueDate",
-        populate: {
-          path: 'cardPermissions',
-          model: 'CardPermissions',
-          select: "user role",
-          populate: {
-            path: "user",
-            select: "name email"
+        select: "name descData createdAt dueDate label",
+        populate: [
+          {
+            path: 'cardPermissions',
+            model: 'CardPermissions',
+            select: "user role",
+            populate: {
+              path: "user",
+              select: "name email color"
+            }
+          },
+          {
+            path: 'label',
+            model: 'Label',
+            select: 'name color'
           }
-        }
+        ]
       },
     }).populate({
       path: 'permissions',

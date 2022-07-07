@@ -111,7 +111,7 @@ const CardSearch = ({ searched, setSearched, invitedMembers, setOpen, filteredCa
                 onChange={handleOnChange}
                 checked={searched.members.length <= 0 ? false : (searched.members.includes(member.name))}
               />
-              <UserAvatar name={member.name} />
+              <UserAvatar name={member.name} color={member.color} />
               <span>{member.name}</span>
             </div>
           ))}

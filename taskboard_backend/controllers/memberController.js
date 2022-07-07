@@ -24,13 +24,15 @@ exports.registerMember = asyncHandler(async (req, res) => {
   const member = await Member.create({
     name,
     email,
-    password: hashedPassword
+    password: hashedPassword,
+    color: Math.floor(Math.random() * 6)
   })
   if (member) {
     res.status(201).json({
       _id: member._id,
       name: member.name,
       email: member.email,
+      color: member.color,
       token: generateToken(member._id)
     })
   } else {
@@ -50,6 +52,7 @@ exports.loginMember = asyncHandler(async (req, res) => {
       _id: member._id,
       name: member.name,
       email: member.email,
+      color: member.color,
       token: generateToken(member._id)
     })
   } else {
@@ -81,7 +84,7 @@ exports.getMembersOfBoard = asyncHandler(async (req, res) => {
       populate: {
         path: 'user',
         model: 'Member',
-        select: 'name email'
+        select: 'name email color'
       }
     });
     const users = board.permissions.map((permission) => ({ user: permission.user, role: permission.role }));

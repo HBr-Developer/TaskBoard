@@ -108,7 +108,7 @@ const Header = () => {
                 <Box>
                   <Tooltip title="Open settings">
                     <div style={styles.avatar} onClick={handleOpenUserMenu}>
-                      <UserAvatar name={user.name}/>
+                      <UserAvatar name={user.name} color={user.color}/>
                     </div>
                   </Tooltip>
                   <Menu

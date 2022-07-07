@@ -55,8 +55,18 @@ export default function InviteMember({
   
   const [selectedMembers, setSelectedMembers] = useState([]);
   const roleChange = invitedMembers.filter((member) => member.name === user.name)[0].role === "admin";
+  const [adminError, setAdminError] = useState(false);
   
   const handleChange = async (e) => {
+    if (e.target.value === "invited") {
+      if (invitedMembers.filter((member) => (member.role === 'admin')).length <= 1) {
+        setAdminError(true);
+        setTimeout(() => {
+          setAdminError(false);
+        }, 3000)
+        return;
+      }
+    }
     const memberChanged = invitedMembers.filter((member) => (member.name === e.target.name))[0];
     setInvitedMembers(invitedMembers.map((member) => (member.name === memberChanged.name ? {
       ...memberChanged,
@@ -140,6 +150,9 @@ export default function InviteMember({
             </div>
             
             <TableContainer component={Paper} elevation={0} sx={{ marginTop: 4, backgroundColor: '#FBFBFB' }}>
+              {adminError &&
+                <p style={{ color: 'red', textAlign: 'center' }}>A project must have at least one admin</p>
+              }
               <Table aria-label="simple table" size='small'>
                 <TableHead>
                 </TableHead>

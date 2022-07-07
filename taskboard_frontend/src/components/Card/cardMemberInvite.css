@@ -1,0 +1,16 @@
+.inviteMember .addButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #b9b9b9;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: background-color 150ms;
+}
+
+.inviteMember .addButton:hover {
+    background-color: #7F7F7F;
+    cursor: pointer;
+}

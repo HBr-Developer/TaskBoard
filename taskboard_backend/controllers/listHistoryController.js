@@ -16,13 +16,12 @@ exports.getHistory = async (req, res) => {
     const history = await History.find({board: req.params.boardId}).populate({
       path: "user",
       model: "Member",
-      select: "name"
+      select: "name color"
     }).populate({
       path: "list",
       model: "List",
       select: "name"
     });
-    console.log('listHistory', history);
     res.send(history);
   } catch(err) {
     console.log(err)

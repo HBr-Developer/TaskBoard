@@ -7,7 +7,8 @@ import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import UserAvatar from "../avatar/UserAvatar";
 import { format } from "date-fns";
 
-const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
+const Card = ({ card, index, boardLists, setBoardLists, visibility, board, invitedMembers }) => {
+  
   const cardStyle = {
     card: {
       padding: 0.6,
@@ -49,18 +50,22 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
   const [currentCard, setCurrentCard] = useState(card);
   const [cardMembers, setCardMembers] = useState(card.cardPermissions ? card.cardPermissions.map((per) => per.user) : []);
   
+  // console.log('cardMembers', cardMembers);
+  // console.log('invitedMembers', invitedMembers.filter((mem) => !(cardMembers.map((cMem) => cMem._id)).includes(mem._id)));
+  
   useEffect(() => {
     setCurrentCard(card);
   }, [boardLists]);
   
   const getDateLimit = () => {
+    if(!currentCard.dueDate) return;
     const days = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
-    if(days < 0) return {time: format(new Date(currentCard.dueDate), "dd/MM HH:mm"), status: false};
+    if (days < 0) return { time: format(new Date(currentCard.dueDate), "dd/MM HH:mm"), status: false };
     let hours = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 3600));
     let minutes = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 60));
     minutes -= 60 * hours;
     hours -= 24 * days
-    return {time: `${days}d ${hours}h ${minutes}m`, status: true};
+    return { time: `${days}d ${hours}h ${minutes}m`, status: true };
   }
   
   // // delete card
@@ -92,17 +97,35 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
             {...provided.dragHandleProps}
           >
             <Paper sx={cardStyle.card} onClick={handleOnClick}>
+              
+                {currentCard.label ? (
+                  <p
+                    style={{width: 'fit-content', textAlign: 'center' ,backgroundColor: currentCard.label.color, color: '#FFF', fontSize: 10, padding: '1px 5px 1px 5px', borderRadius: 2}}
+                  >{currentCard.label.name}</p>
+                ) : (<div></div>)}
+              
               <div style={cardStyle.containerDiv}>
                 <Typography style={{ flexGrow: 1, fontSize: '0.9rem' }}>{currentCard.name}</Typography>
               </div>
-              <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                {new Date(new Date(currentCard.dueDate).getTime() - new Date(currentCard.createdAt).getTime()).getDate() <= 3 &&
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                {((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 3600)) <= 72 &&
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-                    <AccessTimeFilledIcon color={'error'} sx={!getDateLimit().status && {color: 'black'}} />
-                    <p
-                      style={!getDateLimit().status ? {color: 'black'} : { color: '#D32F2F' }}>{(new Date(currentCard.dueDate).getHours() - new Date(currentCard.createdAt).getHours()) < 72 && getDateLimit().time}</p>
-                  </div>}
-                <div style={{width: '100%',display: 'flex', alignItems: 'center', justifyContent: 'end'}}><UserAvatar name={cardMembers[0].name} /></div>
+                    <AccessTimeFilledIcon color={'error'} sx={!getDateLimit().status && { color: 'black' }}/>
+                    <p style={!getDateLimit().status ? { color: 'black' } : { color: '#D32F2F' }}>
+                      {getDateLimit().time}
+                    </p>
+                  </div>
+                 }
+                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'end' }}>
+                  {cardMembers.map((mem, index) => (
+                    <UserAvatar key={index} name={mem.name} color={mem.color}/>
+                  ))}
+                </div>
               </div>
             </Paper>
           </div>
@@ -123,6 +146,8 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
           setCard={setCurrentCard}
           cardMembers={cardMembers}
           setCardMembers={setCardMembers}
+          invitedMembers={invitedMembers}
+          board={board}
         />
       </CardPopup>
     </>

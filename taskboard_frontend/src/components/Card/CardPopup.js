@@ -34,9 +34,9 @@ const Popup = ({ card, setCard, children, openPopup, setOpenPopup, boardLists, s
   return (
     <Dialog open={openPopup}>
       <div style={{ backgroundColor: '#FBFBFB' }}>
-        <DialogTitle sx={{ paddingTop: 0.5, paddingBottom: 0.5 }}>
+        <DialogTitle sx={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 1 }}>
           <div style={styles.topBar}>
-            <div style={{flexGrow: 1, marginRight: 60}}>
+            <div style={{width: '70%'}}>
               <CardTitle card={card} setCard={setCard} boardLists={boardLists}
                          setBoardLists={setBoardLists}/>
             </div>
