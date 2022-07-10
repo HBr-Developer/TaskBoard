@@ -5,8 +5,9 @@ import CardInfo from "./CardInfo";
 import CardPopup from "./CardPopup";
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import UserAvatar from "../avatar/UserAvatar";
+import { format } from "date-fns";
 
-const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
+const Card = ({ card, index, boardLists, setBoardLists, visibility, list }) => {
   const cardStyle = {
     card: {
       padding: 0.6,
@@ -53,12 +54,14 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
   }, [boardLists]);
   
   const getDateLimit = () => {
-    const days = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
-    let hours = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 3600));
-    let minutes = Math.floor((new Date(currentCard.dueDate).getTime() - new Date().getTime()) / (1000 * 60));
+    const dateDiff = new Date(currentCard.dueDate).getTime() - new Date().getTime();
+    const days = Math.floor(dateDiff / (1000 * 3600 * 24));
+    if(days < 0) return {time: format(new Date(currentCard.dueDate), 'dd/MM HH:mm'), status: false, show: true};
+    let hours = Math.floor(dateDiff / (1000 * 3600));
+    let minutes = Math.floor(dateDiff / (1000 * 60));
     minutes -= 60 * hours;
     hours -= 24 * days
-    return `${days}d ${hours}h ${minutes}m`;
+    return {time: `${days}d ${hours}h ${minutes}m`, status: true, show: days < 3};
   }
   
   // // delete card
@@ -94,11 +97,11 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
                 <Typography style={{ flexGrow: 1, fontSize: '0.9rem' }}>{currentCard.name}</Typography>
               </div>
               <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                {new Date(new Date(currentCard.dueDate).getTime() - new Date(currentCard.createdAt).getTime()).getDate() <= 3 &&
+                {getDateLimit().show &&
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-                    <AccessTimeFilledIcon color="error"/>
+                    <AccessTimeFilledIcon color="error" sx={getDateLimit().status ? { color: '#D32F2F' } : { color: 'black' }}/>
                     <p
-                      style={{ color: '#D32F2F' }}>{(new Date(currentCard.dueDate).getHours() - new Date(currentCard.createdAt).getHours()) < 72 && getDateLimit()}</p>
+                      style={getDateLimit().status ? { color: '#D32F2F' } : { color: 'black' }}>{getDateLimit().time}</p>
                   </div>}
                 <div style={{width: '100%',display: 'flex', alignItems: 'center', justifyContent: 'end'}}><UserAvatar name={cardMembers[0].name} /></div>
               </div>
@@ -121,6 +124,9 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility }) => {
           setCard={setCurrentCard}
           cardMembers={cardMembers}
           setCardMembers={setCardMembers}
+          list={list}
+          boardLists={boardLists}
+          setBoardLists={setBoardLists}
         />
       </CardPopup>
     </>

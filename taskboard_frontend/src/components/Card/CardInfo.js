@@ -15,7 +15,7 @@ import InviteMember from "../Member/InviteMember";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-function CardInfo({ card, setCard, cardMembers }) {
+function CardInfo({ card, setCard, cardMembers, list, boardLists, setBoardLists }) {
   const [toggleDescription, setToggleDescription] = useState(false);
   const [recordUpdate, setRecordUpdate] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
@@ -41,9 +41,11 @@ function CardInfo({ card, setCard, cardMembers }) {
   };
   
   const handleOnDateChange = async (newValue) => {
-    setCard({ ...card, dueDate: newValue });
+    const newList = {...list, cards: list.cards.map((mCard) => ((mCard._id === card._id) ? { ...card, dueDate: newValue } : mCard))};
+    setBoardLists(boardLists.map((bList) => bList._id === list._id ? newList : bList));
     try {
-      await axios.patch(`http://localhost:3001/card/${card._id}`, { dueDate: newValue })
+      await axios.patch(`http://localhost:3001/card/${card._id}`, { dueDate: newValue });
+      setCard({ ...card, dueDate: newValue });
     } catch (err) {
       console.log(err)
     }
