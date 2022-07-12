@@ -22,7 +22,6 @@ exports.getHistory = async (req, res) => {
       model: "Card",
       select: "name"
     });
-    console.log('cardHistory', history);
     res.send(history);
   } catch(err) {
     console.log(err)

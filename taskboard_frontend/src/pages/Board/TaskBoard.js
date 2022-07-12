@@ -361,6 +361,8 @@ const Board = () => {
                     searched={searched}
                     compStartDate={compStartDate}
                     compEndDate={compEndDate}
+                    invitedMembers={invitedMembers}
+                    setInvitedMembers={setInvitedMembers}
                   />
                 ))}
                 {provided.placeholder}

@@ -5,7 +5,7 @@ import AddCard from "../Card/AddCard";
 import { useEffect, useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate, compEndDate }) => {
+const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate, compEndDate, invitedMembers, setInvitedMembers }) => {
   
   const paperStyle = {
     borderRadius: 0.7,
@@ -51,6 +51,8 @@ const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate,
                             setList={setCurrentList}
                             boardLists={boardLists}
                             setBoardLists={setBoardLists}
+                            invitedMembers={invitedMembers}
+                            setInvitedMembers={setInvitedMembers}
                       />
                     ) : (
                       <Card visibility='none'
@@ -61,6 +63,8 @@ const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate,
                             setList={setCurrentList}
                             boardLists={boardLists}
                             setBoardLists={setBoardLists}
+                            invitedMembers={invitedMembers}
+                            setInvitedMembers={setInvitedMembers}
                       />
                     )
                   )}

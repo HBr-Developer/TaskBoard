@@ -7,7 +7,7 @@ import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import UserAvatar from "../avatar/UserAvatar";
 import { format } from "date-fns";
 
-const Card = ({ card, index, boardLists, setBoardLists, visibility, list }) => {
+const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invitedMembers, setInvitedMembers }) => {
   const cardStyle = {
     card: {
       padding: 0.6,
@@ -49,6 +49,9 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list }) => {
   const [currentCard, setCurrentCard] = useState(card);
   const [cardMembers, setCardMembers] = useState(card.cardPermissions ? card.cardPermissions.map((per) => per.user) : []);
   
+  console.log('cardMembers', cardMembers);
+  console.log('boardLists', boardLists);
+  
   useEffect(() => {
     setCurrentCard(card);
   }, [boardLists]);
@@ -56,12 +59,12 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list }) => {
   const getDateLimit = () => {
     const dateDiff = new Date(currentCard.dueDate).getTime() - new Date().getTime();
     const days = Math.floor(dateDiff / (1000 * 3600 * 24));
-    if(days < 0) return {time: format(new Date(currentCard.dueDate), 'dd/MM HH:mm'), status: false, show: true};
+    if (days < 0) return { time: format(new Date(currentCard.dueDate), 'dd/MM HH:mm'), status: false, show: true };
     let hours = Math.floor(dateDiff / (1000 * 3600));
     let minutes = Math.floor(dateDiff / (1000 * 60));
     minutes -= 60 * hours;
     hours -= 24 * days
-    return {time: `${days}d ${hours}h ${minutes}m`, status: true, show: days < 3};
+    return { time: `${days}d ${hours}h ${minutes}m`, status: true, show: days < 3 };
   }
   
   // // delete card
@@ -96,14 +99,34 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list }) => {
               <div style={cardStyle.containerDiv}>
                 <Typography style={{ flexGrow: 1, fontSize: '0.9rem' }}>{currentCard.name}</Typography>
               </div>
-              <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
                 {getDateLimit().show &&
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-                    <AccessTimeFilledIcon color="error" sx={getDateLimit().status ? { color: '#D32F2F' } : { color: 'black' }}/>
+                    <AccessTimeFilledIcon color="error"
+                                          sx={getDateLimit().status ? { color: '#D32F2F' } : { color: 'black' }}/>
                     <p
                       style={getDateLimit().status ? { color: '#D32F2F' } : { color: 'black' }}>{getDateLimit().time}</p>
                   </div>}
-                <div style={{width: '100%',display: 'flex', alignItems: 'center', justifyContent: 'end'}}><UserAvatar name={cardMembers[0].name} /></div>
+                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'end' }}>
+                  {cardMembers.length <= 2 ?
+                    cardMembers.map((member, index) => (
+                      <UserAvatar key={index} name={member.name}/>
+                    )) : (
+                      <>
+                        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                          <p style={{marginRight: 3}}>{`+${cardMembers.length - 2}`}</p>
+                          {cardMembers.slice(0, 2).map((member, index) => (
+                            <UserAvatar key={index} name={member.name}/>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                </div>
               </div>
             </Paper>
           </div>
@@ -127,6 +150,8 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list }) => {
           list={list}
           boardLists={boardLists}
           setBoardLists={setBoardLists}
+          invitedMembers={invitedMembers}
+          setInvitedMembers={setInvitedMembers}
         />
       </CardPopup>
     </>

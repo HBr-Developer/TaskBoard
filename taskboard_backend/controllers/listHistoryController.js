@@ -22,7 +22,6 @@ exports.getHistory = async (req, res) => {
       model: "List",
       select: "name"
     });
-    console.log('listHistory', history);
     res.send(history);
   } catch(err) {
     console.log(err)

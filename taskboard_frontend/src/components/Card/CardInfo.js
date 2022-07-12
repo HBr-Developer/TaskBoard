@@ -10,17 +10,25 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import axios from "axios";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { DateTimePicker } from "@mui/x-date-pickers-pro";
-import Popup from "../../pages/Board/Popup";
-import InviteMember from "../Member/InviteMember";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import CardMemberInvite from "./CardMemberInvite";
 
-function CardInfo({ card, setCard, cardMembers, list, boardLists, setBoardLists }) {
+function CardInfo({
+  card,
+  setCard,
+  cardMembers,
+  list,
+  boardLists,
+  setBoardLists,
+  board,
+  invitedMembers,
+  setCardMembers
+}) {
   const [toggleDescription, setToggleDescription] = useState(false);
-  const [recordUpdate, setRecordUpdate] = useState("");
-  const [openPopup, setOpenPopup] = useState(false);
-  const [allMembers, setAllMembers] = useState([]);
-  const [invitedMembers, setInvitedMembers] = useState([]);
+  const [notCardMembers, setNotCardMembers] = useState(invitedMembers.filter((mem) => (!cardMembers.map((cMem) => cMem._id).includes(mem._id))));
+  
+  console.log('notCardMembers', notCardMembers);
   
   const styles = {
     paper: {
@@ -41,7 +49,10 @@ function CardInfo({ card, setCard, cardMembers, list, boardLists, setBoardLists 
   };
   
   const handleOnDateChange = async (newValue) => {
-    const newList = {...list, cards: list.cards.map((mCard) => ((mCard._id === card._id) ? { ...card, dueDate: newValue } : mCard))};
+    const newList = {
+      ...list,
+      cards: list.cards.map((mCard) => ((mCard._id === card._id) ? { ...card, dueDate: newValue } : mCard))
+    };
     setBoardLists(boardLists.map((bList) => bList._id === list._id ? newList : bList));
     try {
       await axios.patch(`http://localhost:3001/card/${card._id}`, { dueDate: newValue });
@@ -52,6 +63,9 @@ function CardInfo({ card, setCard, cardMembers, list, boardLists, setBoardLists 
   }
   const { id } = useParams();
   const { user } = useSelector((state) => state.auth);
+  
+  console.log('board id', id);
+  console.log('', user);
   
   return (
     <>
@@ -67,10 +81,14 @@ function CardInfo({ card, setCard, cardMembers, list, boardLists, setBoardLists 
             }}>
               <GroupIcon/>Members
             </div>
-            <div>
-              {cardMembers.map((mem) => (
-                <UserAvatar key={mem.name} name={mem.name}/>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              {cardMembers.map((mem, index) => (
+                <UserAvatar key={index} name={mem.name} color={mem.color}/>
               ))}
+              <CardMemberInvite key={card._id} card={card} notCardMembers={notCardMembers}
+                                setNotCardMembers={setNotCardMembers} cardMembers={cardMembers}
+                                setCardMembers={setCardMembers} boardLists={boardLists} setBoardLists={setBoardLists}
+                                list={list}/>
             </div>
           </div>
           
@@ -103,25 +121,6 @@ function CardInfo({ card, setCard, cardMembers, list, boardLists, setBoardLists 
           </div>
         </div>
       </Paper>
-      <Popup
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
-        setRecordUpdate={setRecordUpdate}
-        recordUpdate={recordUpdate}
-        title={"Share Task"}
-      >
-        <InviteMember
-          allMembers={allMembers}
-          setAllMembers={setAllMembers}
-          invitedMembers={invitedMembers}
-          setInvitedMembers={setInvitedMembers}
-          openPopup={openPopup}
-          setOpenPopup={setOpenPopup}
-          recordUpdate={recordUpdate}
-          user={user}
-          boardId={id}
-        />
-      </Popup>
     </>
   );
 }
