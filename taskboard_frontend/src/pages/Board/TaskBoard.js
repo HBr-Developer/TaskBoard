@@ -313,7 +313,7 @@ const Board = () => {
     const fCards = [];
     boardLists.map((list) => (
       list.cards.map((card) => (
-        ((card.name.toLowerCase().includes(searched.search.toLowerCase()) || (card.label.title.toLowerCase().includes(searched.search.toLowerCase()))) &&
+        ((card.name.toLowerCase().includes(searched.search.toLowerCase()) || (card.label && card.label.title.toLowerCase().includes(searched.search.toLowerCase()))) &&
           ((searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) =>
             (per.user.name))[0]))) && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1])))
         && (fCards.push({

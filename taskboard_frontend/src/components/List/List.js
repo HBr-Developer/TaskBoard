@@ -38,7 +38,7 @@ const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate,
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {currentList.cards.map((card, index) => (
-                      ((card.name.toLowerCase().includes(searched.search.toLowerCase()) || (card.label.title.toLowerCase().includes(searched.search.toLowerCase()))) &&
+                      ((card.name.toLowerCase().includes(searched.search.toLowerCase()) || (card.label && card.label.title.toLowerCase().includes(searched.search.toLowerCase()))) &&
                         (searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) => (per.user.name))[0])) &&
                         (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1]))
                       )
