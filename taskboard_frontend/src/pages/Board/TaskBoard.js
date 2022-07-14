@@ -32,6 +32,7 @@ const Board = () => {
   const [filteredCards, setFilteredCards] = useState([]);
   
   console.log('filteredCards', filteredCards);
+  console.log('boardLists', boardLists);
   
   const compStartDate = (card, firstDate) => {
     const cardDate = new Date(card.createdAt);
@@ -289,11 +290,30 @@ const Board = () => {
     }, 300);
   }, [id]);
   
+  // useEffect(() => {
+  //   const fCards = [];
+  //   boardLists.map((list) => (
+  //     list.cards.map((card) => (
+  //       (((card.name.toLowerCase().includes(searched.search.toLowerCase())) || (card.label ? card.label.title.toLowerCase().includes(searched.search.toLowerCase()) : false))
+  //         &&
+  //         ((searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) => (per.user.name))[0]))) && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1])))
+  //       && (fCards.push({
+  //         name: card.name,
+  //         status: list.name,
+  //         createdAt: format(new Date(card.createdAt), "dd-MM-yyyy"),
+  //         dueDate: card.dueDate != null ? format(new Date(card.dueDate), "dd-MM-yyyy") : "Not assigned yet",
+  //         label: card.label ? card.label : null
+  //       }))
+  //     ))
+  //   ))
+  //   setFilteredCards([...fCards]);
+  // }, [searched]);
+  
   useEffect(() => {
     const fCards = [];
     boardLists.map((list) => (
       list.cards.map((card) => (
-        ((card.name.toLowerCase().includes(searched.search.toLowerCase())) &&
+        ((card.name.toLowerCase().includes(searched.search.toLowerCase()) || (card.label.title.toLowerCase().includes(searched.search.toLowerCase()))) &&
           ((searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) =>
             (per.user.name))[0]))) && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1])))
         && (fCards.push({
