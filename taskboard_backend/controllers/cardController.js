@@ -66,7 +66,7 @@ exports.cardDelete = async (req, res) => {
   }
 };
 
-exports.cardUpdate = (req, res) => {
+exports.cardUpdate = async (req, res) => {
   Card.findByIdAndUpdate(req.params.id, req.body)
     .then((result) => {
       res.json(result);

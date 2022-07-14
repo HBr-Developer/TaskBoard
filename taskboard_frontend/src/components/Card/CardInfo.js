@@ -13,6 +13,7 @@ import { DateTimePicker } from "@mui/x-date-pickers-pro";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CardMemberInvite from "./CardMemberInvite";
+import AddLabel from "./AddLabel";
 
 function CardInfo({
   card,
@@ -21,9 +22,9 @@ function CardInfo({
   list,
   boardLists,
   setBoardLists,
-  board,
   invitedMembers,
-  setCardMembers
+  setCardMembers,
+  setCardLabel
 }) {
   const [toggleDescription, setToggleDescription] = useState(false);
   const [notCardMembers, setNotCardMembers] = useState(invitedMembers.filter((mem) => (!cardMembers.map((cMem) => cMem._id).includes(mem._id))));
@@ -65,7 +66,7 @@ function CardInfo({
   const { user } = useSelector((state) => state.auth);
   
   console.log('board id', id);
-  console.log('', user);
+  console.log('user', user);
   
   return (
     <>
@@ -118,6 +119,10 @@ function CardInfo({
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
+          </div>
+          <div>
+            <p>Labels</p>
+            <AddLabel card={card} setCardLabel={setCardLabel} boardLists={boardLists} setBoardLists={setBoardLists} list={list} />
           </div>
         </div>
       </Paper>

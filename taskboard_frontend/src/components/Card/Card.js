@@ -8,6 +8,7 @@ import UserAvatar from "../avatar/UserAvatar";
 import { format } from "date-fns";
 
 const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invitedMembers, setInvitedMembers }) => {
+
   const cardStyle = {
     card: {
       padding: 0.6,
@@ -48,9 +49,11 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invite
   const [openPopup, setOpenPopup] = useState(false);
   const [currentCard, setCurrentCard] = useState(card);
   const [cardMembers, setCardMembers] = useState(card.cardPermissions ? card.cardPermissions.map((per) => per.user) : []);
+  const [cardLabel, setCardLabel] = useState(card.label ? card.label : null);
   
   console.log('cardMembers', cardMembers);
   console.log('boardLists', boardLists);
+  console.log('cardLabel', card.label);
   
   useEffect(() => {
     setCurrentCard(card);
@@ -96,6 +99,11 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invite
             {...provided.dragHandleProps}
           >
             <Paper sx={cardStyle.card} onClick={handleOnClick}>
+              <div>
+                {cardLabel && (
+                  <p style={{color: '#FFF', display: 'inline-block', fontSize: 12, padding: '1px 5px', borderRadius: 3, backgroundColor: cardLabel.color}}>{cardLabel.title}</p>
+                )}
+              </div>
               <div style={cardStyle.containerDiv}>
                 <Typography style={{ flexGrow: 1, fontSize: '0.9rem' }}>{currentCard.name}</Typography>
               </div>
@@ -152,6 +160,8 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invite
           setBoardLists={setBoardLists}
           invitedMembers={invitedMembers}
           setInvitedMembers={setInvitedMembers}
+          cardLabel={cardLabel}
+          setCardLabel={setCardLabel}
         />
       </CardPopup>
     </>

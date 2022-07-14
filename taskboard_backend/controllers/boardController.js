@@ -84,7 +84,12 @@ exports.getAllBoards = async (req, res) => {
         populate: {
           path: "cards",
           model: "Card",
-          select: "name descData dueDate",
+          select: "name descData dueDate label",
+          populate: {
+            path: 'label',
+            model: 'Label',
+            select: 'title color'
+          }
         },
       }).populate({
         path: 'permissions',
@@ -110,15 +115,22 @@ exports.boardById = async (req, res) => {
         path: "cards",
         model: "Card",
         select: "name descData createdAt dueDate",
-        populate: {
-          path: 'cardPermissions',
-          model: 'CardPermissions',
-          select: "user role",
-          populate: {
-            path: "user",
-            select: "name email"
+        populate: [
+          {
+            path: 'cardPermissions',
+            model: 'CardPermissions',
+            select: "user role",
+            populate: {
+              path: "user",
+              select: "name email"
+            }
+          },
+          {
+            path: 'label',
+            model: 'Label',
+            select: 'title color'
           }
-        }
+        ]
       },
     }).populate({
       path: 'permissions',

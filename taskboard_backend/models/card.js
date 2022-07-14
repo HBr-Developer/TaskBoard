@@ -19,6 +19,10 @@ const cardSchema = new mongoose.Schema(
     dueDate: {
       type: Date
     },
+    label: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Label",
+    },
     cardPermissions: [
       {
         type: mongoose.Schema.Types.ObjectId,
