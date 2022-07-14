@@ -4,6 +4,7 @@ const List = require("../models/list");
 exports.createCard = async (req, res) => {
   try {
     const list = await List.findById(req.body.list_id);
+    // create new card with permission
     const newCard = new Card({ ...req.body, list_id: list._id });
     // add card to it's list
     await List.findByIdAndUpdate(list._id, {
@@ -37,7 +38,7 @@ exports.cardById = async (req, res) => {
       populate: {
         path: "user",
         model: "Member",
-        select: "name email color"
+        select: "name email"
       }
     });
     res.json(card);
@@ -65,7 +66,7 @@ exports.cardDelete = async (req, res) => {
   }
 };
 
-exports.cardUpdate = (req, res) => {
+exports.cardUpdate = async (req, res) => {
   Card.findByIdAndUpdate(req.params.id, req.body)
     .then((result) => {
       res.json(result);

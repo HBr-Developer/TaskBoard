@@ -44,11 +44,16 @@ const AddCard = ({ toggleAddCard, setToggleAddCard, list, boardLists, setBoardLi
       }
     }
     if (!cardTitle) return;
-    // Create card
-    const { data } = await axios.post(`http://localhost:3001/card/create`, { name: cardTitle, list_id: list._id}, config);
-    // create card permission
-    await axios.post('http://localhost:3001/cardPermission', {user: user._id, card: data._id, role: 'admin'});
-    
+    const { data } = await axios.post(
+      `http://localhost:3001/card/create`,
+      {
+        name: cardTitle,
+        list_id: list._id
+      },
+      config
+    );
+    // creat card permission
+    await axios.post('http://localhost:3001/cardPermission', { card: data._id, user: user._id, role: 'admin' });
     const cardResponse = await axios.get(`http://localhost:3001/card/${data._id}`);
     const newCard = {
       _id: cardResponse.data._id,

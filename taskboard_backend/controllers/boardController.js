@@ -84,7 +84,12 @@ exports.getAllBoards = async (req, res) => {
         populate: {
           path: "cards",
           model: "Card",
-          select: "name descData dueDate",
+          select: "name descData dueDate label",
+          populate: {
+            path: 'label',
+            model: 'Label',
+            select: 'title color'
+          }
         },
       }).populate({
         path: 'permissions',
@@ -105,11 +110,11 @@ exports.boardById = async (req, res) => {
   try {
     let newBoard = await Board.findById(req.params.id, 'name descData lists permissions createdAt updatedAt').populate({
       path: "lists",
-      match: { active: true },
+      match: {active: true},
       populate: {
         path: "cards",
         model: "Card",
-        select: "name descData createdAt dueDate label",
+        select: "name descData createdAt dueDate",
         populate: [
           {
             path: 'cardPermissions',
@@ -117,13 +122,13 @@ exports.boardById = async (req, res) => {
             select: "user role",
             populate: {
               path: "user",
-              select: "name email color"
+              select: "name email"
             }
           },
           {
             path: 'label',
             model: 'Label',
-            select: 'name color'
+            select: 'title color'
           }
         ]
       },

@@ -2,22 +2,24 @@ const mongoose = require("mongoose");
 
 const labelSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
+      require: true,
     },
     color: {
-      type: String,
+      type: String
     },
     board: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Board",
     },
-    card: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Card",
-    },
+    cards: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Card",
+      },
+    ]
   },
   { timestamps: true }
 );
-
 module.exports = mongoose.model("Label", labelSchema);

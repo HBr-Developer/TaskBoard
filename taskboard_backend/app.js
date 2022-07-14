@@ -12,7 +12,7 @@ const permissionRoutes = require("./routes/permissions");
 const cardPermissionRoutes = require("./routes/cardPermissions");
 const listHistoryRoutes = require("./routes/listHistory");
 const cardHistoryRoutes = require("./routes/cardHistory");
-const labelRoutes = require("./routes/labelRoutes");
+const labelRoutes = require("./routes/labels");
 
 //Config
 require("dotenv").config();
