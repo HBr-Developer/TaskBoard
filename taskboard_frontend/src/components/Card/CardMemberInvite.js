@@ -9,9 +9,6 @@ import axios from "axios";
 
 export default function CardMemberInvite({ notCardMembers, cardMembers, setCardMembers, card, boardLists, setBoardLists, list }) {
   
-  console.log('cardMembers', cardMembers);
-  console.log('notCardMembers', notCardMembers);
-  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -21,14 +18,11 @@ export default function CardMemberInvite({ notCardMembers, cardMembers, setCardM
   };
   const handleOnSelect = async (mem) => {
     setAnchorEl(null);
-    console.log('member', mem);
-    console.log('card', card);
     setCardMembers([...cardMembers, mem]);
-    notCardMembers.splice(notCardMembers.indexOf({...mem}));
+    notCardMembers.splice(notCardMembers.indexOf(mem), 1);
     await axios.post('http://localhost:3001/cardPermission', {user: mem._id, card: card._id, role: 'invited'});
     const newCard = await axios.get(`http://localhost:3001/card/${card._id}`);
     const newList = { ...list, cards: list.cards.map((lCard) => lCard._id !== card._id ? lCard : { _id: newCard.data._id, name: newCard.data.name, cardPermissions: newCard.data.cardPermissions, createdAt: newCard.data.createdAt, dueDate: newCard.data.dueDate ? newCard.data.dueDate : '' }) }
-    console.log('newList', newList);
     setBoardLists(boardLists.map((bList) => bList._id === list._id ? newList : bList));
   };
   
