@@ -19,6 +19,7 @@ const AddLabel = ({ card, setCardLabel, boardLists, setBoardLists, list }) => {
   
   useEffect(() => {
     labelsOfBoard();
+    setSelectedLabel(card.label);
   }, [])
   
   const labelsOfBoard = async () => {
@@ -41,7 +42,7 @@ const AddLabel = ({ card, setCardLabel, boardLists, setBoardLists, list }) => {
     e.preventDefault();
     if (!selectedLabel) return;
     try {
-      await axios.patch(`http://localhost:3001/label/${selectedLabel._id}`, { card: card._id });
+      // await axios.patch(`http://localhost:3001/label/${selectedLabel._id}`, { card: card._id });
       await axios.patch(`http://localhost:3001/card/${card._id}`, { label: selectedLabel._id });
       const newList = {
         ...list,

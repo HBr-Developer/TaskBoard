@@ -25,9 +25,6 @@ exports.updateLabel = async (req, res) => {
     const labelToUpdate = await Label.findById(req.params.id);
     if(labelToUpdate.cards.includes(req.body.card)) return;
     const updatedLabels = await Label.find({cards: [req.body.card]});
-    for(let i = 0; i < updatedLabels.length; i++) {
-      await Label.updateOne({_id: updatedLabels[i]._id}, {cards: updatedLabels[i].cards.filter((c) => c._id.toString() !== req.body.card)});
-    }
     await Label.findByIdAndUpdate(labelToUpdate._id, { cards: [...labelToUpdate.cards, req.body.card] });
     res.send(updatedLabels);
   } catch (err) {

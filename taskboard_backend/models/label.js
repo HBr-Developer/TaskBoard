@@ -12,13 +12,7 @@ const labelSchema = new mongoose.Schema(
     board: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Board",
-    },
-    cards: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Card",
-      },
-    ]
+    }
   },
   { timestamps: true }
 );

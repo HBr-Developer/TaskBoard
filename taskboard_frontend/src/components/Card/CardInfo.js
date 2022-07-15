@@ -12,6 +12,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { DateTimePicker } from "@mui/x-date-pickers-pro";
 import CardMemberInvite from "./CardMemberInvite";
 import AddLabel from "./AddLabel";
+import LabelIcon from '@mui/icons-material/Label';
 
 function CardInfo({
   card,
@@ -31,9 +32,9 @@ function CardInfo({
     paper: {
       margin: "auto",
       paddingTop: 2,
-      paddingBottom: 8,
-      paddingLeft: 5,
-      paddingRight: 5,
+      paddingBottom: 2,
+      paddingLeft: 2,
+      paddingRight: 2,
       width: "600px",
     },
     description: {
@@ -41,7 +42,8 @@ function CardInfo({
       flexDirection: 'column',
       alignItems: 'start',
       justifyContent: 'center',
-      marginBottom: 20
+      marginBottom: 20,
+      width: '6'
     }
   };
   
@@ -111,8 +113,11 @@ function CardInfo({
               />
             </LocalizationProvider>
           </div>
-          <div>
-            <p>Labels</p>
+          <div style={{marginTop: 10}}>
+            <div style={{display: 'flex', flexDirection: 'row', marginBottom: 10}}>
+              <LabelIcon />
+              <p>Labels</p>
+            </div>
             <AddLabel card={card} setCardLabel={setCardLabel} boardLists={boardLists} setBoardLists={setBoardLists} list={list} />
           </div>
         </div>
