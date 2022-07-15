@@ -19,6 +19,9 @@ const cardSchema = new mongoose.Schema(
     dueDate: {
       type: Date
     },
+    deliveryDate: {
+      type: Date
+    },
     label: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Label",
@@ -28,11 +31,7 @@ const cardSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "CardPermission",
       },
-    ],
-    label: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Label",
-    }
+    ]
     // DataLastActivity: {
     //   type: String,
     // },

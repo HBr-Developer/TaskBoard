@@ -16,7 +16,7 @@ exports.createCard = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-};
+}
 
 exports.getAllCards = async (req, res) => {
   try {
@@ -25,7 +25,7 @@ exports.getAllCards = async (req, res) => {
   } catch (err) {
     console.log(err.message);
   }
-};
+}
 
 exports.cardById = async (req, res) => {
   try {
@@ -38,14 +38,14 @@ exports.cardById = async (req, res) => {
       populate: {
         path: "user",
         model: "Member",
-        select: "name email"
+        select: "name email color"
       }
     });
     res.json(card);
   } catch (err) {
     console.log(err.message);
   }
-};
+}
 
 exports.cardDelete = async (req, res) => {
   try {
@@ -64,7 +64,7 @@ exports.cardDelete = async (req, res) => {
   } catch (err) {
     console.log(err.message);
   }
-};
+}
 
 exports.cardUpdate = async (req, res) => {
   Card.findByIdAndUpdate(req.params.id, req.body)
@@ -74,4 +74,4 @@ exports.cardUpdate = async (req, res) => {
     .catch((err) => {
       console.log(err.message);
     });
-};
+}

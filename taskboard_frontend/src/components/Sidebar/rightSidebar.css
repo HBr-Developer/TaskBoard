@@ -9,6 +9,7 @@
     top: 0;
     right: -400px;
     transition: 200ms;
+    overflow-y: auto;
 }
 .rightSidebar.active {
     right: 0;

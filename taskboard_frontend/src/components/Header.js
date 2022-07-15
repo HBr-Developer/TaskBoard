@@ -13,7 +13,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout, reset } from "../features/auth/authSlice";
 import UserAvatar from "./avatar/UserAvatar";
 
-// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -108,7 +107,7 @@ const Header = () => {
                 <Box>
                   <Tooltip title="Open settings">
                     <div style={styles.avatar} onClick={handleOpenUserMenu}>
-                      <UserAvatar name={user.name} color={user.color}/>
+                      <UserAvatar name={user.name} color={user.color} />
                     </div>
                   </Tooltip>
                   <Menu

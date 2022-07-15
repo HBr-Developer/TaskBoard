@@ -9,6 +9,7 @@
     left: -230px;
     transition: 400ms;
     z-index: 20;
+    overflow-y: auto;
 }
 
 .sidebar.active {

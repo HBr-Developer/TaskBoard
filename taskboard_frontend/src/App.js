@@ -22,7 +22,7 @@ function App() {
   const { user } = useSelector((state) => state.auth);
   
   return (
-    <>
+    <div>
       <Header/>
       <div>
         {user && (
@@ -32,7 +32,7 @@ function App() {
           <Outlet/>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

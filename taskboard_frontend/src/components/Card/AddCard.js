@@ -58,7 +58,6 @@ const AddCard = ({ toggleAddCard, setToggleAddCard, list, boardLists, setBoardLi
     const newCard = {
       _id: cardResponse.data._id,
       name: cardResponse.data.name,
-      list_id: cardResponse.data.list_id,
       cardPermissions: [...cardResponse.data.cardPermissions],
       createdAt: cardResponse.data.createdAt
     };

@@ -48,6 +48,10 @@ const Title = ({ listTitle, setListTitle, listId, boardLists, setBoardLists, boa
   };
   
   const handleOnDelete = async (event) => {
+    if(listTitle.toLowerCase() === 'done') {
+      window.alert("Deleting Done list is impossible");
+      return;
+    }
     if (window.confirm("Do you want to delete this list")) {
       if (anchorRef.current && anchorRef.current.contains(event.target)) {
         return;
@@ -107,7 +111,7 @@ const Title = ({ listTitle, setListTitle, listId, boardLists, setBoardLists, boa
       ) : (
         <div style={TitleStyle.titleContainer}>
           <Typography
-            onClick={() => setTitleOpened(!titleOpened)}
+            onClick={() => listTitle.toLowerCase() !== 'done' && setTitleOpened(!titleOpened)}
             sx={TitleStyle.title}
           >
             {listTitle}

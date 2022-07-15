@@ -69,8 +69,10 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
   //addBoard
   const addBoard = async (data) => {
     try {
-      await axios.post("http://localhost:3001/board/create", data, config);
-      
+      const newBoard = await axios.post("http://localhost:3001/board/create", data, config);
+      await axios.post(`http://localhost:3001/list/${newBoard.data._id}/create`, { name: 'Todo', board_id: newBoard.data._id});
+      await axios.post(`http://localhost:3001/list/${newBoard.data._id}/create`, { name: 'Doing', board_id: newBoard.data._id});
+      await axios.post(`http://localhost:3001/list/${newBoard.data._id}/create`, { name: 'Done', board_id: newBoard.data._id});
     } catch (err) {
       console.log(err);
     }

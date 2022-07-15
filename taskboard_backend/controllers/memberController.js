@@ -15,7 +15,7 @@ exports.registerMember = asyncHandler(async (req, res) => {
   const userExists = await Member.findOne({ email });
   if (userExists) {
     res.status(400);
-    throw new Error('Member alredy existes');
+    throw new Error('Member already exists');
   }
   //hash password
   const salt = await bcrypt.genSalt(10);
@@ -25,7 +25,7 @@ exports.registerMember = asyncHandler(async (req, res) => {
     name,
     email,
     password: hashedPassword,
-    color: Math.floor(Math.random() * 6)
+    color: Math.floor(Math.random() * 4)
   })
   if (member) {
     res.status(201).json({

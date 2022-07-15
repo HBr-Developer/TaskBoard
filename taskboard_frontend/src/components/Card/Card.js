@@ -8,7 +8,7 @@ import UserAvatar from "../avatar/UserAvatar";
 import { format } from "date-fns";
 
 const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invitedMembers, setInvitedMembers }) => {
-
+  
   const cardStyle = {
     card: {
       padding: 0.6,
@@ -50,17 +50,16 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invite
   const [currentCard, setCurrentCard] = useState(card);
   const [cardMembers, setCardMembers] = useState(card.cardPermissions ? card.cardPermissions.map((per) => per.user) : []);
   const [cardLabel, setCardLabel] = useState(card.label ? card.label : null);
-  
-  console.log('cardMembers', cardMembers);
-  console.log('boardLists', boardLists);
-  console.log('cardLabel', card.label);
+  const [dateLimit, setDateLimit] = useState({});
   
   useEffect(() => {
     setCurrentCard(card);
-  }, [boardLists]);
+    setDateLimit(getDateLimit());
+  }, [boardLists, currentCard, list]);
   
   const getDateLimit = () => {
-    const dateDiff = new Date(currentCard.dueDate).getTime() - new Date().getTime();
+    if(currentCard.deliveryDate) return { time: format(new Date(currentCard.deliveryDate), 'dd/MM HH:mm'), status: true, show: true };
+    const dateDiff = (new Date(currentCard.dueDate).getTime() - new Date().getTime());
     const days = Math.floor(dateDiff / (1000 * 3600 * 24));
     if (days < 0) return { time: format(new Date(currentCard.dueDate), 'dd/MM HH:mm'), status: false, show: true };
     let hours = Math.floor(dateDiff / (1000 * 3600));
@@ -113,23 +112,23 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invite
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}>
-                {getDateLimit().show &&
+                {dateLimit.show &&
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
                     <AccessTimeFilledIcon color="error"
-                                          sx={getDateLimit().status ? { color: '#D32F2F' } : { color: 'black' }}/>
+                                          sx={currentCard.deliveryDate ? ({ color: '#53BF9D' }) : (dateLimit.status ? { color: '#D32F2F' } : { color: 'black' })}/>
                     <p
-                      style={getDateLimit().status ? { color: '#D32F2F' } : { color: 'black' }}>{getDateLimit().time}</p>
+                      style={currentCard.deliveryDate ? ({ color: '#53BF9D' }) : (dateLimit.status ? { color: '#D32F2F' } : { color: 'black' })}>{dateLimit.time}</p>
                   </div>}
                 <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'end' }}>
                   {cardMembers.length <= 2 ?
                     cardMembers.map((member, index) => (
-                      <UserAvatar key={index} name={member.name}/>
+                      <UserAvatar key={index} name={member.name} color={member.color}/>
                     )) : (
                       <>
                         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                           <p style={{marginRight: 3}}>{`+${cardMembers.length - 2}`}</p>
                           {cardMembers.slice(0, 2).map((member, index) => (
-                            <UserAvatar key={index} name={member.name}/>
+                            <UserAvatar key={index} name={member.name} color={member.color}/>
                           ))}
                         </div>
                       </>

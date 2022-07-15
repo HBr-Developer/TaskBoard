@@ -31,9 +31,6 @@ const Board = () => {
   const [searched, setSearched] = useState({ search: "", members: [], dateRange: [null, null] });
   const [filteredCards, setFilteredCards] = useState([]);
   
-  console.log('filteredCards', filteredCards);
-  console.log('boardLists', boardLists);
-  
   const compStartDate = (card, firstDate) => {
     const cardDate = new Date(card.createdAt);
     if (!firstDate) {
@@ -82,7 +79,7 @@ const Board = () => {
   const BoardStyle = {
     paddingTop: 15,
     backgroundColor: "#FFFFFF",
-    minHeight: "100vh",
+    minHeight: "86vh",
     display: "flex",
     alignItems: "flex-start",
     topBar: {
@@ -192,11 +189,16 @@ const Board = () => {
       try {
         const sourceCards = sourceList.cards.map((card) => card._id);
         const destinationCards = destinationList.cards.map((card) => card._id);
-        // console.log(destinationCards);
-        // update list_id
-        await axios.patch(`http://localhost:3001/card/${draggedCard._id}`, {
-          list_id: destinationList._id,
-        });
+        if (destinationList.name.toLowerCase() === 'done') {
+          await axios.patch(`http://localhost:3001/card/${draggedCard._id}`, {
+            deliveryDate: new Date(),
+            list_id: destinationList._id,
+          });
+        } else {
+          await axios.patch(`http://localhost:3001/card/${draggedCard._id}`, {
+            list_id: destinationList._id,
+          });
+        }
         //update sourceList
         await axios.patch(`http://localhost:3001/list/${sourceList._id}`, {
           cards: sourceCards,
@@ -210,7 +212,7 @@ const Board = () => {
         console.log(err);
       }
     }
-  };
+  }
   // const updateBoard = async (newBoardList)
   const updateBoard = async (source, destination) => {
     if (!user) return;
@@ -246,14 +248,12 @@ const Board = () => {
       // get invited members
       const response2 = await axios.get(`http://localhost:3001/member/${id}`);
       const allInvitedMember = response2.data.map((member) => (
-        { _id: member.user._id, name: member.user.name, email: member.user.email, role: member.role }
+        { _id: member.user._id, name: member.user.name, email: member.user.email, role: member.role, color: member.user.color }
       ))
       setInvitedMembers(allInvitedMember);
-      
       // get All members
       const response1 = await axios.get("http://localhost:3001/member", config);
-      const Member = response1.data.map((member) => ({ _id: member._id, name: member.name, email: member.email }));
-      
+      const Member = response1.data.map((member) => ({ _id: member._id, name: member.name, email: member.email, color: member.color }));
       // checking for duplicated values
       for (let i = 0; i < allInvitedMember.length; i++) {
         const index = Member.findIndex((mem) => {
@@ -290,25 +290,6 @@ const Board = () => {
     }, 300);
   }, [id]);
   
-  // useEffect(() => {
-  //   const fCards = [];
-  //   boardLists.map((list) => (
-  //     list.cards.map((card) => (
-  //       (((card.name.toLowerCase().includes(searched.search.toLowerCase())) || (card.label ? card.label.title.toLowerCase().includes(searched.search.toLowerCase()) : false))
-  //         &&
-  //         ((searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) => (per.user.name))[0]))) && (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1])))
-  //       && (fCards.push({
-  //         name: card.name,
-  //         status: list.name,
-  //         createdAt: format(new Date(card.createdAt), "dd-MM-yyyy"),
-  //         dueDate: card.dueDate != null ? format(new Date(card.dueDate), "dd-MM-yyyy") : "Not assigned yet",
-  //         label: card.label ? card.label : null
-  //       }))
-  //     ))
-  //   ))
-  //   setFilteredCards([...fCards]);
-  // }, [searched]);
-  
   useEffect(() => {
     const fCards = [];
     boardLists.map((list) => (
@@ -320,7 +301,8 @@ const Board = () => {
           name: card.name,
           status: list.name,
           createdAt: format(new Date(card.createdAt), "dd-MM-yyyy"),
-          dueDate: card.dueDate != null ? format(new Date(card.dueDate), "dd-MM-yyyy") : "Not assigned yet"
+          dueDate: card.dueDate != null ? format(new Date(card.dueDate), "dd-MM-yyyy") : "Not assigned yet",
+          deliveryDate: card.deliveryDate != null ? format(new Date(card.deliveryDate), "dd-MM-yyyy") : "Not delivered yet",
         }))
       ))
     ))
@@ -332,7 +314,7 @@ const Board = () => {
   }
   
   return (
-    <>
+    <div style={{height: '93vh', overflowY: 'auto', overflowX: 'auto'}}>
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <div style={BoardStyle.topBar}>
           <div style={BoardStyle.leftSide}>
@@ -341,7 +323,7 @@ const Board = () => {
               <p style={BoardStyle.separator}></p>
               <div className='membersAvatars' style={BoardStyle.membersAvatars}>
                 {invitedMembers.map((member) => (
-                  <UserAvatar key={member.name} name={member.name}/>
+                  <UserAvatar key={member.name} name={member.name} color={member.color}/>
                 ))}
               </div>
               {/*Share*/}
@@ -424,7 +406,7 @@ const Board = () => {
         boardId={id}
         boardLists={boardLists}
       />
-    </>
+    </div>
   );
 };
 

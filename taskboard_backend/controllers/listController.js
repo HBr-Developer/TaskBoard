@@ -52,15 +52,12 @@ exports.listById = async (req, res) => {
 exports.listDelete = async (req, res) => {
   try {
     const deletedList = await List.findByIdAndDelete(req.params.id);
-    console.log("deletedList", deletedList);
-    const deletedCards = await Card.deleteMany({ list_id: req.params.id });
-    console.log("deletedCards", deletedCards);
+    await Card.deleteMany({ list_id: req.params.id });
     const board = await Board.findById(deletedList.board_id);
-    const newBoard = await Board.findByIdAndUpdate(board._id, {
+    await Board.findByIdAndUpdate(board._id, {
       ...board._doc,
       lists: board.lists.filter((list) => !list.equals(deletedList._id)),
     });
-    console.log("NewBoard", newBoard);
     res.json(deletedList);
   } catch (err) {
     console.log(err);

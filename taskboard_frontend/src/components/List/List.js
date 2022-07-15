@@ -13,6 +13,7 @@ const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate,
     backgroundColor: "#e1e2e9",
     marginLeft: 1.2,
     flexShrink: 0,
+    overflowY: 'auto'
   };
   
   const [toggleAddCard, setToggleAddCard] = useState(false);
@@ -21,7 +22,7 @@ const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate,
   
   useEffect(() => {
     setCurrentList(list);
-  }, [boardLists])
+  }, [boardLists]);
   
   return (
     <Draggable draggableId={currentList._id} index={index}>

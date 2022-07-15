@@ -10,8 +10,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import axios from "axios";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { DateTimePicker } from "@mui/x-date-pickers-pro";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import CardMemberInvite from "./CardMemberInvite";
 import AddLabel from "./AddLabel";
 
@@ -28,8 +26,6 @@ function CardInfo({
 }) {
   const [toggleDescription, setToggleDescription] = useState(false);
   const [notCardMembers, setNotCardMembers] = useState(invitedMembers.filter((mem) => (!cardMembers.map((cMem) => cMem._id).includes(mem._id))));
-  
-  console.log('notCardMembers', notCardMembers);
   
   const styles = {
     paper: {
@@ -62,11 +58,6 @@ function CardInfo({
       console.log(err)
     }
   }
-  const { id } = useParams();
-  const { user } = useSelector((state) => state.auth);
-  
-  console.log('board id', id);
-  console.log('user', user);
   
   return (
     <>
