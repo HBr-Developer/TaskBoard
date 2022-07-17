@@ -4,7 +4,6 @@ const asyncHandler = require('express-async-handler');
 const Member = require("../models/member");
 const Board = require("../models/board");
 
-
 exports.registerMember = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
@@ -25,6 +24,7 @@ exports.registerMember = asyncHandler(async (req, res) => {
     name,
     email,
     password: hashedPassword,
+    role: 'user',
     color: Math.floor(Math.random() * 4)
   })
   if (member) {
@@ -33,6 +33,7 @@ exports.registerMember = asyncHandler(async (req, res) => {
       name: member.name,
       email: member.email,
       color: member.color,
+      role: member.role,
       token: generateToken(member._id)
     })
   } else {
@@ -41,18 +42,72 @@ exports.registerMember = asyncHandler(async (req, res) => {
   }
 });
 
+exports.updateMember = asyncHandler(async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const memberToUpdate = await Member.findById(req.params.memberId);
+  const { name, email, currentPassword, newPassword } = req.body;
+  const data = {};
+  
+  console.log('body', req.body);
+  
+  if (!name || !email || !currentPassword) {
+    res.status(400).send('Please add all fields');
+  }
+  
+  if (await bcrypt.compare(currentPassword, memberToUpdate.password)) {
+    console.log('passwords match');
+    if (newPassword !== '') {
+      data.password = await bcrypt.hash(newPassword, salt);
+    }
+    if (memberToUpdate.email !== email) {
+      data.email = email;
+    }
+    if (memberToUpdate.name !== name) {
+      data.name = name;
+    }
+    console.log('data', data);
+    await Member.findByIdAndUpdate(memberToUpdate._id, data);
+    res.send(memberToUpdate);
+  } else {
+    res.status(400).send('Password is invalid');
+  }
+  
+  // //hash password
+  // const salt = await bcrypt.genSalt(10);
+  // const hashedPassword = await bcrypt.hash(password, salt);
+  // //Create member
+  // const member = await Member.create({
+  //   name,
+  //   email,
+  //   password: hashedPassword,
+  //   role: 'user',
+  //   color: Math.floor(Math.random() * 4)
+  // })
+  // if (member) {
+  //   res.status(201).json({
+  //     _id: member._id,
+  //     name: member.name,
+  //     email: member.email,
+  //     color: member.color,
+  //     role: member.role,
+  //   })
+  // } else {
+  //   res.status(400);
+  //   throw new Error('Invalid member data');
+  // }
+});
+
 exports.loginMember = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
   //check for member email
   const member = await Member.findOne({ email });
-  console.log(member);
   if (member && (await bcrypt.compare(password, member.password))) {
     res.status(201).json({
       _id: member._id,
       name: member.name,
       email: member.email,
       color: member.color,
+      role: member.role,
       token: generateToken(member._id)
     })
   } else {
@@ -68,9 +123,9 @@ exports.getMe = asyncHandler(async (req, res) => {
 
 exports.getAllMembers = asyncHandler(async (req, res) => {
   try {
-    const members = await Member.find();
+    const members = await Member.find({ role: 'user' });
     res.status(200).json(members);
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 });
@@ -89,7 +144,7 @@ exports.getMembersOfBoard = asyncHandler(async (req, res) => {
     });
     const users = board.permissions.map((permission) => ({ user: permission.user, role: permission.role }));
     res.status(200).json(users);
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 });
