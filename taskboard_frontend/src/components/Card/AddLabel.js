@@ -69,22 +69,20 @@ const AddLabel = ({ card, setCardLabel, boardLists, setBoardLists, list }) => {
           {/*select exist labels*/}
           <div className="labels">
             {labels.map((label, index) => (
-              <>
-                <div style={{ marginBottom: 5 }}>
-                  <input type="radio" name="label" id={index}
-                         onChange={() => setSelectedLabel({ _id: label._id, color: label.color, title: label.title })}/>
-                  <label htmlFor={index}>
-                    <div style={{
-                      backgroundColor: label.color,
-                      display: 'inline-block',
-                      color: '#FFF',
-                      padding: "2px 8px",
-                      marginLeft: 3,
-                      borderRadius: 3
-                    }}>{label.title}</div>
-                  </label>
-                </div>
-              </>
+              <div key={index} style={{ marginBottom: 5 }}>
+                <input type="radio" name="label" id={index}
+                       onChange={() => setSelectedLabel({ _id: label._id, color: label.color, title: label.title })}/>
+                <label htmlFor={index}>
+                  <div style={{
+                    backgroundColor: label.color,
+                    display: 'inline-block',
+                    color: '#FFF',
+                    padding: "2px 8px",
+                    marginLeft: 3,
+                    borderRadius: 3
+                  }}>{label.title}</div>
+                </label>
+              </div>
             ))}
           </div>
           <Collapse in={!addLabel}>

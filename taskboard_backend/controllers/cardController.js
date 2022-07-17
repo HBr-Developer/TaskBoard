@@ -20,7 +20,11 @@ exports.createCard = async (req, res) => {
 
 exports.getAllCards = async (req, res) => {
   try {
-    const cards = await Card.find().populate({ path: "cardPermissions", model: "CardPermissions", select: "role user" });
+    const cards = await Card.find().populate({
+      path: "cardPermissions",
+      model: "CardPermissions",
+      select: "role user"
+    });
     res.json(cards);
   } catch (err) {
     console.log(err.message);
@@ -30,17 +34,23 @@ exports.getAllCards = async (req, res) => {
 exports.cardById = async (req, res) => {
   try {
     const card = await Card.findById(req.params.id)
-      .populate("list_id", "name")
-      .populate({
-      path: "cardPermissions",
-      model: "CardPermissions",
-      select: "user role",
-      populate: {
-        path: "user",
-        model: "Member",
-        select: "name email color"
-      }
-    });
+      .populate([
+          {
+            path: 'cardPermissions',
+            model: 'CardPermissions',
+            select: "user role",
+            populate: {
+              path: "user",
+              select: "name email color"
+            }
+          },
+          {
+            path: 'label',
+            model: 'Label',
+            select: 'title color'
+          }
+        ]
+      );
     res.json(card);
   } catch (err) {
     console.log(err.message);

@@ -9,68 +9,49 @@ import BoardSearch from "../../components/Board/BoardSearch";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useNavigate } from "react-router-dom";
-import Popup from "./Popup";
-import BoardForm from "../../components/Board/BoardForm";
-import { useSelector } from "react-redux";
 import Spinner from "../../components/Spinner";
+import UserAvatar from "../../components/avatar/UserAvatar";
+import UserPopup from "./UserPopup";
+import NewUser from "./NewUser";
 
-const Boards = () => {
-  const [recordUpdate, setRecordUpdate] = useState("");
-  const [boards, setBoards] = useState([]);
+const Users = () => {
+  const [users, setUsers] = useState([]);
   const [searched, setSearched] = useState("");
-  const [openPopup, setOpenPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [userToUpdate, setUserToUpdate] = useState(null);
   
-  console.log('user', user);
-  
-  const GetBoards = async () => {
-    if (!user) return;
-    const token = user.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
+  const GetUsers = async () => {
+    // if (!user) return;
+    // const token = user.token;
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`
+    //   }
+    // }
     
     try {
-      const response = await axios.get("http://localhost:3001/board/", config);
+      const response = await axios.get("http://localhost:3001/member/");
       const { status, message, data } = response;
       if (status !== 200) {
         alert(message, status);
       } else {
-        setBoards(data);
+        setUsers(data);
       }
     } catch (err) {
       console.log("error", err);
     }
   };
   
-  useEffect(() => {
-    GetBoards();
-    setIsLoading(false);
-    console.log('board');
-  }, [openPopup]);
+  const handleOnUpdate = (item) => {
+    setUserToUpdate(item)
+    setOpenPopup(!openPopup);
+  }
   
-  //delete Board
-  const deleteBoards = async (id) => {
-    if (!user) return;
-    const token = user.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
-    if (window.confirm("Do you want to delete this board")) {
-      const response = await axios.patch(`http://localhost:3001/board/${id}`, { active: false }, config);
-      if (response.status === 200) {
-        console.log("Board deleted successfully");
-        GetBoards();
-      }
-    }
-  };
+  useEffect(() => {
+    GetUsers();
+    setIsLoading(false);
+  }, []);
   
   // Styling
   const styles = {
@@ -122,15 +103,6 @@ const Boards = () => {
   };
   //----------------------------------------------------------------Styling
   
-  const openInPopup = (item) => {
-    setRecordUpdate(item);
-    setOpenPopup(!openPopup);
-  };
-  
-  const handleOnClickRow = (id) => {
-    navigate(`/taskboard/${id}`);
-  };
-  
   if (isLoading) {
     return <Spinner/>
   }
@@ -153,7 +125,7 @@ const Boards = () => {
           <Button
             style={styles.buttons.addBoard}
             variant="contained"
-            children="New Boards"
+            children="New User"
             onClick={() => setOpenPopup(true)}
           />
         </div>
@@ -162,40 +134,39 @@ const Boards = () => {
           <Table sx={styles.tableStyle} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <TableCell>Boards Name</TableCell>
-                <TableCell align="center">Boards Description</TableCell>
+                <TableCell>User</TableCell>
+                <TableCell align="center">Email</TableCell>
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {boards.length <= 0 ? (<><TableRow><TableCell>No boards available</TableCell></TableRow></>) : boards
+              {users.length <= 0 ? (<><TableRow><TableCell>No Users available</TableCell></TableRow></>) : users
                 .filter(
-                  (board) =>
-                    board.name.toLowerCase().includes(searched.toLowerCase()) ||
-                    board.descData
-                      .toLowerCase()
-                      .includes(searched.toLowerCase())
+                  (usr) =>
+                    usr.name.toLowerCase().includes(searched.toLowerCase())
                 )
-                .map((board) => (
+                .map((usr, index) => (
                   <TableRow
-                    key={board._id}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    onClick={() => handleOnClickRow(board._id)}
+                    // onClick={() => handleOnClickRow(board._id)}
                   >
                     <TableCell component="th" scope="row">
-                      {board.name}
+                      <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                        <UserAvatar name={usr.name} color={usr.color}/>
+                        <p style={{marginLeft: 2, fontSize: '1rem'}}>{usr.name}</p>
+                      </div>
                     </TableCell>
                     <TableCell
                       align="center"
-                      
                     >
-                      {board.descData}
+                      <p style={{fontSize: '1rem'}}>{usr.email}</p>
                     </TableCell>
                     <TableCell align="center">
                       <Button
                         variant="outlined"
                         color="success"
-                        onClick={() => handleOnClickRow(board._id)}
+                        // onClick={() => handleOnClickRow(board._id)}
                       >
                         <MenuIcon/>
                       </Button>
@@ -203,14 +174,15 @@ const Boards = () => {
                         variant="outlined"
                         color="warning"
                         sx={{ marginLeft: 2 }}
-                        onClick={() => openInPopup(board)}
+                        onClick={() => handleOnUpdate(usr)}
+                        // onClick={() => openInPopup(board)}
                       >
                         <ModeEditOutlineIcon/>
                       </Button>
                       <Button
                         variant="outlined"
                         color="error"
-                        onClick={() => deleteBoards(board._id)}
+                        // onClick={() => deleteBoards(board._id)}
                         sx={{ marginLeft: 2 }}
                       >
                         <DeleteForeverIcon/>
@@ -222,21 +194,29 @@ const Boards = () => {
           </Table>
         </TableContainer>
       </Paper>
-      <Popup
+      {/*<Popup*/}
+      {/*  openPopup={openPopup}*/}
+      {/*  setOpenPopup={setOpenPopup}*/}
+      {/*  setRecordUpdate={setRecordUpdate}*/}
+      {/*  recordUpdate={recordUpdate}*/}
+      {/*  title={recordUpdate ? "Update Board" : "New board"}*/}
+      {/*>*/}
+      {/*  <BoardForm*/}
+      {/*    openPopup={openPopup}*/}
+      {/*    setOpenPopup={setOpenPopup}*/}
+      {/*    recordUpdate={recordUpdate}*/}
+      {/*  />*/}
+      {/*</Popup>*/}
+      <UserPopup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
-        setRecordUpdate={setRecordUpdate}
-        recordUpdate={recordUpdate}
-        title={recordUpdate ? "Update Board" : "New board"}
-      >
-        <BoardForm
-          openPopup={openPopup}
-          setOpenPopup={setOpenPopup}
-          recordUpdate={recordUpdate}
-        />
-      </Popup>
+        userToUpdate={userToUpdate}
+        setUserToUpdate={setUserToUpdate}
+        >
+        <NewUser users={users} setUsers={setUsers} userToUpdate={userToUpdate} setOpenPopup={setOpenPopup} />
+      </UserPopup>
     </>
   );
 };
 
-export default Boards;
+export default Users;

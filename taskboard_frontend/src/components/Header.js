@@ -126,6 +126,7 @@ const Header = () => {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
+                    <MenuItem onClick={() => navigate(`/profile/${user._id}`)}>Profile</MenuItem>
                     <MenuItem key="menus" onClick={handleCloseUserMenu}>
                       <Typography textAlign="center" onClick={onLogout}>Logout</Typography>
                     </MenuItem>

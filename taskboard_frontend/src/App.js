@@ -1,8 +1,9 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, Navigate } from "react-router-dom"
 import Sidebar from "./components/Sidebar/Sidebar";
 import { useState } from "react";
 import Header from "./components/Header";
 import { useSelector } from "react-redux";
+import AdminSidebar from "./components/Sidebar/AdminSidebar";
 
 const styles = {
   sideBarOn: {
@@ -18,21 +19,27 @@ const styles = {
 }
 
 function App() {
-  const [showSidebar, setShowSideBar] = useState(false);
+  const [showSidebar, setShowSideBar] = useState(true);
   const { user } = useSelector((state) => state.auth);
   
   return (
-    <div>
-      <Header/>
+    <>
       <div>
-        {user && (
-          <Sidebar showSidebar={showSidebar} setShowSideBar={setShowSideBar}/>
+        {user ? (
+          <>
+            <Header/>
+            {user.role.toLowerCase() !== 'admin' ?
+              <Sidebar showSidebar={showSidebar} setShowSideBar={setShowSideBar}/> :
+              <AdminSidebar showSidebar={showSidebar} setShowSideBar={setShowSideBar}/>}
+            <div style={showSidebar ? styles.sideBarOn : styles.sideBarOff}>
+              <Outlet/>
+            </div>
+          </>
+        ) : (
+          <Navigate to='login' replace/>
         )}
-        <div style={showSidebar ? styles.sideBarOn : styles.sideBarOff}>
-          <Outlet/>
-        </div>
       </div>
-    </div>
+    </>
   );
 }
 

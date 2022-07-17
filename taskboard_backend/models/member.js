@@ -22,6 +22,9 @@ const memberSchema = new mongoose.Schema(
     color: {
       type: Number,
     },
+    role: {
+      type: String,
+    },
     permissions: [
       {
         type: mongoose.Schema.Types.ObjectId,

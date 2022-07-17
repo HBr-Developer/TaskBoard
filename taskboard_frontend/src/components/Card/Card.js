@@ -3,9 +3,9 @@ import { Paper, Typography } from "@mui/material";
 import { Draggable } from "react-beautiful-dnd";
 import CardInfo from "./CardInfo";
 import CardPopup from "./CardPopup";
-import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import UserAvatar from "../avatar/UserAvatar";
 import { format } from "date-fns";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invitedMembers, setInvitedMembers }) => {
   
@@ -53,9 +53,12 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invite
   const [dateLimit, setDateLimit] = useState({});
   
   useEffect(() => {
-    setCurrentCard(card);
     setDateLimit(getDateLimit());
-  }, [boardLists, currentCard, list]);
+  }, [boardLists, currentCard]);
+  
+  useEffect(() => {
+    setCurrentCard(card);
+  }, [boardLists, list]);
   
   const getDateLimit = () => {
     if(currentCard.deliveryDate) return { time: format(new Date(currentCard.deliveryDate), 'dd/MM HH:mm'), status: true, show: true };
@@ -113,11 +116,10 @@ const Card = ({ card, index, boardLists, setBoardLists, visibility, list, invite
                 justifyContent: 'space-between'
               }}>
                 {dateLimit.show &&
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-                    <AccessTimeFilledIcon color="error"
-                                          sx={currentCard.deliveryDate ? ({ color: '#53BF9D' }) : (dateLimit.status ? { color: '#D32F2F' } : { color: 'black' })}/>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '90%', backgroundColor: currentCard.deliveryDate ? ('#2FDD92') : (dateLimit.status ? ('#EB5353') : ('#F9D923')), padding: '2px 3px', borderRadius: 3 }}>
+                    <AccessTimeIcon sx={{ color: '#FFFFFF', marginRight: 0.2 }}/>
                     <p
-                      style={currentCard.deliveryDate ? ({ color: '#53BF9D' }) : (dateLimit.status ? { color: '#D32F2F' } : { color: 'black' })}>{dateLimit.time}</p>
+                      style={{ color: '#FFFFFF' }}>{dateLimit.time}</p>
                   </div>}
                 <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'end' }}>
                   {cardMembers.length <= 2 ?

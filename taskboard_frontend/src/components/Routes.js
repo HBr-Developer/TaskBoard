@@ -7,15 +7,19 @@ import App from "../App";
 import Login from "../pages/Authentification/Login";
 import Register from "../pages/Authentification/Register";
 import BoardPage from "../pages/Board/BoardPage";
+import Profile from "../pages/profile/Profile";
+import Users from "../pages/Users/Users";
 
 const MainRoutes = () => {
   return (
     <Routes>
+      <Route path='login' element={<Login/>}/>
+      <Route path='register' element={<Register/>}/>
       <Route path="/" element={<App/>}>
-        <Route path='/' element={<Navigate to="login" replace/>}/>
-        <Route path='login' element={<Login/>}/>
-        <Route path='register' element={<Register/>}/>
+        <Route path="/" element={<Navigate to="board" replace />} />
         <Route path="board" element={<Boards/>}/>
+        <Route path="users" element={<Users/>}/>
+        <Route path="profile/:id" element={<Profile/>}/>
         <Route path="taskboard" element={<BoardPage/>}>
           <Route path=":id" element={<TaskBoard/>}/>
         </Route>

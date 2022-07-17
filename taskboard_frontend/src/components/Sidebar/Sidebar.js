@@ -47,7 +47,7 @@ function Sidebar({ showSidebar, setShowSideBar }) {
     title: list.name,
     icon: <DashboardIcon/>,
     path: `taskboard/${list._id}`,
-    cName: 'side-text'
+      cName: 'side-text'
   }));
   
   return (

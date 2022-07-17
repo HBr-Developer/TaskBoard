@@ -5,14 +5,16 @@ const {
   registerMember,
   loginMember,
   getMe,
-  getMembersOfBoard
+  getMembersOfBoard,
+  updateMember
 } = require("../controllers/memberController");
 
 const { protect } = require('../middleware/authMiddleware');
 
 router.post("/", registerMember);
 router.post("/login", loginMember);
-router.get("/me", protect, getMe);
+router.patch("/:memberId", updateMember);
+router.get("/me", getMe);
 router.get("/", getAllMembers);
 router.get("/:boardId", getMembersOfBoard);
 

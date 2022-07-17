@@ -39,10 +39,10 @@ exports.getAllList = async (req, res) => {
 
 exports.listById = async (req, res) => {
   try {
-    const list = await List.findById(req.params.id).populate(
-      "board_id",
-      "name descData"
-    );
+    const list = await List.findById(req.params.id).populate({
+      path: 'cards',
+      model: 'Card'
+    });
     res.json(list);
   } catch (err) {
     console.log(err.message);
@@ -75,10 +75,10 @@ exports.listUpdate = async (req, res) => {
 
 exports.getListsFromBoard = async (req, res) => {
   try {
-    const boardLists = await List.find({board_id: req.params.boardId}, 'name cards')
-        .populate('cards', 'name descData');
+    const boardLists = await List.find({ board_id: req.params.boardId }, 'name cards')
+      .populate('cards', 'name descData');
     res.json(boardLists);
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 }

@@ -65,7 +65,7 @@
     width: 100%;
 }
 
-span {
+.sidebar span {
     margin-left: 16px;
 }
 .sidebar * {

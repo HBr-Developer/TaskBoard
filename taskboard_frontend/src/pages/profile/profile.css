@@ -1,0 +1,42 @@
+.profile-container {
+    width: 100%;
+    height: 93vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-container form > div {
+    margin-bottom: 30px;
+}
+
+.profile-container label {
+    display: inline-block;
+    width: 200px;
+    font-size: 1.2rem;
+}
+
+.profile-container input {
+    font-size: 1rem;
+    padding: 8px 8px;
+    width: 400px;
+    border-radius: 3px;
+}
+
+.profile-container input[type=submit] {
+    width: auto;
+    border-radius: 3px;
+    padding: 12px 20px;
+}
+
+.profile-container .profile-avatar {
+    font-size: 2rem;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 70px;
+}

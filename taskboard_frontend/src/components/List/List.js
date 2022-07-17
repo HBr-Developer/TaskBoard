@@ -5,7 +5,17 @@ import AddCard from "../Card/AddCard";
 import { useEffect, useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate, compEndDate, invitedMembers, setInvitedMembers }) => {
+const List = ({
+  list,
+  boardLists,
+  setBoardLists,
+  index,
+  searched,
+  compStartDate,
+  compEndDate,
+  invitedMembers,
+  setInvitedMembers
+}) => {
   
   const paperStyle = {
     borderRadius: 0.7,
@@ -39,7 +49,7 @@ const List = ({ list, boardLists, setBoardLists, index, searched, compStartDate,
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {currentList.cards.map((card, index) => (
                       ((card.name.toLowerCase().includes(searched.search.toLowerCase()) || (card.label && card.label.title.toLowerCase().includes(searched.search.toLowerCase()))) &&
-                        (searched.members.length <= 0 ? true : searched.members.includes(card.cardPermissions.map((per) => (per.user.name))[0])) &&
+                        (searched.members.length <= 0 ? true : (searched.members.includes(card.cardPermissions.map((per) => (per.user.name))[0]))) &&
                         (compStartDate(card, searched.dateRange[0]) && compEndDate(card, searched.dateRange[1]))
                       )
                     ) ? (

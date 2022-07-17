@@ -6,9 +6,9 @@ import {
   Button,
 } from "@mui/material/";
 import CloseIcon from "@mui/icons-material/Close";
-import CardTitle from "./CardTitle";
 
-const Popup = ({ card, setCard, children, openPopup, setOpenPopup, boardLists, setBoardLists }) => {
+const Popup = ({ children, openPopup, setOpenPopup, userToUpdate, setUserToUpdate }) => {
+  
   const styles = {
     closeButton: {
       color: '#595656',
@@ -22,23 +22,24 @@ const Popup = ({ card, setCard, children, openPopup, setOpenPopup, boardLists, s
       display: "flex",
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      justifyContent: 'space-between'
     }
   }
   
   const handleCloseClicked = () => {
     setOpenPopup(false);
-    // setRecordUpdate('');
-  };
+    setTimeout(() => {
+      setUserToUpdate(null);
+    }, 100)
+  }
   
   return (
     <Dialog open={openPopup}>
       <div style={{ backgroundColor: '#FBFBFB' }}>
-        <DialogTitle sx={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 1 }}>
+        <DialogTitle sx={{ padding: 1 }}>
           <div style={styles.topBar}>
-            <div style={{width: '70%'}}>
-              <CardTitle card={card} setCard={setCard} boardLists={boardLists}
-                         setBoardLists={setBoardLists}/>
+            <div style={{ width: '70%' }}>
+              <p>{userToUpdate ? "Update User" : "New User"}</p>
             </div>
             <CloseIcon
               onClick={handleCloseClicked}
