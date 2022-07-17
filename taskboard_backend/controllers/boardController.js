@@ -73,10 +73,11 @@ exports.getAllBoards = async (req, res) => {
     const permissions = await Permission.find({ user: req.member.id });
     // res.json(permissions);
     const permissionBoards = permissions.map((per) => per.board);
-    const allBoards = await Board.find({
+    const filter = {
       _id: permissionBoards,
       active: true
-    }, 'name descData lists permissions createdAt updatedAt')
+    }
+    const allBoards = await Board.find(req.member.role.toLowerCase() === 'admin' ? { active: true } : filter, 'name descData lists permissions createdAt updatedAt')
       .populate({
         path: "lists",
         model: "List",
@@ -110,7 +111,7 @@ exports.boardById = async (req, res) => {
   try {
     let newBoard = await Board.findById(req.params.id, 'name descData lists permissions createdAt updatedAt').populate({
       path: "lists",
-      match: {active: true},
+      match: { active: true },
       populate: {
         path: "cards",
         model: "Card",
@@ -146,6 +147,15 @@ exports.boardById = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.allBoards = async (req, res) => {
+  try {
+    const boards = Board.find({});
+    res.send(boards);
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 exports.boardDelete = async (req, res) => {
   try {
