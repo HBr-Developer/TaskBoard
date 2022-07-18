@@ -8,7 +8,6 @@ import axios from "axios";
 import BoardSearch from "../../components/Board/BoardSearch";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import MenuIcon from "@mui/icons-material/Menu";
 import Spinner from "../../components/Spinner";
 import UserAvatar from "../../components/avatar/UserAvatar";
 import UserPopup from "./UserPopup";
@@ -152,24 +151,24 @@ const Users = () => {
                     // onClick={() => handleOnClickRow(board._id)}
                   >
                     <TableCell component="th" scope="row">
-                      <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <UserAvatar name={usr.name} color={usr.color}/>
-                        <p style={{marginLeft: 2, fontSize: '1rem'}}>{usr.name}</p>
+                        <p style={{ marginLeft: 2, fontSize: '1rem' }}>{usr.name}</p>
                       </div>
                     </TableCell>
                     <TableCell
                       align="center"
                     >
-                      <p style={{fontSize: '1rem'}}>{usr.email}</p>
+                      <p style={{ fontSize: '1rem' }}>{usr.email}</p>
                     </TableCell>
                     <TableCell align="center">
-                      <Button
-                        variant="outlined"
-                        color="success"
-                        // onClick={() => handleOnClickRow(board._id)}
-                      >
-                        <MenuIcon/>
-                      </Button>
+                      {/*<Button*/}
+                      {/*  variant="outlined"*/}
+                      {/*  color="success"*/}
+                      {/*  // onClick={() => handleOnClickRow(board._id)}*/}
+                      {/*>*/}
+                      {/*  <MenuIcon/>*/}
+                      {/*</Button>*/}
                       <Button
                         variant="outlined"
                         color="warning"
@@ -194,26 +193,13 @@ const Users = () => {
           </Table>
         </TableContainer>
       </Paper>
-      {/*<Popup*/}
-      {/*  openPopup={openPopup}*/}
-      {/*  setOpenPopup={setOpenPopup}*/}
-      {/*  setRecordUpdate={setRecordUpdate}*/}
-      {/*  recordUpdate={recordUpdate}*/}
-      {/*  title={recordUpdate ? "Update Board" : "New board"}*/}
-      {/*>*/}
-      {/*  <BoardForm*/}
-      {/*    openPopup={openPopup}*/}
-      {/*    setOpenPopup={setOpenPopup}*/}
-      {/*    recordUpdate={recordUpdate}*/}
-      {/*  />*/}
-      {/*</Popup>*/}
       <UserPopup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
         userToUpdate={userToUpdate}
         setUserToUpdate={setUserToUpdate}
-        >
-        <NewUser users={users} setUsers={setUsers} userToUpdate={userToUpdate} setOpenPopup={setOpenPopup} />
+      >
+        <NewUser users={users} setUsers={setUsers} userToUpdate={userToUpdate} setOpenPopup={setOpenPopup}/>
       </UserPopup>
     </>
   );

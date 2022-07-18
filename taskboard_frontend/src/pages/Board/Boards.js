@@ -24,8 +24,6 @@ const Boards = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   
-  console.log('user', user);
-  
   const GetBoards = async () => {
     if (!user) return;
     const token = user.token;
@@ -150,12 +148,14 @@ const Boards = () => {
           }
         >
           <BoardSearch searched={searched} setSearched={setSearched}/>
-          <Button
-            style={styles.buttons.addBoard}
-            variant="contained"
-            children="New Boards"
-            onClick={() => setOpenPopup(true)}
-          />
+          <div>
+            <Button
+              style={styles.buttons.addBoard}
+              variant="contained"
+              children="New Boards"
+              onClick={() => setOpenPopup(true)}
+            />
+          </div>
         </div>
         <TableContainer component={Paper}>
           
@@ -180,12 +180,12 @@ const Boards = () => {
                   <TableRow
                     key={board._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    onClick={() => handleOnClickRow(board._id)}
                   >
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" onClick={() => handleOnClickRow(board._id)} >
                       {board.name}
                     </TableCell>
                     <TableCell
+                      onClick={() => handleOnClickRow(board._id)}
                       align="center"
                       
                     >

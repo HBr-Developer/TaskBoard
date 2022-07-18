@@ -70,9 +70,18 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
   const addBoard = async (data) => {
     try {
       const newBoard = await axios.post("http://localhost:3001/board/create", data, config);
-      await axios.post(`http://localhost:3001/list/${newBoard.data._id}/create`, { name: 'Todo', board_id: newBoard.data._id});
-      await axios.post(`http://localhost:3001/list/${newBoard.data._id}/create`, { name: 'Doing', board_id: newBoard.data._id});
-      await axios.post(`http://localhost:3001/list/${newBoard.data._id}/create`, { name: 'Done', board_id: newBoard.data._id});
+      await axios.post(`http://localhost:3001/list/${newBoard.data._id}/create`, {
+        name: 'Todo',
+        board_id: newBoard.data._id
+      });
+      await axios.post(`http://localhost:3001/list/${newBoard.data._id}/create`, {
+        name: 'Doing',
+        board_id: newBoard.data._id
+      });
+      await axios.post(`http://localhost:3001/list/${newBoard.data._id}/create`, {
+        name: 'Done',
+        board_id: newBoard.data._id
+      });
     } catch (err) {
       console.log(err);
     }
@@ -82,7 +91,7 @@ function BoardForm({ recordUpdate, openPopup, setOpenPopup }) {
   const updateBoard = (data) => {
     console.log('updateData', data);
     axios
-      .patch(`http://localhost:3001/board/${state._id}`, data)
+      .patch(`http://localhost:3001/board/${state._id}`, { name: data.name, descData: data.descData }, config)
       .then((res) => {
         // navigate('/');
         res.json(res);
