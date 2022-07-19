@@ -22,21 +22,20 @@ const UserStats = ({ boardId }) => {
         cards.push(lists[i].cards[j]);
       }
     }
-  
-    // setChartsData({completed: cards.filter((c) => c.deliveryDate).length, "not completed": cards.filter((c) => !c.deliveryDate).length})
     
     setChartsData({
-      labels: ['completed', "not completed"],
+      labels: ['completed', "not completed", "late"],
       datasets: [
         {
           label: 'Projects completion',
-          data: [cards.filter((c) => c.deliveryDate).length, cards.filter((c) => !c.deliveryDate).length],
+          data: [cards.filter((c) => c.deliveryDate).length, cards.filter((c) => !c.deliveryDate).length, cards.filter((c) => (c.dueDate && new Date(c.createdAt) - new Date(c.dueDate) < 0)).length],
           backgroundColor: [
-            "#3AB0FF",
-            "#F15412"
+            "#3CCF4E",
+            "#EF5B0C",
+            "#FFC300"
           ],
-          borderColor: '#7F8487',
-          borderWidth: 2,
+          borderColor: '#FDF6EC',
+          borderWidth: 3,
         }
       ]
     })

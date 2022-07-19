@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 import PieChart from "../PieChart";
 import { useSelector } from "react-redux";
 
 const BoardStats = ({ board }) => {
   const { user } = useSelector((state) => state.auth);
-  const [chartsData, setChartsData] = useState({labels: [], datasets: []});
-  console.log(chartsData);
+  const [chartsData, setChartsData] = useState({ labels: [], datasets: [] });
   
   const getBoardCards = async () => {
     if (!user) return;
@@ -21,28 +19,28 @@ const BoardStats = ({ board }) => {
     const boardData = d.data;
     const lists = boardData.lists.map((l) => l);
     const cards = [];
-    for(let i = 0; i < lists.length; i++) {
-      for(let j = 0; j < lists[i].cards.length; j++) {
+    for (let i = 0; i < lists.length; i++) {
+      for (let j = 0; j < lists[i].cards.length; j++) {
         cards.push(lists[i].cards[j]);
       }
     }
     
-    console.log('cards', cards);
     setChartsData({
-          labels: ['completed', "not completed"],
-          datasets: [
-            {
-              label: 'Projects completion',
-              data: [cards.filter((c) => c.deliveryDate).length, cards.filter((c) => !c.deliveryDate).length],
-              backgroundColor: [
-                "#3AB0FF",
-                "#F15412"
-              ],
-              borderColor: '#7F8487',
-              borderWidth: 2,
-            }
-          ]
-        })
+      labels: ['completed', "not completed", "late"],
+      datasets: [
+        {
+          label: 'Projects completion',
+          data: [cards.filter((c) => c.deliveryDate).length, cards.filter((c) => !c.deliveryDate).length, cards.filter((c) => (c.dueDate && new Date(c.createdAt) - new Date(c.dueDate) < 0)).length],
+          backgroundColor: [
+            "#3CCF4E",
+            "#EF5B0C",
+            "#FFC300"
+          ],
+          borderColor: '#FDF6EC',
+          borderWidth: 3,
+        }
+      ]
+    })
   }
   
   useEffect(() => {
@@ -51,7 +49,7 @@ const BoardStats = ({ board }) => {
   
   return (
     <div>
-      <div style={{ width: 500 , padding: "10px 20px"}}>
+      <div style={{ width: 500, padding: "10px 20px" }}>
         <PieChart chartData={chartsData}/>
       </div>
     </div>
