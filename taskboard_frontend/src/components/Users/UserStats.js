@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import PieChart from "./PieChart";
+import PieChart from "../PieChart";
 
 const UserStats = ({ boardId }) => {
   const [chartsData, setChartsData] = useState({labels: [], datasets: []});

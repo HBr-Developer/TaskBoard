@@ -2,6 +2,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Link } from 'react-router-dom'
 import './sidebar.css';
+import GroupIcon from '@mui/icons-material/Group';
+import DeveloperBoardIcon from '@mui/icons-material/DeveloperBoard';
 
 function Sidebar({ showSidebar, setShowSideBar }) {
   const hideSideBar = () => {
@@ -20,11 +22,13 @@ function Sidebar({ showSidebar, setShowSideBar }) {
           </Link>
           <li className='side-text'>
             <Link to='/board'>
+              <DeveloperBoardIcon />
               <span>Projects</span>
             </Link>
           </li>
           <li className='side-text'>
             <Link to='/users'>
+              <GroupIcon />
               <span>Users</span>
             </Link>
           </li>

@@ -8,9 +8,9 @@
 }
 
 .user-boards-container .board:hover {
-    background-color: #183654;
+    background-color: #2377b0;
 }
 
-.user-boards-container .active {
-    background-color: #183654;
+.user-boards-container .clicked-active {
+    background-color: #2377b0;
 }

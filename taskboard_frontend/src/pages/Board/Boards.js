@@ -14,13 +14,17 @@ import Popup from "./Popup";
 import BoardForm from "../../components/Board/BoardForm";
 import { useSelector } from "react-redux";
 import Spinner from "../../components/Spinner";
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import BoardStats from "../../components/Board/BoardStats";
 
 const Boards = () => {
   const [recordUpdate, setRecordUpdate] = useState("");
   const [boards, setBoards] = useState([]);
   const [searched, setSearched] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
+  const [openStatsPopup, setOpenStatsPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedBoard, setSelectedBoard] = useState({});
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   
@@ -133,6 +137,11 @@ const Boards = () => {
     return <Spinner/>
   }
   
+  const onBoardStatsClicked = (boardId) => {
+    setSelectedBoard(boards[boardId]);
+    setOpenStatsPopup(true);
+  }
+  
   return (
     <>
       <Paper sx={styles.paperStyle} elevation={2}>
@@ -176,12 +185,12 @@ const Boards = () => {
                       .toLowerCase()
                       .includes(searched.toLowerCase())
                 )
-                .map((board) => (
+                .map((board, index) => (
                   <TableRow
                     key={board._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row" onClick={() => handleOnClickRow(board._id)} >
+                    <TableCell component="th" scope="row" onClick={() => handleOnClickRow(index)} >
                       {board.name}
                     </TableCell>
                     <TableCell
@@ -215,6 +224,16 @@ const Boards = () => {
                       >
                         <DeleteForeverIcon/>
                       </Button>
+                      {user.role.toLowerCase() === 'admin' && (
+                        <Button
+                          variant="outlined"
+                          color="info"
+                          onClick={() => onBoardStatsClicked(index)}
+                          sx={{ marginLeft: 2 }}
+                        >
+                          <AssessmentIcon/>
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -233,6 +252,19 @@ const Boards = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           recordUpdate={recordUpdate}
+        />
+      </Popup>
+      
+      {/*charts popup*/}
+      <Popup
+        openPopup={openStatsPopup}
+        setOpenPopup={setOpenStatsPopup}
+        title="board statistics"
+      >
+        <BoardStats
+          openPopup={openStatsPopup}
+          setOpenPopup={setOpenStatsPopup}
+          board={selectedBoard}
         />
       </Popup>
     </>

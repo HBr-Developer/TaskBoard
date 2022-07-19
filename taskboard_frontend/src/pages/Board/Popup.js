@@ -20,6 +20,7 @@ const Popup = ({ title, children, openPopup, setOpenPopup, setRecordUpdate }) =>
   
   const handleCloseClicked = () => {
     setOpenPopup(false);
+    if(setRecordUpdate)
     setRecordUpdate('');
   };
   
