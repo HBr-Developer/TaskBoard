@@ -12,7 +12,7 @@ import Spinner from "../../components/Spinner";
 import UserAvatar from "../../components/avatar/UserAvatar";
 import UserPopup from "../../components/Users/UserPopup";
 import NewUser from "../../components/Users/NewUser";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -20,6 +20,7 @@ const Users = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [openPopup, setOpenPopup] = useState(false);
   const [userToUpdate, setUserToUpdate] = useState(null);
+  const navigate = useNavigate();
   
   const GetUsers = async () => {
     // if (!user) return;
@@ -108,8 +109,7 @@ const Users = () => {
   }
   
   const handleNavigation = (id) => {
-    console.log(id);
-    <Navigate to="/user-boards/" replace/>
+    navigate(`../user-boards/${id}`);
   }
   
   return (
@@ -155,7 +155,7 @@ const Users = () => {
                     key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" onClick={() => handleNavigation(usr._id)}>
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <UserAvatar name={usr.name} color={usr.color}/>
                         <p style={{ marginLeft: 2, fontSize: '1rem' }}>{usr.name}</p>
@@ -163,18 +163,19 @@ const Users = () => {
                     </TableCell>
                     <TableCell
                       align="center"
+                      onClick={() => handleNavigation(usr._id)}
                     >
                       <p style={{ fontSize: '1rem' }}>{usr.email}</p>
                     </TableCell>
                     <TableCell align="center">
-                      <Button
-                        variant="outlined"
-                        color="success"
-                        // onClick={() => handleOnClickRow(board._id)}
-                        onClick={() => handleNavigation(usr._id)}
-                      >
-                        <ModeEditOutlineIcon/>
-                      </Button>
+                      {/*<Button*/}
+                      {/*  variant="outlined"*/}
+                      {/*  color="success"*/}
+                      {/*  // onClick={() => handleOnClickRow(board._id)}*/}
+                      {/*  onClick={() => handleNavigation(usr._id)}*/}
+                      {/*>*/}
+                      {/*  <ModeEditOutlineIcon/>*/}
+                      {/*</Button>*/}
                       <Button
                         variant="outlined"
                         color="warning"
