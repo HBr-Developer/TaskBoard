@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Alert } from "@mui/material";
+import { toast } from 'react-toastify';
 
 const NewUser = ({ setUsers, users, userToUpdate, setOpenPopup }) => {
   const [formData, setFormData] = useState({
@@ -15,18 +15,22 @@ const NewUser = ({ setUsers, users, userToUpdate, setOpenPopup }) => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     // add user
-    if (password !== password2) {
-      console.log("Passwords don't match");
-    } else {
-      if (!userToUpdate) {
+    if (!userToUpdate) {
+      if (password !== password2) {
+        toast.error("Passwords don't match");
+      } else {
         const userData = {
           name,
           email,
           password
         }
-        const newUser = await axios.post("http://localhost:3001/member/", userData);
-        setUsers([...users, newUser.data]);
-        setOpenPopup(false);
+        try {
+          const newUser = await axios.post("http://localhost:3001/member/", userData);
+          setUsers([...users, newUser.data]);
+          setOpenPopup(false);
+        } catch (err) {
+          toast.error(err.response.data)
+        }
       }
     }
     
@@ -44,9 +48,7 @@ const NewUser = ({ setUsers, users, userToUpdate, setOpenPopup }) => {
         setUsers(users);
         setOpenPopup(false);
       } catch (err) {
-        <Alert severity="success" color="info">
-          {err.response.data}
-        </Alert>
+        toast.error(err.response.data);
       }
     }
   }

@@ -13,8 +13,7 @@ exports.registerMember = asyncHandler(async (req, res) => {
   //check if user exists
   const userExists = await Member.findOne({ email });
   if (userExists) {
-    res.status(400);
-    throw new Error('Member already exists');
+    res.status(400).send('Member already exists');
   }
   //hash password
   const salt = await bcrypt.genSalt(10);
@@ -37,8 +36,7 @@ exports.registerMember = asyncHandler(async (req, res) => {
       token: generateToken(member._id)
     })
   } else {
-    res.status(400);
-    throw new Error('Invalid member data');
+    res.status(400).send('Invalid member data');
   }
 });
 
@@ -53,7 +51,6 @@ exports.updateMember = asyncHandler(async (req, res) => {
   }
   
   if (await bcrypt.compare(currentPassword, memberToUpdate.password)) {
-    console.log('passwords match');
     if (newPassword !== '') {
       data.password = await bcrypt.hash(newPassword, salt);
     }
@@ -85,8 +82,7 @@ exports.loginMember = asyncHandler(async (req, res) => {
       token: generateToken(member._id)
     })
   } else {
-    res.status(400);
-    throw new Error('invalid credentials');
+    res.status(400).send('invalid credentials');
   }
 });
 

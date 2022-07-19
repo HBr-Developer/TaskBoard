@@ -30,3 +30,12 @@ exports.addPermission = async (req, res) => {
     console.log(err);
   }
 }
+
+exports.getCardPermissionsOfMember = async (req, res) => {
+  try {
+    const permissions = await CardPermission.find({user: req.params.member});
+    res.send(permissions);
+  } catch(err) {
+    res.status(err.status).send(err.response);
+  }
+}

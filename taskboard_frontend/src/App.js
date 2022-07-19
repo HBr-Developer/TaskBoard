@@ -4,6 +4,8 @@ import { useState } from "react";
 import Header from "./components/Header";
 import { useSelector } from "react-redux";
 import AdminSidebar from "./components/Sidebar/AdminSidebar";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const styles = {
   sideBarOn: {
@@ -39,6 +41,7 @@ function App() {
           <Navigate to='login' replace/>
         )}
       </div>
+      <ToastContainer />
     </>
   );
 }

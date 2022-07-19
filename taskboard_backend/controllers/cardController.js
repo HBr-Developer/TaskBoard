@@ -85,3 +85,13 @@ exports.cardUpdate = async (req, res) => {
       console.log(err.message);
     });
 }
+
+exports.getCardsOfBoard = async (req, res) => {
+  try {
+    const lists = await List.find({board_id: req.params.board}, '_id');
+    const cards = await Card.find({list_id: lists.map((l) => l._id)});
+    res.send(cards);
+  } catch(err) {
+    res.status(err.status).send(err.response);
+  }
+}

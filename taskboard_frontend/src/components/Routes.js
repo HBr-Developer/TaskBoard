@@ -9,6 +9,7 @@ import Register from "../pages/Authentification/Register";
 import BoardPage from "../pages/Board/BoardPage";
 import Profile from "../pages/profile/Profile";
 import Users from "../pages/Users/Users";
+import UserBoards from "../pages/Users/UserBoards";
 
 const MainRoutes = () => {
   return (
@@ -16,9 +17,10 @@ const MainRoutes = () => {
       <Route path='login' element={<Login/>}/>
       <Route path='register' element={<Register/>}/>
       <Route path="/" element={<App/>}>
-        <Route path="/" element={<Navigate to="board" replace />} />
+        <Route path="/" element={<Navigate to="board" replace/>}/>
         <Route path="board" element={<Boards/>}/>
         <Route path="users" element={<Users/>}/>
+        <Route path="user-boards/:member" element={<UserBoards/>}/>
         <Route path="profile/:id" element={<Profile/>}/>
         <Route path="taskboard" element={<BoardPage/>}>
           <Route path=":id" element={<TaskBoard/>}/>

@@ -11,7 +11,7 @@ const {
 } = require("../controllers/listController");
 
 router.get("/", getAllList);
-router.get("/board/:boardId", getListsFromBoard);
+router.post("/board/:boardId", getListsFromBoard);
 router.get("/:id", listById);
 router.post("/create", createList);
 router.post("/:boardId/create", createListInBoard);

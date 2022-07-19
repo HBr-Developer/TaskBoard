@@ -1,0 +1,16 @@
+.user-boards-container .board {
+    background-color: #282C34;
+    color: #FFF;
+    padding: 8px 5px;
+    margin-bottom: 8px;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.user-boards-container .board:hover {
+    background-color: #183654;
+}
+
+.user-boards-container .active {
+    background-color: #183654;
+}

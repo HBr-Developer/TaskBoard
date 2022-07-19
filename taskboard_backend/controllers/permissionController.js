@@ -40,3 +40,12 @@ exports.updatePermission = async (req, res) => {
     console.log(err);
   }
 }
+
+exports.userPermissions = async (req, res) => {
+  try {
+    const permission = await Permission.find({user: req.params.member}, "_id").populate('board', 'name');
+    res.send(permission);
+  } catch(err) {
+    res.send(err.response.data);
+  }
+}

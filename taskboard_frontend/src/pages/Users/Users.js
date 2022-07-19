@@ -10,8 +10,9 @@ import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Spinner from "../../components/Spinner";
 import UserAvatar from "../../components/avatar/UserAvatar";
-import UserPopup from "./UserPopup";
-import NewUser from "./NewUser";
+import UserPopup from "../../components/Users/UserPopup";
+import NewUser from "../../components/Users/NewUser";
+import { Navigate } from "react-router-dom";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -106,6 +107,11 @@ const Users = () => {
     return <Spinner/>
   }
   
+  const handleNavigation = (id) => {
+    console.log(id);
+    <Navigate to="/user-boards/" replace/>
+  }
+  
   return (
     <>
       <Paper sx={styles.paperStyle} elevation={2}>
@@ -148,7 +154,6 @@ const Users = () => {
                   <TableRow
                     key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    // onClick={() => handleOnClickRow(board._id)}
                   >
                     <TableCell component="th" scope="row">
                       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -162,13 +167,14 @@ const Users = () => {
                       <p style={{ fontSize: '1rem' }}>{usr.email}</p>
                     </TableCell>
                     <TableCell align="center">
-                      {/*<Button*/}
-                      {/*  variant="outlined"*/}
-                      {/*  color="success"*/}
-                      {/*  // onClick={() => handleOnClickRow(board._id)}*/}
-                      {/*>*/}
-                      {/*  <MenuIcon/>*/}
-                      {/*</Button>*/}
+                      <Button
+                        variant="outlined"
+                        color="success"
+                        // onClick={() => handleOnClickRow(board._id)}
+                        onClick={() => handleNavigation(usr._id)}
+                      >
+                        <ModeEditOutlineIcon/>
+                      </Button>
                       <Button
                         variant="outlined"
                         color="warning"

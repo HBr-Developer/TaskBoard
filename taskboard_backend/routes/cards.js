@@ -6,6 +6,7 @@ const {
   getAllCards,
   cardDelete,
   cardUpdate,
+  getCardsOfBoard
 } = require("../controllers/cardController");
 
 const { protect } = require('../middleware/authMiddleware');
@@ -14,6 +15,7 @@ const { protect } = require('../middleware/authMiddleware');
 router.post("/create", protect, createCard);
 router.get("/", getAllCards);
 router.get("/:id", cardById);
+router.get("/:board/:member", getCardsOfBoard);
 router.delete("/:id", cardDelete);
 router.patch("/:id", cardUpdate);
 
